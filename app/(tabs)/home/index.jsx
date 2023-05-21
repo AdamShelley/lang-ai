@@ -1,6 +1,7 @@
 import { View, Text, SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import React from "react";
 import Recommended from "./Recommended";
+import AllStories from "./AllStories";
 
 const home = () => {
   return (
@@ -9,6 +10,7 @@ const home = () => {
         <View style={{ flex: 1, padding: 16 }}>
           <Text style={styles.title}>Welcome Back</Text>
           <Recommended />
+          <AllStories />
         </View>
       </ScrollView>
     </SafeAreaView>
