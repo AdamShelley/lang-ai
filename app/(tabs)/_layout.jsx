@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
-
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -23,9 +22,26 @@ export default () => {
       />
       <Tabs.Screen
         name="stories"
+        // listeners={({ navigation }) => ({
+        //   tabPress: (event) => {
+        //     event.preventDefault();
+        //     navigation.navigate("stories");
+        //   },
+        // })}
         options={{
           headerShown: false,
           tabBarLabel: "Stories",
+          component: () => null,
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="book-open" size={20} color="#fff" />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          headerShown: false,
+          tabBarLabel: "Settings",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="book-open" size={20} color="#fff" />
           ),
@@ -37,8 +53,9 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#212124",
+    backgroundColor: "#262626",
     alignItems: "center",
     justifyContent: "center",
+    borderTopWidth: 0,
   },
 });

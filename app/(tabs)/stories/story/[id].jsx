@@ -1,7 +1,8 @@
-import { StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { Redirect, Stack, useSearchParams } from "expo-router";
 import { View, Text } from "react-native";
-import { data } from "../../../data";
+import { data } from "../../../../data";
+import { FONT } from "../../../../constants/fonts";
 
 const Story = () => {
   const { id } = useSearchParams();
@@ -12,6 +13,11 @@ const Story = () => {
 
   return (
     <View style={styles.container}>
+      <Image
+        source={{ uri: story.image }}
+        style={styles.image}
+        alt="story-image"
+      />
       <Stack.Screen options={{ headerTitle: `Story: ${id}` }} />
       <View style={styles.wrapper}>
         <Text style={styles.title}>{story.title}</Text>
@@ -25,16 +31,22 @@ export default Story;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#474750",
+    backgroundColor: "#212124",
     flexDirection: "column",
     alignItems: "center",
-    padding: 24,
     height: "100%",
   },
-
+  image: {
+    height: "100%",
+    width: "100%",
+    objectFit: "cover",
+    position: "absolute",
+    opacity: 0.2,
+  },
   wrapper: {
     width: "80%",
     height: "100%",
+    padding: 20,
   },
 
   title: {
@@ -44,12 +56,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#fff",
     paddingBottom: 50,
+    fontFamily: FONT.medium,
   },
   text: {
     color: "#fff",
     marginTop: 10,
     fontSize: 25,
-    lineHeight: 50,
+    lineHeight: 80,
     fontWeight: 300,
   },
 });
