@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { FONT } from "../../../constants/fonts";
 import { useRouter } from "expo-router";
 
-const Card = ({ story, width, wide = false }) => {
+const Card = ({ story, width }) => {
   const router = useRouter();
 
   const handlePress = () => {
@@ -10,26 +10,22 @@ const Card = ({ story, width, wide = false }) => {
   };
 
   return (
-    <TouchableOpacity
-      style={styles.container(width, wide)}
-      onPress={handlePress}
-    >
-      <View style={styles.imageContainer(wide)}>
+    <TouchableOpacity style={styles.container(width)} onPress={handlePress}>
+      <View style={styles.imageContainer()}>
         <View style={{ alignSelf: "stretch" }}>
           <Image
             source={{ uri: story.image }}
-            style={styles.image(wide)}
+            style={styles.image()}
             alt="story-image"
           />
           <View style={styles.overlay} />
-          {wide && <Text style={styles.level(wide)}>{story.level}</Text>}
+          <Text style={styles.level()}>{story.level}</Text>
         </View>
       </View>
-      <View style={styles.bottomSection(wide)}>
-        {!wide && <Text style={styles.level(wide)}>{story.level}</Text>}
-        <Text style={styles.text(wide)}>{story.title}</Text>
+      <View style={styles.bottomSection()}>
+        <Text style={styles.text()}>{story.title}</Text>
 
-        {wide && <Text style={styles.smallText}>{story.tease}</Text>}
+        <Text style={styles.smallText}>{story.tease}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -38,64 +34,63 @@ const Card = ({ story, width, wide = false }) => {
 export default Card;
 
 const styles = StyleSheet.create({
-  container: (width, wide) => ({
+  container: (width) => ({
     backgroundColor: "#313131",
-    flexDirection: wide ? "row" : "column",
-    alignItems: wide ? "flex-start" : "center",
-    justifyContent: wide ? "flex-start" : "center",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-start",
     alignSelf: "center",
     width: width ? width : 200,
-    height: wide ? 100 : 200,
+    height: 250,
     borderRadius: 20,
     marginTop: 15,
-    // marginLeft: 15,
-
     shadowColor: "#262626",
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 20,
   }),
-  imageContainer: (wide) => ({
-    // flex: 1,
-    width: wide ? "30%" : "100%", // Smaller container if wide card
+  imageContainer: () => ({
+    width: "100%",
     minWidth: 10,
-    height: wide ? "100%" : "70%",
-    borderTopRightRadius: wide ? 0 : 20,
+    height: "50%",
+    borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    borderBottomLeftRadius: wide ? 20 : 0,
+    borderBottomLeftRadius: 0,
     overflow: "hidden",
     position: "relative",
   }),
 
-  image: (wide) => ({
+  image: () => ({
     height: "100%",
-    borderTopRightRadius: wide ? 0 : 20,
+    borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    borderBottomLeftRadius: wide ? 20 : 0,
+    borderBottomLeftRadius: 0,
     resizeMode: "cover",
   }),
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: "rgba(0,0,0,0.2)",
   },
-  bottomSection: (wide) => ({
-    height: wide ? "100%" : "30%",
-    padding: 10,
-    flexDirection: wide ? "column" : "row",
-    alignItems: wide ? "flex-start" : "center",
+  bottomSection: () => ({
+    height: "50%",
+    flexDirection: "column",
+    alignItems: "flex-start",
     justifyContent: "flex-start",
     alignSelf: "stretch",
     overflow: "hidden",
-    marginLeft: 10,
+    padding: 5,
   }),
-  text: (wide) => ({
+  text: () => ({
     color: "#fff",
     fontSize: 16,
     fontWeight: 400,
-    paddingHorizontal: wide ? 0 : 10,
+    // paddingHorizontal: 10,
     fontFamily: FONT.medium,
+    marginTop: 10,
+    alignSelf: "center",
+    flexWrap: "wrap",
   }),
-  level: (wide) => ({
+  level: () => ({
     borderRadius: 6,
     borderWidth: 1,
     borderColor: "#262626",
@@ -103,9 +98,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#262626",
     color: "#fff",
     fontSize: 10,
-    position: wide ? "absolute" : "relative",
-    left: wide ? 35 : null,
-    bottom: wide ? 4 : null,
+    position: "absolute",
+    left: 75,
+    bottom: 2,
     fontFamily: FONT.light,
   }),
   smallText: {
@@ -113,5 +108,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginTop: 20,
     fontFamily: FONT.regular,
+    flexWrap: "wrap",
+    paddingHorizontal: 10,
   },
 });

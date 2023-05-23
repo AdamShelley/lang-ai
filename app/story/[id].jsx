@@ -1,8 +1,8 @@
 import { Image, StyleSheet } from "react-native";
 import { Redirect, Stack, useSearchParams } from "expo-router";
 import { View, Text } from "react-native";
-import { data } from "../../../../data";
-import { FONT } from "../../../../constants/fonts";
+import { data } from "../../data";
+import { FONT } from "../../constants/fonts";
 
 const Story = () => {
   const { id } = useSearchParams();

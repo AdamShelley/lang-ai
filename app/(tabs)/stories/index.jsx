@@ -1,36 +1,29 @@
 import {
   View,
-  Text,
   FlatList,
   StyleSheet,
   Dimensions,
   SafeAreaView,
+  StatusBar,
 } from "react-native";
-import Card from "../home/Card";
+import StoryCard from "./StoryCard";
 import { data } from "../../../data";
-import { useRouter } from "expo-router";
 
 const stories = () => {
-  const router = useRouter();
-
-  const handleStory = (id) => {
-    router.push(`/stories/story/${id}`);
-  };
-
   // Screen Width
   const screenWidth = Dimensions.get("window").width;
   // Card width (40%)
-  const cardWidth = screenWidth * 0.4;
+  const cardWidth = screenWidth * 0.45;
 
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <Text style={styles.text}>All Stories</Text>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="light" />
+      <View>
         <FlatList
           showsVerticalScrollIndicator={false}
           data={data}
           renderItem={({ item }) => (
-            <Card handleStory={handleStory} story={item} width={cardWidth} />
+            <StoryCard story={item} width={cardWidth} />
           )}
           keyExtractor={(item) => item.id}
           numColumns={2}
@@ -38,7 +31,7 @@ const stories = () => {
           columnWrapperStyle={{
             flex: 1,
             justifyContent: "space-evenly",
-            marginTop: 10,
+            marginTop: 20,
           }}
         />
       </View>
@@ -50,13 +43,7 @@ export default stories;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
-    backgroundColor: "#212124",
-  },
-  text: {
-    marginTop: 20,
-    color: "#fff",
-    fontSize: 20,
-    // marginLeft: 10,
+    backgroundColor: "#212121",
+    flex: 1,
   },
 });

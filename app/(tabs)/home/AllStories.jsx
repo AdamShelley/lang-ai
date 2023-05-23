@@ -1,36 +1,76 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { data } from "../../../data";
 import Card from "./Card";
-import { useRouter } from "expo-router";
+
 import { FONT } from "../../../constants/fonts";
+import { useEffect, useState } from "react";
+import Filter from "../../../components/Filter";
 
 const AllStories = ({ ListHeaderComponent }) => {
-  const router = useRouter();
-  const handleStory = (id) => {
-    router.push(`/stories/story/${id}`);
-  };
+  const [stories, setStories] = useState([]);
+  const [showUnread, setShowUnread] = useState("All");
+
+  useEffect(() => {
+    setStories(data);
+  }, [data]);
+
+  useEffect(() => {
+    if (showUnread === "Unread") {
+      setStories(data.filter((story) => !story.read));
+    } else if (showUnread === "Read") {
+      setStories(data.filter((story) => story.read));
+    } else {
+      setStories(data);
+    }
+  }, [showUnread]);
+
   return (
     <View style={styles.container}>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={data}
+        data={stories}
         renderItem={({ item }) => (
-          <Card
-            width={"100%"}
-            wide={true}
-            handleStory={handleStory}
-            story={item}
-          />
+          <Card width={"90%"} wide={true} story={item} />
         )}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{
-          columnGap: 10,
-          marginTop: 5,
-        }}
+        ListHeaderComponentStyle={{ paddingHorizontal: 0 }}
         ListHeaderComponent={() => (
           <>
             {ListHeaderComponent}
-            <Text style={styles.text}>All Stories</Text>
+            <Text style={styles.text}>Last week</Text>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              {showUnread === "Read" ? (
+                <Filter
+                  text={"Unread"}
+                  color="#fff"
+                  size="20%"
+                  onPress={() => setShowUnread("Unread")}
+                />
+              ) : (
+                <Filter
+                  text={"Read"}
+                  size="20%"
+                  color="#fff"
+                  dark
+                  onPress={() => setShowUnread("Read")}
+                />
+              )}
+
+              <Filter
+                text={"Show All"}
+                size="20%"
+                color="#fff"
+                onPress={() => setShowUnread("All")}
+                disabled={showUnread === "All"}
+              />
+            </View>
           </>
         )}
       />
@@ -43,13 +83,12 @@ export default AllStories;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
   },
   text: {
     color: "#fff",
     fontSize: 20,
-    // marginLeft: 30,
     marginTop: 50,
-    fontFamily: FONT.medium,
+    fontFamily: FONT.regular,
+    paddingHorizontal: 20,
   },
 });

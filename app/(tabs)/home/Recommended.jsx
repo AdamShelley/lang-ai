@@ -1,27 +1,23 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Card from "./Card";
 import { data } from "../../../data";
-import { useRouter } from "expo-router";
+
 import { FONT } from "../../../constants/fonts";
 
 const Recommended = () => {
-  const router = useRouter();
-
-  const handleStory = (id) => {
-    router.push(`/stories/story/${id}`);
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Latest Stories</Text>
+
       <FlatList
         showsHorizontalScrollIndicator={false}
         data={data}
-        renderItem={({ item }) => (
-          <Card handleStory={handleStory} story={item} wide={false} />
-        )}
+        renderItem={({ item }) => <Card story={item} wide={false} />}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ columnGap: 10, marginTop: 5 }}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          columnGap: 15,
+        }}
         horizontal
       />
     </View>
@@ -38,6 +34,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     fontFamily: FONT.regular,
-    // marginLeft: 10,
+    paddingHorizontal: 20,
   },
 });
