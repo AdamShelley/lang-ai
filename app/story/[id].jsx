@@ -1,29 +1,112 @@
-import { Image, StyleSheet } from "react-native";
+import {
+  Image,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+} from "react-native";
 import { Redirect, Stack, useSearchParams } from "expo-router";
 import { View, Text } from "react-native";
 import { data } from "../../data";
+import { dictionary } from "../../dictionary";
 import { FONT } from "../../constants/fonts";
+import { useState } from "react";
+import Filter from "../../components/Filter";
 
 const Story = () => {
   const { id } = useSearchParams();
+  const [shownWord, setShownWord] = useState("");
+  const [wordDef, setWordDef] = useState("");
+  const [showPinyin, setShowPinyin] = useState(true);
 
   const story = data.find((story) => story.id === parseInt(id));
 
+  // Check for returns
   if (!story) return <Redirect to="/" />;
+  if (!story.words) return <Text>Oh dear no words array</Text>;
+
+  const showWord = (e, word) => {
+    // If word is puntionation, don't do anything
+    if (
+      word === "." ||
+      word === "," ||
+      word === "!" ||
+      word === "?" ||
+      word === "。" ||
+      word === "，"
+    ) {
+      setShownWord("");
+      setWordDef("");
+      return;
+    }
+    setShownWord(word);
+
+    if (word in dictionary) {
+      setWordDef(dictionary[word]);
+    }
+  };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="light" />
       <Image
         source={{ uri: story.image }}
         style={styles.image}
         alt="story-image"
       />
-      <Stack.Screen options={{ headerTitle: `Story: ${id}` }} />
+      <Stack.Screen
+        options={{
+          headerTitle: `${story.title}`,
+          headerTitleStyle: {
+            fontSize: 24,
+            fontFamily: FONT.medium,
+          },
+        }}
+      />
+
       <View style={styles.wrapper}>
-        <Text style={styles.title}>{story.title}</Text>
-        <Text style={styles.text}>{story.text}</Text>
+        <View style={styles.translationContainer}>
+          <Text style={{ color: "#fff", fontSize: 20 }}>
+            {shownWord && `${shownWord} - ${wordDef.translation}`}
+          </Text>
+          <Text style={{ color: "#fff", fontSize: 20 }}>
+            {shownWord && `${wordDef.definition} `}
+          </Text>
+        </View>
+
+        <ScrollView
+          horizontal={false}
+          contentContainerStyle={styles.wordWrapper}
+        >
+          {story.words.map((word, index) => (
+            <Pressable
+              onPressIn={(e) => showWord(e, word)}
+              onPressOut={() => {
+                setShownWord("");
+                setWordDef("");
+              }}
+              key={`${word}-${index}`}
+            >
+              <View>
+                {showPinyin && (
+                  <Text style={styles.pinyinText}>
+                    {dictionary[word]?.pinyin}
+                  </Text>
+                )}
+                <Text style={styles.text(shownWord === word)}>{word}</Text>
+              </View>
+            </Pressable>
+          ))}
+        </ScrollView>
+        <Filter
+          text={"Pinyin"}
+          color="#fff"
+          size="20%"
+          onPress={() => setShowPinyin((prev) => !prev)}
+        />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -41,28 +124,70 @@ const styles = StyleSheet.create({
     width: "100%",
     objectFit: "cover",
     position: "absolute",
-    opacity: 0.2,
-  },
-  wrapper: {
-    width: "80%",
-    height: "100%",
-    padding: 20,
+    opacity: 0.1,
   },
 
+  translationContainer: {
+    height: 80,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#363636",
+    borderColor: "#535050",
+    borderBottomWidth: 1,
+    zIndex: 5,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#212121",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+  wrapper: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+  },
+  wordWrapper: {
+    marginTop: 30,
+    paddingBottom: 100,
+    width: "100%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    paddingHorizontal: "10%",
+  },
   title: {
     marginTop: 10,
     color: "#fff",
-    fontSize: 30,
+    fontSize: 25,
     borderBottomWidth: 1,
     borderBottomColor: "#fff",
     paddingBottom: 50,
     fontFamily: FONT.medium,
   },
-  text: {
-    color: "#fff",
-    marginTop: 10,
-    fontSize: 25,
-    lineHeight: 80,
+  text: (shownWord) => ({
+    color: "#e6e6e6",
+    padding: 10,
+    marginTop: 0,
+    marginBottom: 10,
+    fontSize: 30,
     fontWeight: 300,
+    borderWidth: 1,
+    borderRadius: 20,
+    borderColor: shownWord ? "#464646" : "transparent",
+    backgroundColor: shownWord ? "#464646" : "transparent",
+  }),
+  pinyinText: {
+    color: "#fff",
+    fontSize: 14,
+    textAlign: "center",
   },
 });

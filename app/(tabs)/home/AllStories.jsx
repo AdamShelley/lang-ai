@@ -46,20 +46,20 @@ const AllStories = ({ ListHeaderComponent }) => {
                 justifyContent: "space-between",
               }}
             >
-              {showUnread === "Read" ? (
-                <Filter
-                  text={"Unread"}
-                  color="#fff"
-                  size="20%"
-                  onPress={() => setShowUnread("Unread")}
-                />
-              ) : (
+              {showUnread === "Unread" ? (
                 <Filter
                   text={"Read"}
                   size="20%"
                   color="#fff"
                   dark
                   onPress={() => setShowUnread("Read")}
+                />
+              ) : (
+                <Filter
+                  text={"Unread"}
+                  color="#fff"
+                  size="20%"
+                  onPress={() => setShowUnread("Unread")}
                 />
               )}
 
