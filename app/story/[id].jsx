@@ -13,6 +13,7 @@ import { dictionary } from "../../dictionary";
 import { FONT } from "../../constants/fonts";
 import { useState } from "react";
 import Filter from "../../components/Filter";
+import * as Haptics from "expo-haptics";
 
 const Story = () => {
   const { id } = useSearchParams();
@@ -28,6 +29,7 @@ const Story = () => {
 
   const showWord = (e, word) => {
     // If word is puntionation, don't do anything
+
     if (
       word === "." ||
       word === "," ||
@@ -40,6 +42,9 @@ const Story = () => {
       setWordDef("");
       return;
     }
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
     setShownWord(word);
 
     if (word in dictionary) {
@@ -57,10 +62,14 @@ const Story = () => {
       />
       <Stack.Screen
         options={{
-          headerTitle: `${story.title}`,
+          headerTitle: `${story.title} (${story.level})`,
+          headerStyle: {
+            backgroundColor: "#161616",
+          },
           headerTitleStyle: {
             fontSize: 24,
             fontFamily: FONT.medium,
+            color: "#fff",
           },
         }}
       />
@@ -103,7 +112,10 @@ const Story = () => {
           text={"Pinyin"}
           color="#fff"
           size="20%"
-          onPress={() => setShowPinyin((prev) => !prev)}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            setShowPinyin((prev) => !prev);
+          }}
         />
       </View>
     </SafeAreaView>
@@ -128,13 +140,14 @@ const styles = StyleSheet.create({
   },
 
   translationContainer: {
-    height: 80,
+    height: 100,
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#363636",
-    borderColor: "#535050",
+    backgroundColor: "#212124",
+    borderColor: "#212124",
     borderBottomWidth: 1,
+    opacity: 0.8,
     zIndex: 5,
     ...Platform.select({
       ios: {
@@ -151,17 +164,16 @@ const styles = StyleSheet.create({
   wrapper: {
     width: "100%",
     height: "100%",
-    alignItems: "center",
   },
   wordWrapper: {
-    marginTop: 30,
-    paddingBottom: 100,
     width: "100%",
+    marginTop: 20,
+    paddingBottom: 100,
     flexDirection: "row",
     flexWrap: "wrap",
     alignSelf: "center",
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "flex-start",
     paddingHorizontal: "10%",
   },
   title: {
@@ -177,9 +189,9 @@ const styles = StyleSheet.create({
     color: "#e6e6e6",
     padding: 10,
     marginTop: 0,
-    marginBottom: 10,
+    marginBottom: 20,
     fontSize: 30,
-    fontWeight: 300,
+    fontWeight: 400,
     borderWidth: 1,
     borderRadius: 20,
     borderColor: shownWord ? "#464646" : "transparent",

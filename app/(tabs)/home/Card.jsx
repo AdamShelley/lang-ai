@@ -1,11 +1,15 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { FONT } from "../../../constants/fonts";
 import { useRouter } from "expo-router";
+import * as Haptics from "expo-haptics";
+import useSettingsStore from "../../../state/store";
 
 const Card = ({ story, width, wide = false }) => {
   const router = useRouter();
+  const haptics = useSettingsStore((state) => state.haptics);
 
   const handlePress = () => {
+    haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push(`/story/${story.id}`);
   };
 

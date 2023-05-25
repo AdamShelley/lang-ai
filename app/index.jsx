@@ -1,9 +1,6 @@
-import { View, ScrollView, SafeAreaView, Text } from "react-native";
-import { Redirect, Stack, useRouter } from "expo-router";
+import { Redirect } from "expo-router";
 
 const Home = () => {
-  const router = useRouter();
-
   return <Redirect href="/home" />;
 };
 
