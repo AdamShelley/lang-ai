@@ -14,13 +14,14 @@ import { FONT } from "../../constants/fonts";
 import { useState } from "react";
 import Filter from "../../components/Filter";
 import * as Haptics from "expo-haptics";
+import useSettingsStore from "../../state/store";
 
 const Story = () => {
   const { id } = useSearchParams();
   const [shownWord, setShownWord] = useState("");
   const [wordDef, setWordDef] = useState("");
-  const [showPinyin, setShowPinyin] = useState(true);
-
+  const showPinyin = useSettingsStore((state) => state.pinyin);
+  const setPinyin = useSettingsStore((state) => state.setPinyin);
   const story = data.find((story) => story.id === parseInt(id));
 
   // Check for returns
@@ -50,6 +51,11 @@ const Story = () => {
     if (word in dictionary) {
       setWordDef(dictionary[word]);
     }
+  };
+
+  const handleFilterPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setPinyin();
   };
 
   return (
@@ -103,7 +109,9 @@ const Story = () => {
                     {dictionary[word]?.pinyin}
                   </Text>
                 )}
-                <Text style={styles.text(shownWord === word)}>{word}</Text>
+                <Text style={styles.text(shownWord === word, showPinyin)}>
+                  {word}
+                </Text>
               </View>
             </Pressable>
           ))}
@@ -112,10 +120,7 @@ const Story = () => {
           text={"Pinyin"}
           color="#fff"
           size="20%"
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            setShowPinyin((prev) => !prev);
-          }}
+          onPress={handleFilterPress}
         />
       </View>
     </SafeAreaView>
@@ -144,8 +149,8 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#212124",
-    borderColor: "#212124",
+    // backgroundColor: "#212124",
+    borderColor: "#474343",
     borderBottomWidth: 1,
     opacity: 0.8,
     zIndex: 5,
@@ -167,13 +172,13 @@ const styles = StyleSheet.create({
   },
   wordWrapper: {
     width: "100%",
-    marginTop: 20,
+    marginTop: 30,
     paddingBottom: 100,
     flexDirection: "row",
     flexWrap: "wrap",
     alignSelf: "center",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     paddingHorizontal: "10%",
   },
   title: {
@@ -185,11 +190,11 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
     fontFamily: FONT.medium,
   },
-  text: (shownWord) => ({
+  text: (shownWord, showPinyin) => ({
     color: "#e6e6e6",
     padding: 10,
-    marginTop: 0,
-    marginBottom: 20,
+    marginTop: showPinyin ? 0 : 17,
+    marginBottom: 0,
     fontSize: 30,
     fontWeight: 400,
     borderWidth: 1,

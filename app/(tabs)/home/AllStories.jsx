@@ -32,6 +32,7 @@ const AllStories = ({ ListHeaderComponent }) => {
         renderItem={({ item }) => (
           <Card width={"90%"} wide={true} story={item} />
         )}
+        contentContainerStyle={{ paddingBottom: 50 }}
         keyExtractor={(item) => item.id}
         ListHeaderComponentStyle={{ paddingHorizontal: 0 }}
         ListHeaderComponent={() => (

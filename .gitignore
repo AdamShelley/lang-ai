@@ -12,6 +12,7 @@ web-build/
 data.js
 dictionary.js
 Design/
+.env
 
 # macOS
 .DS_Store

@@ -1,9 +1,17 @@
-import { View, StyleSheet, SafeAreaView, StatusBar, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  Switch,
+} from "react-native";
 import { FONT } from "../../../constants/fonts";
 import useSettingsStore from "../../../state/store";
 
 const settings = () => {
-  const state = useSettingsStore();
+  const haptics = useSettingsStore((state) => state.haptics);
+  const setHaptics = useSettingsStore((state) => state.setHaptics);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -11,7 +19,13 @@ const settings = () => {
       <View style={styles.wrapper}>
         <View>
           <Text style={styles.text}>Haptics</Text>
-          <Text style={styles.text}>Haptics</Text>
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={"#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={setHaptics}
+            value={haptics}
+          />
         </View>
       </View>
     </SafeAreaView>
