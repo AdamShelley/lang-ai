@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import Recommended from "./Recommended";
 import AllStories from "./AllStories";
 import { FONT } from "../../../constants/fonts";
@@ -17,6 +17,15 @@ const home = () => {
   const goToUser = () => {
     router.push("/user");
   };
+
+  useEffect(() => {
+    const fetchStories = async () => {
+      const response = await fetch("http://localhost:3000/api/db");
+      const data = await response.json();
+      console.log(data);
+    };
+    fetchStories();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
