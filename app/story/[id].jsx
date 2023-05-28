@@ -15,6 +15,7 @@ import { useState } from "react";
 import Filter from "../../components/Filter";
 import * as Haptics from "expo-haptics";
 import useSettingsStore from "../../state/store";
+import useStoriesStore from "../../state/storiesStore";
 
 const Story = () => {
   const { id } = useSearchParams();
@@ -22,7 +23,11 @@ const Story = () => {
   const [wordDef, setWordDef] = useState("");
   const showPinyin = useSettingsStore((state) => state.pinyin);
   const setPinyin = useSettingsStore((state) => state.setPinyin);
-  const story = data.find((story) => story.id === parseInt(id));
+  // const story = useStoriesStore((state) => state.stories);
+
+  const stories = useStoriesStore((state) => state.stories);
+
+  const story = stories.find((story) => story.gptId === id);
 
   // Check for returns
   if (!story) return <Redirect to="/" />;
@@ -61,11 +66,11 @@ const Story = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
-      <Image
-        source={{ uri: story.image }}
+      {/* <Image
+        source={{ uri: story?.image || null }}
         style={styles.image}
         alt="story-image"
-      />
+      /> */}
       <Stack.Screen
         options={{
           headerTitle: `${story.title} (${story.level})`,

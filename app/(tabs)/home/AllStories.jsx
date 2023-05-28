@@ -1,28 +1,24 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { data } from "../../../data";
 import Card from "./Card";
-
 import { FONT } from "../../../constants/fonts";
 import { useEffect, useState } from "react";
 import Filter from "../../../components/Filter";
+import useStoriesStore from "../../../state/storiesStore";
 
 const AllStories = ({ ListHeaderComponent }) => {
-  const [stories, setStories] = useState([]);
   const [showUnread, setShowUnread] = useState("All");
+  const stories = useStoriesStore((state) => state.stories);
 
-  useEffect(() => {
-    setStories(data);
-  }, [data]);
-
-  useEffect(() => {
-    if (showUnread === "Unread") {
-      setStories(data.filter((story) => !story.read));
-    } else if (showUnread === "Read") {
-      setStories(data.filter((story) => story.read));
-    } else {
-      setStories(data);
-    }
-  }, [showUnread]);
+  // useEffect(() => {
+  //   if (showUnread === "Unread") {
+  //     setStories(data.filter((story) => !story.read));
+  //   } else if (showUnread === "Read") {
+  //     setStories(data.filter((story) => story.read));
+  //   } else {
+  //     setStories(data);
+  //   }
+  // }, [showUnread]);
 
   return (
     <View style={styles.container}>
@@ -33,7 +29,7 @@ const AllStories = ({ ListHeaderComponent }) => {
           <Card width={"90%"} wide={true} story={item} />
         )}
         contentContainerStyle={{ paddingBottom: 50 }}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.gptId}
         ListHeaderComponentStyle={{ paddingHorizontal: 0 }}
         ListHeaderComponent={() => (
           <>

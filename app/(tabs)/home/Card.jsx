@@ -8,25 +8,36 @@ const Card = ({ story, width, wide = false }) => {
   const router = useRouter();
   const haptics = useSettingsStore((state) => state.haptics);
 
-  const handlePress = () => {
-    haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    router.push(`/story/${story.id}`);
+  const handlePress = (id) => {
+    // haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    router.push(`/story/${id}`);
   };
+
+  const imgJson = JSON.parse(story.image);
+  const img = imgJson?.b64_json;
 
   return (
     <TouchableOpacity
       style={styles.container(width, wide)}
-      onPress={handlePress}
+      onPress={() => handlePress(story.gptId)}
     >
       <View style={styles.imageContainer(wide)}>
         <View style={{ alignSelf: "stretch" }}>
           <Image
-            source={{ uri: story.image }}
+            source={{
+              uri: img
+                ? `data:image/jpeg;base64,${img}`
+                : "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+            }}
             style={styles.image(wide)}
+            resizeMode="cover"
             alt="story-image"
           />
           <View style={styles.overlay} />
-          {wide && <Text style={styles.level(wide)}>{story.level}</Text>}
+          {wide && (
+            <Text style={styles.level(wide)}>{story.level || "N/A"}</Text>
+          )}
         </View>
       </View>
       <View style={styles.bottomSection(wide)}>
