@@ -1,14 +1,12 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import { data } from "../../../data";
+
 import Card from "./Card";
 import { FONT } from "../../../constants/fonts";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Filter from "../../../components/Filter";
-import useStoriesStore from "../../../state/storiesStore";
 
-const AllStories = ({ ListHeaderComponent }) => {
+const AllStories = ({ ListHeaderComponent, stories }) => {
   const [showUnread, setShowUnread] = useState("All");
-  const stories = useStoriesStore((state) => state.stories);
 
   // useEffect(() => {
   //   if (showUnread === "Unread") {

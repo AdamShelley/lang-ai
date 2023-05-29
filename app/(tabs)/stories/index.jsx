@@ -7,7 +7,8 @@ import {
   StatusBar,
 } from "react-native";
 import StoryCard from "./StoryCard";
-import { data } from "../../../data";
+
+import useStoriesStore from "../../../state/storiesStore";
 
 const stories = () => {
   // Screen Width
@@ -15,17 +16,19 @@ const stories = () => {
   // Card width (40%)
   const cardWidth = screenWidth * 0.45;
 
+  const stories = useStoriesStore((state) => state.stories);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
       <View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={data}
+          data={stories}
           renderItem={({ item }) => (
             <StoryCard story={item} width={cardWidth} />
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.gptId}
           numColumns={2}
           contentContainerStyle={{ marginTop: 5 }}
           columnWrapperStyle={{

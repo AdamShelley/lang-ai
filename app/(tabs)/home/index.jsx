@@ -12,6 +12,7 @@ import { FONT } from "../../../constants/fonts";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import useStoriesStore from "../../../state/storiesStore";
+import useDictionaryStore from "../../../state/dictionaryStore";
 
 const home = () => {
   const router = useRouter();
@@ -21,61 +22,65 @@ const home = () => {
 
   const stories = useStoriesStore((state) => state.stories);
   const setStories = useStoriesStore((state) => state.setStories);
+  const setWords = useDictionaryStore((state) => state.setWords);
 
   useEffect(() => {
-    try {
-      const fetchStories = async () => {
-        try {
-          const response = await fetch("http://192.168.1.160:3000/api/db");
-          const data = await response.json();
+    const fetchStories = async () => {
+      try {
+        const response = await fetch("http://192.168.1.160:8888/api/db");
+        const data = await response.json();
 
-          // data.forEach((story) => {
-          //   story.image =
-          //     "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2952&q=80";
-          // });
+        if (!data) alert("No stories found");
 
-          setStories(data);
-        } catch (error) {
-          alert(error);
-          throw console.log(error);
-        }
-      };
-      fetchStories();
-    } catch (error) {
-      console.log(error);
-      alert("Error");
-    }
+        setStories(data);
+      } catch (error) {
+        return console.log(error);
+      }
+    };
+
+    const fetchDictionary = async () => {
+      try {
+        const dictionary = await fetch("http://192.168.1.160:8888/api/def");
+        const wordData = await dictionary.json();
+        if (!wordData) alert("No dictionary found");
+        setWords(wordData);
+      } catch (error) {
+        return console.log(error);
+      }
+    };
+
+    fetchStories();
+    fetchDictionary();
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
 
-      {stories && (
-        <AllStories
-          ListHeaderComponent={
-            <>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: 10,
-                }}
-              >
-                <Text style={styles.title}>Home</Text>
-                <TouchableOpacity style={styles.circle} onPress={goToUser}>
-                  <Text style={styles.text}>AS</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={{ flex: 1 }}>
-                <Recommended />
-              </View>
-            </>
-          }
-        />
-      )}
+      <AllStories
+        stories={stories}
+        ListHeaderComponent={
+          <>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: 10,
+              }}
+            >
+              <Text style={styles.title}>Home</Text>
+              <TouchableOpacity style={styles.circle} onPress={goToUser}>
+                <Text style={styles.text}>AS</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Recommended stories={stories} />
+            </View>
+          </>
+        }
+      />
     </SafeAreaView>
   );
 };

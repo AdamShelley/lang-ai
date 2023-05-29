@@ -8,14 +8,13 @@ import {
 } from "react-native";
 import { Redirect, Stack, useSearchParams } from "expo-router";
 import { View, Text } from "react-native";
-import { data } from "../../data";
-import { dictionary } from "../../dictionary";
 import { FONT } from "../../constants/fonts";
 import { useState } from "react";
 import Filter from "../../components/Filter";
 import * as Haptics from "expo-haptics";
 import useSettingsStore from "../../state/store";
 import useStoriesStore from "../../state/storiesStore";
+import useDictionaryStore from "../../state/dictionaryStore";
 
 const Story = () => {
   const { id } = useSearchParams();
@@ -23,11 +22,9 @@ const Story = () => {
   const [wordDef, setWordDef] = useState("");
   const showPinyin = useSettingsStore((state) => state.pinyin);
   const setPinyin = useSettingsStore((state) => state.setPinyin);
-  // const story = useStoriesStore((state) => state.stories);
-
   const stories = useStoriesStore((state) => state.stories);
-
   const story = stories.find((story) => story.gptId === id);
+  const dictionary = useDictionaryStore((state) => state.words);
 
   // Check for returns
   if (!story) return <Redirect to="/" />;
@@ -49,7 +46,7 @@ const Story = () => {
       return;
     }
 
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
     setShownWord(word);
 
@@ -59,7 +56,7 @@ const Story = () => {
   };
 
   const handleFilterPress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setPinyin();
   };
 
@@ -77,6 +74,7 @@ const Story = () => {
           headerStyle: {
             backgroundColor: "#161616",
           },
+          headerTintColor: "#fff",
           headerTitleStyle: {
             fontSize: 24,
             fontFamily: FONT.medium,
@@ -88,7 +86,7 @@ const Story = () => {
       <View style={styles.wrapper}>
         <View style={styles.translationContainer}>
           <Text style={{ color: "#fff", fontSize: 20 }}>
-            {shownWord && `${shownWord} - ${wordDef.translation}`}
+            {shownWord && `${shownWord} - ${wordDef.englishWord}`}
           </Text>
           <Text style={{ color: "#fff", fontSize: 20 }}>
             {shownWord && `${wordDef.definition} `}
