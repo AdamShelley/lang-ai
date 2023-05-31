@@ -15,6 +15,7 @@ import * as Haptics from "expo-haptics";
 import useSettingsStore from "../../state/store";
 import useStoriesStore from "../../state/storiesStore";
 import useDictionaryStore from "../../state/dictionaryStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Story = () => {
   const { id } = useSearchParams();
@@ -32,7 +33,6 @@ const Story = () => {
 
   const showWord = (e, word) => {
     // If word is puntionation, don't do anything
-
     if (
       word === "." ||
       word === "," ||
@@ -50,8 +50,8 @@ const Story = () => {
 
     setShownWord(word);
 
-    if (word in dictionary) {
-      setWordDef(dictionary[word]);
+    if (word.chineseWord in dictionary) {
+      setWordDef(dictionary[word.chineseWord]);
     }
   };
 
@@ -60,25 +60,46 @@ const Story = () => {
     setPinyin();
   };
 
+  const handleFinishedStory = () => {
+    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    // Get entry out of local storage and update it with read:true
+    const updateStory = async () => {
+      const storiesFromStorage = await AsyncStorage.getItem("stories");
+      const stories = JSON.parse(storiesFromStorage);
+      stories[story.gptId].read = true;
+      await AsyncStorage.setItem("stories", JSON.stringify(stories));
+    };
+
+    updateStory();
+  };
+
+  const imgJson = JSON.parse(story.image);
+  const img = imgJson?.b64_json;
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
-      {/* <Image
-        source={{ uri: story?.image || null }}
+      <Image
+        source={{
+          uri: img
+            ? `data:image/jpeg;base64,${img}`
+            : "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+        }}
         style={styles.image}
         alt="story-image"
-      /> */}
+      />
       <Stack.Screen
         options={{
           headerTitle: `${story.title} (${story.level})`,
           headerStyle: {
             backgroundColor: "#161616",
           },
-          headerTintColor: "#fff",
+          headerTintColor: "#eee",
           headerTitleStyle: {
-            fontSize: 24,
+            fontSize: 20,
             fontFamily: FONT.medium,
-            color: "#fff",
+            color: "#eee",
           },
         }}
       />
@@ -86,10 +107,11 @@ const Story = () => {
       <View style={styles.wrapper}>
         <View style={styles.translationContainer}>
           <Text style={{ color: "#fff", fontSize: 20 }}>
-            {shownWord && `${shownWord} - ${wordDef.englishWord}`}
+            {shownWord &&
+              `${shownWord.chineseWord} - ${wordDef?.englishWord || "-???-"}`}
           </Text>
           <Text style={{ color: "#fff", fontSize: 20 }}>
-            {shownWord && `${wordDef.definition} `}
+            {shownWord && `${wordDef?.definition || ""} `}
           </Text>
         </View>
 
@@ -108,23 +130,31 @@ const Story = () => {
             >
               <View>
                 {showPinyin && (
-                  <Text style={styles.pinyinText}>
-                    {dictionary[word]?.pinyin}
-                  </Text>
+                  <Text style={styles.pinyinText}>{word.pinyin}</Text>
                 )}
                 <Text style={styles.text(shownWord === word, showPinyin)}>
-                  {word}
+                  {word.chineseWord}
                 </Text>
               </View>
             </Pressable>
           ))}
         </ScrollView>
-        <Filter
-          text={"Pinyin"}
-          color="#fff"
-          size="20%"
-          onPress={handleFilterPress}
-        />
+        <View style={styles.buttonContainer}>
+          <Filter
+            text={"Pinyin"}
+            color="#fff"
+            size="30%"
+            storyFilter
+            onPress={handleFilterPress}
+          />
+          <Filter
+            text={"Finish"}
+            color="#fff"
+            size="30%"
+            storyFilter
+            onPress={handleFinishedStory}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -148,13 +178,12 @@ const styles = StyleSheet.create({
   },
 
   translationContainer: {
-    height: 100,
+    height: 80,
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "#212124",
-    borderColor: "#474343",
-    borderBottomWidth: 1,
+    // backgroundColor: "#1616169a",
+    backgroundColor: "transparent",
     opacity: 0.8,
     zIndex: 5,
     ...Platform.select({
@@ -175,7 +204,7 @@ const styles = StyleSheet.create({
   },
   wordWrapper: {
     width: "100%",
-    marginTop: 30,
+    marginTop: 10,
     paddingBottom: 100,
     flexDirection: "row",
     flexWrap: "wrap",
@@ -195,7 +224,10 @@ const styles = StyleSheet.create({
   },
   text: (shownWord, showPinyin) => ({
     color: "#e6e6e6",
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 2,
+    margin: 2,
+    letterSpacing: 10,
     marginTop: showPinyin ? 0 : 17,
     marginBottom: 0,
     fontSize: 30,
@@ -209,5 +241,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     textAlign: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "space-evenly",
   },
 });

@@ -10,15 +10,22 @@ const Card = ({ story, width }) => {
 
   const handlePress = () => {
     haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    router.push(`/story/${story.id}`);
+    router.push(`/story/${story.gptId}`);
   };
+
+  const imgJson = JSON.parse(story.image);
+  const img = imgJson?.b64_json;
 
   return (
     <TouchableOpacity style={styles.container(width)} onPress={handlePress}>
       <View style={styles.imageContainer()}>
         <View style={{ alignSelf: "stretch" }}>
           <Image
-            source={{ uri: story.image }}
+            source={{
+              uri: img
+                ? `data:image/jpeg;base64,${img}`
+                : "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+            }}
             style={styles.image()}
             alt="story-image"
           />
@@ -29,7 +36,7 @@ const Card = ({ story, width }) => {
       <View style={styles.bottomSection()}>
         <Text style={styles.text()}>{story.title}</Text>
 
-        <Text style={styles.smallText}>{story.tease}</Text>
+        <Text style={styles.smallText}>{story.synopsis}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -56,7 +63,7 @@ const styles = StyleSheet.create({
   imageContainer: () => ({
     width: "100%",
     minWidth: 10,
-    height: "50%",
+    height: "40%",
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 0,
@@ -76,20 +83,19 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.2)",
   },
   bottomSection: () => ({
-    height: "50%",
+    height: "60%",
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "flex-start",
     alignSelf: "stretch",
     overflow: "hidden",
-    padding: 5,
+    padding: 10,
   }),
   text: () => ({
-    color: "#fff",
+    color: "#eee",
     fontSize: 16,
     fontWeight: 400,
-    // paddingHorizontal: 10,
-    fontFamily: FONT.medium,
+    fontFamily: FONT.bold,
     marginTop: 10,
     alignSelf: "center",
     flexWrap: "wrap",
@@ -108,10 +114,11 @@ const styles = StyleSheet.create({
     fontFamily: FONT.light,
   }),
   smallText: {
-    fontSize: 14,
+    fontSize: 15,
     color: "#fff",
     marginTop: 20,
-    fontFamily: FONT.regular,
+    fontFamily: FONT.light,
+    fontWeight: 100,
     flexWrap: "wrap",
     paddingHorizontal: 10,
   },

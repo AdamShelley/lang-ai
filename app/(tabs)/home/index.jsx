@@ -5,24 +5,34 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { FONT } from "../../../constants/fonts";
 import Recommended from "./Recommended";
 import AllStories from "./AllStories";
-import { FONT } from "../../../constants/fonts";
-import { StatusBar } from "expo-status-bar";
-import { useRouter } from "expo-router";
+
 import useStoriesStore from "../../../state/storiesStore";
 import useDictionaryStore from "../../../state/dictionaryStore";
+import { ActivityIndicator } from "react-native";
+import { useLocalStorage } from "../../../utils/useLocalStorage";
 
 const home = () => {
   const router = useRouter();
+  const { getLocalStore } = useLocalStorage();
   const goToUser = () => {
     router.push("/user");
   };
 
   const stories = useStoriesStore((state) => state.stories);
+
   const setStories = useStoriesStore((state) => state.setStories);
   const setWords = useDictionaryStore((state) => state.setWords);
+  const setLocalStorageStories = useStoriesStore(
+    (state) => state.setLocalStorageStories
+  );
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -30,9 +40,32 @@ const home = () => {
         const response = await fetch("http://192.168.1.160:8888/api/db");
         const data = await response.json();
 
-        if (!data) alert("No stories found");
+        data.map(
+          (story) => (story.words = story.words.map((obj) => JSON.parse(obj)))
+        );
 
         setStories(data);
+
+        // Check if stories are already saved to local storage
+        const storiesFromStorage = await AsyncStorage.getItem("stories");
+
+        if (storiesFromStorage) return;
+
+        // Save the story ID's to local storage
+        let storiesForStorage = data.reduce((acc, story) => {
+          acc[story.gptId] = {
+            title: story.title,
+            read: false,
+          };
+          return acc;
+        }, {});
+
+        console.log("Saving Stories to local storage");
+
+        await AsyncStorage.setItem(
+          "stories",
+          JSON.stringify(storiesForStorage)
+        );
       } catch (error) {
         return console.log(error);
       }
@@ -42,7 +75,7 @@ const home = () => {
       try {
         const dictionary = await fetch("http://192.168.1.160:8888/api/def");
         const wordData = await dictionary.json();
-        if (!wordData) alert("No dictionary found");
+
         setWords(wordData);
       } catch (error) {
         return console.log(error);
@@ -53,34 +86,48 @@ const home = () => {
     fetchDictionary();
   }, []);
 
+  // Get local storage stories from asyncstorage
+  const fetchStories = async () => {
+    const storageStories = await getLocalStore("stories");
+    setLocalStorageStories(storageStories);
+  };
+
+  useEffect(() => {
+    fetchStories();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
 
-      <AllStories
-        stories={stories}
-        ListHeaderComponent={
-          <>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: 10,
-              }}
-            >
-              <Text style={styles.title}>Home</Text>
-              <TouchableOpacity style={styles.circle} onPress={goToUser}>
-                <Text style={styles.text}>AS</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Recommended stories={stories} />
-            </View>
-          </>
-        }
-      />
+      {stories ? (
+        <AllStories
+          stories={stories}
+          ListHeaderComponent={
+            <>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: 10,
+                }}
+              >
+                <Text style={styles.title}>Home</Text>
+                <TouchableOpacity style={styles.circle} onPress={goToUser}>
+                  <Text style={styles.text}>AS</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Recommended stories={stories} />
+              </View>
+            </>
+          }
+        />
+      ) : (
+        <ActivityIndicator color="#fff" size="large" />
+      )}
     </SafeAreaView>
   );
 };

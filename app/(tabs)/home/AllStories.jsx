@@ -1,28 +1,48 @@
+import { useEffect } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
-
 import Card from "./Card";
 import { FONT } from "../../../constants/fonts";
 import { useState } from "react";
 import Filter from "../../../components/Filter";
+import useStoriesStore from "../../../state/storiesStore";
+import { useLocalStorage } from "../../../utils/useLocalStorage";
 
 const AllStories = ({ ListHeaderComponent, stories }) => {
   const [showUnread, setShowUnread] = useState("All");
+  const [storiesToShow, setStoriesToShow] = useState(stories);
+  const localStorageStories = useStoriesStore(
+    (state) => state.localStorageStories
+  );
 
-  // useEffect(() => {
-  //   if (showUnread === "Unread") {
-  //     setStories(data.filter((story) => !story.read));
-  //   } else if (showUnread === "Read") {
-  //     setStories(data.filter((story) => story.read));
-  //   } else {
-  //     setStories(data);
-  //   }
-  // }, [showUnread]);
+  const unreadStories = stories.filter((story) => {
+    const status = localStorageStories[story.gptId];
+    return status && !status.read;
+  });
+
+  const readStories = stories.filter((story) => {
+    const status = localStorageStories[story.gptId];
+    return status && status.read;
+  });
+
+  useEffect(() => {
+    if (showUnread === "Unread") {
+      setStoriesToShow(unreadStories);
+    } else if (showUnread === "Read") {
+      setStoriesToShow(readStories);
+    } else {
+      setStoriesToShow(stories);
+    }
+  }, [showUnread]);
+
+  useEffect(() => {
+    setStoriesToShow(stories);
+  }, [stories]);
 
   return (
     <View style={styles.container}>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={stories}
+        data={storiesToShow}
         renderItem={({ item }) => (
           <Card width={"90%"} wide={true} story={item} />
         )}

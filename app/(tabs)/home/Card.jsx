@@ -44,7 +44,7 @@ const Card = ({ story, width, wide = false }) => {
         {!wide && <Text style={styles.level(wide)}>{story.level}</Text>}
         <Text style={styles.text(wide)}>{story.title}</Text>
 
-        {wide && <Text style={styles.smallText}>{story.tease}</Text>}
+        {wide && <Text style={styles.smallText}>{story.synopsis}</Text>}
       </View>
     </TouchableOpacity>
   );
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 15,
     // marginLeft: 15,
-
+    overflow: "hidden",
     shadowColor: "#262626",
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
@@ -101,7 +101,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignSelf: "stretch",
     overflow: "hidden",
-    marginLeft: 10,
+    marginLeft: wide ? 10 : null,
+    width: wide ? "70%" : null,
   }),
   text: (wide) => ({
     color: "#fff",
@@ -128,5 +129,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginTop: 20,
     fontFamily: FONT.regular,
+    height: "100%",
   },
 });
