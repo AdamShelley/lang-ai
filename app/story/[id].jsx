@@ -6,10 +6,10 @@ import {
   StatusBar,
   StyleSheet,
 } from "react-native";
-import { Redirect, Stack, useSearchParams } from "expo-router";
+import { Redirect, Stack, useRouter, useSearchParams } from "expo-router";
 import { View, Text } from "react-native";
 import { FONT } from "../../constants/fonts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Filter from "../../components/Filter";
 import * as Haptics from "expo-haptics";
 import useSettingsStore from "../../state/store";
@@ -18,19 +18,52 @@ import useDictionaryStore from "../../state/dictionaryStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Story = () => {
+  const router = useRouter();
   const { id } = useSearchParams();
   const [shownWord, setShownWord] = useState("");
   const [wordDef, setWordDef] = useState("");
   const showPinyin = useSettingsStore((state) => state.pinyin);
   const setPinyin = useSettingsStore((state) => state.setPinyin);
   const stories = useStoriesStore((state) => state.stories);
-  const story = stories.find((story) => story.gptId === id);
-  const dictionary = useDictionaryStore((state) => state.words);
+  const localStorageStories = useStoriesStore(
+    (state) => state.localStorageStories
+  );
+  const [story, setStory] = useState();
+
+  useEffect(() => {
+    if (!stories.length) {
+      fetchSpecificStory(id);
+    } else {
+      const foundStory = stories.find((story) => story.gptId === id);
+      setStory(foundStory);
+    }
+  }, [id, stories]);
+
+  // Fetch specific story from DB
+  const fetchSpecificStory = async (id) => {
+    try {
+      const response = await fetch(`http://192.168.1.160:8888/api/db/${id}`);
+      const data = await response.json();
+      data[0].words = data[0].words.map((obj) => JSON.parse(obj));
+      setStory(data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // Check for returns
-  if (!story) return <Redirect to="/" />;
-  if (!story.words) return <Text>Oh dear no words array</Text>;
+  // if (!id || !story || !story.words) return <Redirect to="/home" />;
 
+  const dictionary = useDictionaryStore((state) => state.words);
+
+  let imgJson, img, localStorageMatch;
+  if (story) {
+    imgJson = JSON.parse(story?.image);
+    img = imgJson?.b64_json;
+    localStorageMatch = localStorageStories[id];
+  }
+
+  // Button functionality
   const showWord = (e, word) => {
     // If word is puntionation, don't do anything
     if (
@@ -62,100 +95,113 @@ const Story = () => {
 
   const handleFinishedStory = () => {
     // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
     // Get entry out of local storage and update it with read:true
     const updateStory = async () => {
-      const storiesFromStorage = await AsyncStorage.getItem("stories");
-      const stories = JSON.parse(storiesFromStorage);
-      stories[story.gptId].read = true;
-      await AsyncStorage.setItem("stories", JSON.stringify(stories));
+      try {
+        const storiesFromStorage = await AsyncStorage.getItem("stories");
+        const stories = JSON.parse(storiesFromStorage);
+        stories[story.gptId].read = true;
+        await AsyncStorage.setItem("stories", JSON.stringify(stories));
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     updateStory();
+    router.replace("/");
   };
-
-  const imgJson = JSON.parse(story.image);
-  const img = imgJson?.b64_json;
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
-      <Image
-        source={{
-          uri: img
-            ? `data:image/jpeg;base64,${img}`
-            : "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
-        }}
-        style={styles.image}
-        alt="story-image"
-      />
-      <Stack.Screen
-        options={{
-          headerTitle: `${story.title} (${story.level})`,
-          headerStyle: {
-            backgroundColor: "#161616",
-          },
-          headerTintColor: "#eee",
-          headerTitleStyle: {
-            fontSize: 20,
-            fontFamily: FONT.medium,
-            color: "#eee",
-          },
-        }}
-      />
+      {story && (
+        <>
+          <Image
+            source={{
+              uri: img
+                ? `data:image/jpeg;base64,${img}`
+                : "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+            }}
+            style={styles.image}
+            alt="story-image"
+          />
+          <Stack.Screen
+            options={{
+              headerTitle: `${story.title} (${story.level})`,
+              headerStyle: {
+                backgroundColor: "#161616",
+              },
+              headerTintColor: "#eee",
+              headerTitleStyle: {
+                fontSize: 20,
+                fontFamily: FONT.medium,
+                color: "#eee",
+              },
+            }}
+          />
 
-      <View style={styles.wrapper}>
-        <View style={styles.translationContainer}>
-          <Text style={{ color: "#fff", fontSize: 20 }}>
-            {shownWord &&
-              `${shownWord.chineseWord} - ${wordDef?.englishWord || "-???-"}`}
-          </Text>
-          <Text style={{ color: "#fff", fontSize: 20 }}>
-            {shownWord && `${wordDef?.definition || ""} `}
-          </Text>
-        </View>
+          <View style={styles.wrapper}>
+            <View style={styles.translationContainer}>
+              <Text style={{ color: "#fff", fontSize: 20 }}>
+                {shownWord &&
+                  `${shownWord.chineseWord} - ${
+                    wordDef?.englishWord || "-???-"
+                  }`}
+              </Text>
+              <Text style={{ color: "#fff", fontSize: 20 }}>
+                {shownWord && `${wordDef?.definition || ""} `}
+              </Text>
+            </View>
 
-        <ScrollView
-          horizontal={false}
-          contentContainerStyle={styles.wordWrapper}
-        >
-          {story.words.map((word, index) => (
-            <Pressable
-              onPressIn={(e) => showWord(e, word)}
-              onPressOut={() => {
-                setShownWord("");
-                setWordDef("");
-              }}
-              key={`${word}-${index}`}
+            <ScrollView
+              horizontal={false}
+              contentContainerStyle={styles.wordWrapper}
             >
-              <View>
-                {showPinyin && (
-                  <Text style={styles.pinyinText}>{word.pinyin}</Text>
-                )}
-                <Text style={styles.text(shownWord === word, showPinyin)}>
-                  {word.chineseWord}
-                </Text>
-              </View>
-            </Pressable>
-          ))}
-        </ScrollView>
-        <View style={styles.buttonContainer}>
-          <Filter
-            text={"Pinyin"}
-            color="#fff"
-            size="30%"
-            storyFilter
-            onPress={handleFilterPress}
-          />
-          <Filter
-            text={"Finish"}
-            color="#fff"
-            size="30%"
-            storyFilter
-            onPress={handleFinishedStory}
-          />
-        </View>
-      </View>
+              {story.words.map((word, index) => (
+                <Pressable
+                  onPressIn={(e) => showWord(e, word)}
+                  onPressOut={() => {
+                    setShownWord("");
+                    setWordDef("");
+                  }}
+                  key={`${word}-${index}`}
+                >
+                  <View>
+                    {showPinyin && (
+                      <Text style={styles.pinyinText}>{word.pinyin}</Text>
+                    )}
+                    <Text style={styles.text(shownWord === word, showPinyin)}>
+                      {word.chineseWord}
+                    </Text>
+                  </View>
+                </Pressable>
+              ))}
+            </ScrollView>
+
+            <View style={styles.fullTranslation}>
+              <Text style={styles.translationText}>{story.translation}</Text>
+            </View>
+
+            <View style={styles.buttonContainer}>
+              <Filter
+                text={"Pinyin"}
+                color="#fff"
+                size="30%"
+                storyFilter
+                onPress={handleFilterPress}
+              />
+              <Filter
+                text={"Finish"}
+                color="#fff"
+                size="30%"
+                storyFilter
+                disabled={localStorageMatch?.read}
+                onPress={handleFinishedStory}
+              />
+            </View>
+          </View>
+        </>
+      )}
     </SafeAreaView>
   );
 };
@@ -246,5 +292,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "space-evenly",
+  },
+  fullTranslation: {
+    width: "100%",
+    paddingHorizontal: "10%",
+  },
+  translationText: {
+    color: "#fff",
+    fontSize: 20,
+    lineHeight: 30,
+    fontFamily: FONT.regular,
+    marginBottom: 20,
   },
 });

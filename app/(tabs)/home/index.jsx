@@ -21,13 +21,12 @@ import { useLocalStorage } from "../../../utils/useLocalStorage";
 
 const home = () => {
   const router = useRouter();
-  const { getLocalStore } = useLocalStorage();
+  const { localStories, getLocalStore } = useLocalStorage();
   const goToUser = () => {
     router.push("/user");
   };
 
   const stories = useStoriesStore((state) => state.stories);
-
   const setStories = useStoriesStore((state) => state.setStories);
   const setWords = useDictionaryStore((state) => state.setWords);
   const setLocalStorageStories = useStoriesStore(
@@ -96,6 +95,18 @@ const home = () => {
     fetchStories();
   }, []);
 
+  // Just for dev purposes
+  const clearAll = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (e) {
+      // clear error
+    }
+
+    alert("Storage cleared");
+    console.log("Done.");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
@@ -119,7 +130,12 @@ const home = () => {
                   <Text style={styles.text}>AS</Text>
                 </TouchableOpacity>
               </View>
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 11 }}>
+                <TouchableOpacity onPress={clearAll}>
+                  <Text style={{ color: "red", padding: 5 }}>
+                    Clear Storage
+                  </Text>
+                </TouchableOpacity>
                 <Recommended stories={stories} />
               </View>
             </>

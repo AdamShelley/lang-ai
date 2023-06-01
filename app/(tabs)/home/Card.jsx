@@ -127,7 +127,8 @@ const styles = StyleSheet.create({
   smallText: {
     fontSize: 14,
     color: "#fff",
-    marginTop: 20,
+    marginTop: 15,
+    marginRight: 5,
     fontFamily: FONT.regular,
     height: "100%",
   },

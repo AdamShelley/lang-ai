@@ -5,7 +5,6 @@ import { FONT } from "../../../constants/fonts";
 import { useState } from "react";
 import Filter from "../../../components/Filter";
 import useStoriesStore from "../../../state/storiesStore";
-import { useLocalStorage } from "../../../utils/useLocalStorage";
 
 const AllStories = ({ ListHeaderComponent, stories }) => {
   const [showUnread, setShowUnread] = useState("All");
@@ -15,12 +14,14 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
   );
 
   const unreadStories = stories.filter((story) => {
-    const status = localStorageStories[story.gptId];
+    if (!localStorageStories) return;
+    const status = localStorageStories[story?.gptId] || null;
     return status && !status.read;
   });
 
   const readStories = stories.filter((story) => {
-    const status = localStorageStories[story.gptId];
+    if (!localStorageStories) return;
+    const status = localStorageStories[story?.gptId];
     return status && status.read;
   });
 
