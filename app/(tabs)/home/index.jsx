@@ -40,7 +40,7 @@ const home = () => {
         const data = await response.json();
 
         data.map(
-          (story) => (story.words = story.words.map((obj) => JSON.parse(obj)))
+          (story) => (story.words = story?.words?.map((obj) => JSON.parse(obj)))
         );
 
         setStories(data);
@@ -48,7 +48,12 @@ const home = () => {
         // Check if stories are already saved to local storage
         const storiesFromStorage = await AsyncStorage.getItem("stories");
 
-        if (storiesFromStorage) return;
+        // If the quantity of stories in local storage matches the quantity of stories in the DB, return
+        if (
+          storiesFromStorage &&
+          JSON.parse(storiesFromStorage).length === data.length
+        )
+          return;
 
         // Save the story ID's to local storage
         let storiesForStorage = data.reduce((acc, story) => {

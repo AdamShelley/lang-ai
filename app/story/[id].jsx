@@ -22,6 +22,7 @@ const Story = () => {
   const { id } = useSearchParams();
   const [shownWord, setShownWord] = useState("");
   const [wordDef, setWordDef] = useState("");
+  const [showTranslation, setShowTranslation] = useState(false);
   const showPinyin = useSettingsStore((state) => state.pinyin);
   const setPinyin = useSettingsStore((state) => state.setPinyin);
   const stories = useStoriesStore((state) => state.stories);
@@ -178,9 +179,25 @@ const Story = () => {
               ))}
             </ScrollView>
 
-            <View style={styles.fullTranslation}>
-              <Text style={styles.translationText}>{story.translation}</Text>
-            </View>
+            {showTranslation ? (
+              <Pressable
+                style={styles.fullTranslation}
+                onPress={() => setShowTranslation(false)}
+              >
+                <Text style={styles.translationText((hidden = false))}>
+                  {story.translation}
+                </Text>
+              </Pressable>
+            ) : (
+              <Pressable
+                style={styles.fullTranslation}
+                onPress={() => setShowTranslation(true)}
+              >
+                <Text style={styles.translationText((hidden = true))}>
+                  Tap to see translation
+                </Text>
+              </Pressable>
+            )}
 
             <View style={styles.buttonContainer}>
               <Filter
@@ -295,13 +312,19 @@ const styles = StyleSheet.create({
   },
   fullTranslation: {
     width: "100%",
+    marginTop: 20,
+    paddingTop: 20,
     paddingHorizontal: "10%",
+    borderTopColor: "#1c1c1c",
+    borderTopWidth: 1,
+    backgroundColor: "#0000002a",
   },
-  translationText: {
+  translationText: (hidden) => ({
     color: "#fff",
     fontSize: 20,
     lineHeight: 30,
     fontFamily: FONT.regular,
     marginBottom: 20,
-  },
+    textAlign: hidden ? "center" : "justify",
+  }),
 });
