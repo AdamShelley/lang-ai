@@ -14,7 +14,7 @@ const stories = () => {
   // Screen Width
   const screenWidth = Dimensions.get("window").width;
   // Card width (40%)
-  const cardWidth = screenWidth * 0.45;
+  const cardWidth = screenWidth * 0.4;
 
   const stories = useStoriesStore((state) => state.stories);
 

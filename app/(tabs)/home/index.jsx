@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FONT } from "../../../constants/fonts";
 import Recommended from "./Recommended";
 import AllStories from "./AllStories";
+import { URL_DEV } from "@env";
 
 import useStoriesStore from "../../../state/storiesStore";
 import useDictionaryStore from "../../../state/dictionaryStore";
@@ -36,7 +37,7 @@ const home = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await fetch("http://192.168.1.160:8888/api/db");
+        const response = await fetch(`${URL_DEV}/db`);
         const data = await response.json();
 
         data.map(
@@ -77,7 +78,7 @@ const home = () => {
 
     const fetchDictionary = async () => {
       try {
-        const dictionary = await fetch("http://192.168.1.160:8888/api/def");
+        const dictionary = await fetch(`${URL_DEV}/def`);
         const wordData = await dictionary.json();
 
         setWords(wordData);
