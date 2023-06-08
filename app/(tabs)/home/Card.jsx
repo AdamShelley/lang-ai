@@ -14,9 +14,6 @@ const Card = ({ story, width, wide = false }) => {
     router.push(`/story/${id}`);
   };
 
-  const imgJson = JSON.parse(story.image);
-  const img = imgJson?.b64_json;
-
   return (
     <TouchableOpacity
       style={styles.container(width, wide)}
@@ -26,9 +23,10 @@ const Card = ({ story, width, wide = false }) => {
         <View style={{ alignSelf: "stretch" }}>
           <Image
             source={{
-              uri: img
-                ? `data:image/jpeg;base64,${img}`
-                : "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+              uri:
+                story?.imageUrl || story?.imageUrl.length > 0
+                  ? story.imageUrl
+                  : "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
             }}
             style={styles.image(wide)}
             resizeMode="cover"
@@ -36,12 +34,14 @@ const Card = ({ story, width, wide = false }) => {
           />
           <View style={styles.overlay} />
           {wide && (
-            <Text style={styles.level(wide)}>{story.level || "N/A"}</Text>
+            <Text style={styles.level(wide)}>{story.level || "Unknown"}</Text>
           )}
         </View>
       </View>
       <View style={styles.bottomSection(wide)}>
-        {!wide && <Text style={styles.level(wide)}>{story.level}</Text>}
+        {!wide && (
+          <Text style={styles.level(wide)}>{story.level || "Unknown"}</Text>
+        )}
         <Text style={styles.text(wide)}>{story.title}</Text>
 
         {wide && <Text style={styles.smallText}>{story.synopsis}</Text>}
@@ -109,7 +109,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 400,
     paddingHorizontal: wide ? 0 : 10,
+    marginHorizontal: 5,
     fontFamily: FONT.medium,
+    flexWrap: "wrap",
   }),
   level: (wide) => ({
     borderRadius: 6,

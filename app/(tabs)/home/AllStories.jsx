@@ -13,17 +13,21 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
     (state) => state.localStorageStories
   );
 
-  const unreadStories = stories.filter((story) => {
-    if (!localStorageStories) return;
-    const status = localStorageStories[story?.gptId] || null;
-    return status && !status.read;
-  });
+  const unreadStories = Array.isArray(stories)
+    ? stories?.filter((story) => {
+        if (!localStorageStories) return;
+        const status = localStorageStories[story?.gptId] || null;
+        return status && !status.read;
+      })
+    : [];
 
-  const readStories = stories.filter((story) => {
-    if (!localStorageStories) return;
-    const status = localStorageStories[story?.gptId];
-    return status && status.read;
-  });
+  const readStories = Array.isArray(stories)
+    ? stories.filter((story) => {
+        if (!localStorageStories) return;
+        const status = localStorageStories[story?.gptId];
+        return status && status.read;
+      })
+    : [];
 
   useEffect(() => {
     if (showUnread === "Unread") {
