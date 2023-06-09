@@ -1,16 +1,18 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Card from "./Card";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { FONT } from "../../../constants/fonts";
+import { ActivityIndicator } from "react-native";
+import useStoriesStore from "../../../state/storiesStore";
 
 const Recommended = ({ stories }) => {
-  // Get read state from stories in asyncStorage
+  const isLoading = useStoriesStore((state) => state.isLoading);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Latest Stories</Text>
 
-      {stories ? (
+      {!isLoading ? (
         <FlatList
           showsHorizontalScrollIndicator={false}
           data={stories}
@@ -23,7 +25,7 @@ const Recommended = ({ stories }) => {
           horizontal
         />
       ) : (
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" color="#fff" />
       )}
     </View>
   );

@@ -26,9 +26,7 @@ const Story = () => {
   const showPinyin = useSettingsStore((state) => state.pinyin);
   const setPinyin = useSettingsStore((state) => state.setPinyin);
   const stories = useStoriesStore((state) => state.stories);
-  const localStorageStories = useStoriesStore(
-    (state) => state.localStorageStories
-  );
+
   const [story, setStory] = useState();
 
   useEffect(() => {
@@ -52,18 +50,7 @@ const Story = () => {
     }
   };
 
-  // Check for returns
-  // if (!id || !story || !story.words) return <Redirect to="/home" />;
-
   const dictionary = useDictionaryStore((state) => state.words);
-
-  let imgJson, img, localStorageMatch;
-  if (story) {
-    // imgJson = JSON.parse(story?.image);
-    // img = imgJson?.b64_json;
-    img = "";
-    localStorageMatch = localStorageStories[id];
-  }
 
   // Button functionality
   const showWord = (e, word) => {
@@ -120,10 +107,9 @@ const Story = () => {
         <>
           <Image
             source={{
-              uri:
-                story?.imageUrl || story?.imageUrl.length > 0
-                  ? story.imageUrl
-                  : "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+              uri: story?.imageUrl
+                ? story.imageUrl
+                : "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
             }}
             style={styles.image}
             alt="story-image"
@@ -214,7 +200,7 @@ const Story = () => {
                 color="#fff"
                 size="30%"
                 storyFilter
-                disabled={localStorageMatch?.read}
+                // disabled={localStorageMatch?.read}
                 onPress={handleFinishedStory}
               />
             </View>
