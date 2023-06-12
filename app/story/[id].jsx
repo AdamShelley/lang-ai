@@ -16,6 +16,7 @@ import useSettingsStore from "../../state/store";
 import useStoriesStore from "../../state/storiesStore";
 import useDictionaryStore from "../../state/dictionaryStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import useDictionary from "../../hooks/useDictionary";
 
 const Story = () => {
   const router = useRouter();
@@ -51,6 +52,7 @@ const Story = () => {
   };
 
   const dictionary = useDictionaryStore((state) => state.words);
+  if (!dictionary) useDictionary();
 
   // Button functionality
   const showWord = (e, word) => {

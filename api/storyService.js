@@ -27,45 +27,49 @@ export const fetchStoriesFromServer = async () => {
     }
   } catch (error) {
     console.error(error);
-    return null;
+    return error;
   }
 };
 
 export const fetchImagesFromServer = async (stories, batchSize = 5) => {
-  const imageUrls = [];
-  let imageMap = {};
+  try {
+    const imageUrls = [];
+    let imageMap = {};
 
-  for (let i = 0; i < stories.length; i += batchSize) {
-    const batch = stories.slice(i, i + batchSize + 1);
-    const imageList = batch.map((story) => `${story.gptId}-${story.title}`);
+    for (let i = 0; i < stories.length; i += batchSize) {
+      const batch = stories.slice(i, i + batchSize + 1);
+      const imageList = batch.map((story) => `${story.gptId}-${story.title}`);
 
-    // Fetch this batch of images from the server
-    const response = await fetch(`${URL_DEV}/db/images`, {
-      method: "POST",
-      body: JSON.stringify({ imageList }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      // Fetch this batch of images from the server
+      const response = await fetch(`${URL_DEV}/db/images`, {
+        method: "POST",
+        body: JSON.stringify({ imageList }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      imageUrls.push(data);
+      // Flatten the structure
+      for (let index in data) {
+        imageMap = { ...imageMap, ...data[index] };
+      }
+    }
+
+    // Now merge the stories with their corresponding image URLs
+    const storiesWithImages = stories.map((story) => {
+      const key = story.title;
+      return {
+        ...story,
+        imageUrl: imageMap[key],
+      };
     });
 
-    const data = await response.json();
-    imageUrls.push(data);
-    // Flatten the structure
-    for (let index in data) {
-      imageMap = { ...imageMap, ...data[index] };
-    }
+    return storiesWithImages;
+  } catch (error) {
+    return console.log(error);
   }
-
-  // Now merge the stories with their corresponding image URLs
-  const storiesWithImages = stories.map((story) => {
-    const key = story.title;
-    return {
-      ...story,
-      imageUrl: imageMap[key],
-    };
-  });
-
-  return storiesWithImages;
 };
 
 export const getStoriesFromStorage = async () => {
@@ -78,4 +82,13 @@ export const getStoriesFromStorage = async () => {
 
 export const saveStoriesToStorage = async (stories) => {
   await AsyncStorage.setItem("stories", JSON.stringify(stories));
+};
+
+export const updateLocalStorage = async (newData) => {
+  try {
+    // Update local storage with new data
+    await AsyncStorage.setItem("stories", JSON.stringify(newData));
+  } catch (error) {
+    console.error("Error updating local storage:", error);
+  }
 };

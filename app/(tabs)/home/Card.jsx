@@ -76,12 +76,13 @@ const styles = StyleSheet.create({
   }),
   imageContainer: (wide) => ({
     // flex: 1,
-    width: wide ? "30%" : "100%", // Smaller container if wide card
+    width: wide ? "30%" : "95%", // Smaller container if wide card
     minWidth: 10,
-    height: wide ? "100%" : "70%",
+    height: wide ? "100%" : "65%",
     borderTopRightRadius: wide ? 0 : 20,
     borderTopLeftRadius: 20,
-    borderBottomLeftRadius: wide ? 20 : 0,
+    borderBottomLeftRadius: wide ? 0 : 20,
+    borderBottomRightRadius: wide ? 0 : 20,
     overflow: "hidden",
     position: "relative",
   }),
@@ -113,9 +114,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 400,
     paddingHorizontal: wide ? 0 : 10,
-    marginHorizontal: 5,
+    // marginHorizontal: 10,
     fontFamily: FONT.medium,
     flexWrap: "wrap",
+    flexShrink: 1,
   }),
   level: (wide) => ({
     borderRadius: 6,

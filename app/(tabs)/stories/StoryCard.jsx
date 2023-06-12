@@ -32,7 +32,7 @@ const Card = ({ story, width }) => {
           />
           <View style={styles.overlay} />
           <View style={styles.level}>
-            <Text style={styles.levelText}>{story.level}</Text>
+            <Text style={styles.levelText}>{story.level || "Unknown"}</Text>
           </View>
         </View>
       </View>

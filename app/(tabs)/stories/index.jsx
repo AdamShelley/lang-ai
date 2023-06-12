@@ -12,7 +12,11 @@ import StoryCard from "./StoryCard";
 
 import useStoriesStore from "../../../state/storiesStore";
 import FilterSection from "./FilterSection";
-import { RecyclerListView } from "recyclerlistview";
+import {
+  RecyclerListView,
+  LayoutProvider,
+  DataProvider,
+} from "recyclerlistview";
 
 const stories = () => {
   // State
@@ -25,8 +29,6 @@ const stories = () => {
 
   const allStories = useStoriesStore((state) => state.stories);
 
-  console.log(allStories);
-
   const filteredStories = useMemo(() => {
     if (selectedGenre === "All") {
       return allStories;
@@ -37,6 +39,25 @@ const stories = () => {
     }
   }, [selectedGenre, allStories]);
 
+  const dataProvider = new DataProvider((r1, r2) => {
+    return r1 !== r2;
+  });
+
+  const numOfColumns = 2;
+  const layoutProvider = new LayoutProvider(
+    () => {
+      return 0; // Assuming single view type
+    },
+    (type, dim, index) => {
+      const isEvenIndex = index % 2 === 0;
+
+      dim.width = screenWidth / numOfColumns;
+      dim.height = cardWidth * 2;
+
+      dim.x = isEvenIndex ? 0 : dim.width;
+    }
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
@@ -45,28 +66,14 @@ const stories = () => {
         setSelectedGenre={setSelectedGenre}
       />
       <View>
-        {/* <RecyclerListView
-          // layoutProvider={}
-          dataProvider={filteredStories}
+        <RecyclerListView
+          layoutProvider={layoutProvider}
+          dataProvider={dataProvider.cloneWithRows(filteredStories)}
           rowRenderer={(type, data) => (
             <StoryCard story={data} width={cardWidth} />
           )}
-        /> */}
-
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={filteredStories}
-          renderItem={({ item }) => (
-            <StoryCard story={item} width={cardWidth} />
-          )}
-          keyExtractor={(item) => item.gptId}
-          numColumns={2}
-          contentContainerStyle={{ marginTop: 5 }}
-          columnWrapperStyle={{
-            flex: 1,
-            justifyContent: "space-evenly",
-            marginTop: 20,
-          }}
+          contentContainerStyle={{ marginTop: 5, paddingBottom: 100 }}
+          renderAheadOffset={300}
         />
       </View>
     </SafeAreaView>

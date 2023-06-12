@@ -4,12 +4,10 @@ import {
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
 } from "react-native";
 
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { FONT } from "../../../constants/fonts";
 import Recommended from "./Recommended";
@@ -18,6 +16,9 @@ import AllStories from "./AllStories";
 import useStories from "../../../hooks/useStories";
 import useDictionary from "../../../hooks/useDictionary";
 import useStoriesStore from "../../../state/storiesStore";
+
+// DEV ONLY
+import { clearAll } from "../../../utils/devFunctions";
 
 const home = () => {
   const router = useRouter();
@@ -31,20 +32,6 @@ const home = () => {
   const goToUser = () => {
     router.push("/user");
   };
-
-  //--------------------------------------------//
-  // Just for dev purposes
-  const clearAll = async () => {
-    try {
-      await AsyncStorage.clear();
-    } catch (e) {
-      // clear error
-    }
-
-    alert("Storage cleared");
-    console.log("Done.");
-  };
-  //--------------------------------------------//
 
   return (
     <SafeAreaView style={styles.container}>
