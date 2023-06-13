@@ -17,9 +17,6 @@ import useStories from "../../../hooks/useStories";
 import useDictionary from "../../../hooks/useDictionary";
 import useStoriesStore from "../../../state/storiesStore";
 
-// DEV ONLY
-import { clearAll } from "../../../utils/devFunctions";
-
 const home = () => {
   const router = useRouter();
 
@@ -57,11 +54,6 @@ const home = () => {
                 </TouchableOpacity>
               </View>
               <View style={{ flex: 11 }}>
-                <TouchableOpacity onPress={clearAll}>
-                  <Text style={{ color: "red", padding: 5 }}>
-                    Clear Storage
-                  </Text>
-                </TouchableOpacity>
                 <Recommended stories={stories} />
               </View>
             </>

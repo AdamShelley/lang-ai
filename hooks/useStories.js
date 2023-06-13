@@ -23,35 +23,48 @@ const useStories = () => {
   };
 
   useEffect(() => {
+    // let isMounted = true;
+    // const fetchStoriesAndUpdate = async () => {
+    //   if (!isMounted) return;
+    //   fetchStories();
+    // };
+    // // Call fetchStories initially to load the stories
+    // fetchStoriesAndUpdate();
+    // const handlePayload = async (payload) => {
+    //   if (payload.eventType === "INSERT") {
+    //     // Combine the new data with the existing data
+    //     const localStories = await storyService.getStoriesFromStorage();
+    //     const newData = [...localStories, payload.new];
+    //     await storyService.updateLocalStorage(newData);
+    //     // Run the fetchStories function to update the state
+    //     fetchStoriesAndUpdate();
+    //   }
+    // };
+    // // Subscribe to real-time changes in 'stories' table
+    // const subscription = supabase
+    //   .channel("any")
+    //   .on("postgres_changes", { event: "*", table: "stories" }, handlePayload)
+    //   .subscribe();
+    // return () => {
+    //   isMounted = false;
+    //   supabase.removeSubscription(subscription);
+    // };
+
     fetchStories();
+    // const subscription = supabase
+    //   .channel("any")
+    //   .on(
+    //     "postgres_changes",
+    //     { event: "INSERT", table: "stories" },
+    //     (payload) => {
+    //       console.log("payload");
+    //     }
+    //   )
+    //   .subscribe();
 
-    // Subscribe to real-time changes in 'stories' table
-
-    const subscription = supabase
-      .channel("any")
-      .on(
-        "postgres_changes",
-        { event: "*", table: "stories" },
-        async (payload) => {
-          console.log(payload);
-
-          if (payload.eventType === "INSERT") {
-            // Combine the new data with the existing data
-            const localStories = await storyService.getStoriesFromStorage();
-            const newData = [...localStories, payload.new];
-
-            await storyService.updateLocalStorage(newData);
-
-            // Run the fetchStories function to update the state
-            fetchStories();
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeSubscription(subscription);
-    };
+    // return () => {
+    //   supabase.removeSubscription(subscription);
+    // };
   }, []);
 };
 

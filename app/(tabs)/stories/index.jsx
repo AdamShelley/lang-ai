@@ -2,11 +2,11 @@ import { useState, useMemo } from "react";
 
 import {
   View,
-  FlatList,
   StyleSheet,
   Dimensions,
   SafeAreaView,
   StatusBar,
+  Text,
 } from "react-native";
 import StoryCard from "./StoryCard";
 
@@ -49,12 +49,16 @@ const stories = () => {
       return 0; // Assuming single view type
     },
     (type, dim, index) => {
-      const isEvenIndex = index % 2 === 0;
+      if (filteredStories && filteredStories.length > 0) {
+        const isEvenIndex = index % 2 === 0;
+        dim.width = screenWidth / numOfColumns;
+        dim.height = cardWidth * 2;
 
-      dim.width = screenWidth / numOfColumns;
-      dim.height = cardWidth * 2;
-
-      dim.x = isEvenIndex ? 0 : dim.width;
+        dim.x = isEvenIndex ? 0 : dim.width;
+      } else {
+        dim.width = 0;
+        dim.height = 0;
+      }
     }
   );
 
@@ -66,15 +70,22 @@ const stories = () => {
         setSelectedGenre={setSelectedGenre}
       />
       <View>
-        <RecyclerListView
-          layoutProvider={layoutProvider}
-          dataProvider={dataProvider.cloneWithRows(filteredStories)}
-          rowRenderer={(type, data) => (
-            <StoryCard story={data} width={cardWidth} />
-          )}
-          contentContainerStyle={{ marginTop: 5, paddingBottom: 100 }}
-          renderAheadOffset={300}
-        />
+        {filteredStories && filteredStories.length > 0 ? (
+          <RecyclerListView
+            layoutProvider={layoutProvider}
+            dataProvider={dataProvider.cloneWithRows(
+              filteredStories ? filteredStories : []
+            )}
+            rowRenderer={(type, data) => (
+              <StoryCard story={data} width={cardWidth} />
+            )}
+            contentContainerStyle={{ marginTop: 5 }}
+            renderAheadOffset={300}
+            renderFooter={() => <View style={{ paddingVertical: 100 }} />}
+          />
+        ) : (
+          <Text style={{ color: "white" }}>No items to display</Text>
+        )}
       </View>
     </SafeAreaView>
   );
