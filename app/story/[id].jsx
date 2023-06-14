@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     alignSelf: "center",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     paddingHorizontal: "10%",
   },
   title: {
@@ -299,15 +299,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "space-evenly",
+    marginBottom: 10,
   },
   fullTranslation: {
     width: "100%",
     marginTop: 20,
     paddingTop: 20,
     paddingHorizontal: "10%",
-    borderTopColor: "#1c1c1c",
+    borderTopColor: "#00000013",
     borderTopWidth: 1,
-    backgroundColor: "#0000002a",
+    backgroundColor: "#00000013",
   },
   translationText: (hidden) => ({
     color: "#fff",

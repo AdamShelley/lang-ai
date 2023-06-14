@@ -5,6 +5,11 @@
       "bundler": "metro"
     },
     "name": "language_native",
-    "slug": "language_native"
+    "slug": "language_native",
+    "splash": {
+      "image": "./assets/splash/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFFFF"
+    }
   }
 }

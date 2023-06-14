@@ -7,6 +7,7 @@ export const fetchStoriesFromServer = async () => {
     const storiesFromStorage = await AsyncStorage.getItem("stories");
     if (storiesFromStorage) {
       console.log("Using local storage Stories");
+
       const parsedStories = JSON.parse(storiesFromStorage);
       return parsedStories;
     } else {
@@ -19,9 +20,6 @@ export const fetchStoriesFromServer = async () => {
         story.words = story?.words?.map((obj) => JSON.parse(obj));
         return { ...story };
       });
-
-      // Save stories to local Storage
-      await AsyncStorage.setItem("stories", JSON.stringify(newData));
 
       return newData;
     }
@@ -66,6 +64,9 @@ export const fetchImagesFromServer = async (stories, batchSize = 5) => {
       };
     });
 
+    // Save stories to local Storage
+    await AsyncStorage.setItem("stories", JSON.stringify(storiesWithImages));
+
     return storiesWithImages;
   } catch (error) {
     return console.log(error);
@@ -91,4 +92,14 @@ export const updateLocalStorage = async (newData) => {
   } catch (error) {
     console.error("Error updating local storage:", error);
   }
+};
+
+export const setStoryLevels = (stories) => {
+  // filter out and keep unique levels
+  const storyLevels = stories.map((story) => story.level);
+  const uniqueLevels = [...new Set(storyLevels)];
+  // sort levels
+  uniqueLevels.sort((a, b) => a - b);
+
+  return uniqueLevels;
 };

@@ -21,6 +21,8 @@ import {
 const stories = () => {
   // State
   const [selectedGenre, setSelectedGenre] = useState("All");
+  const [selectedLevel, setSelectedLevel] = useState("All");
+  const levels = useStoriesStore((state) => state.levels);
 
   // Screen Width
   const screenWidth = Dimensions.get("window").width;
@@ -52,7 +54,7 @@ const stories = () => {
       if (filteredStories && filteredStories.length > 0) {
         const isEvenIndex = index % 2 === 0;
         dim.width = screenWidth / numOfColumns;
-        dim.height = cardWidth * 2;
+        dim.height = cardWidth * 2 + 25;
 
         dim.x = isEvenIndex ? 0 : dim.width;
       } else {
@@ -65,10 +67,19 @@ const stories = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
-      <FilterSection
-        selectedGenre={selectedGenre}
-        setSelectedGenre={setSelectedGenre}
-      />
+      <View style={styles.filterSection}>
+        <FilterSection
+          selectedData={selectedGenre}
+          setSelectedData={setSelectedGenre}
+          title={"Select Genre"}
+        />
+        <FilterSection
+          selectedData={selectedLevel}
+          setSelectedData={setSelectedLevel}
+          title={"Select Level"}
+          data={levels}
+        />
+      </View>
       <View>
         {filteredStories && filteredStories.length > 0 ? (
           <RecyclerListView
@@ -79,7 +90,7 @@ const stories = () => {
             rowRenderer={(type, data) => (
               <StoryCard story={data} width={cardWidth} />
             )}
-            contentContainerStyle={{ marginTop: 5 }}
+            contentContainerStyle={{ marginTop: 5, paddingBottom: 100 }}
             renderAheadOffset={300}
             renderFooter={() => <View style={{ paddingVertical: 100 }} />}
           />
@@ -97,5 +108,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#212121",
     flex: 1,
+    width: "100%",
+  },
+
+  filterSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
   },
 });

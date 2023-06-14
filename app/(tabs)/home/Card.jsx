@@ -46,8 +46,8 @@ const Card = ({ story, width, wide = false }) => {
         {!wide && (
           <Text style={styles.level(wide)}>{story.level || "Unknown"}</Text>
         )}
-        <Text style={styles.text(wide)}>{story.title}</Text>
 
+        <Text style={styles.text(wide)}>{story.title}</Text>
         {wide && <Text style={styles.smallText}>{story.synopsis}</Text>}
       </View>
     </TouchableOpacity>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     // marginHorizontal: 10,
     fontFamily: FONT.medium,
     flexWrap: "wrap",
-    flexShrink: 1,
+    // flexShrink: 1,
   }),
   level: (wide) => ({
     borderRadius: 6,

@@ -26,6 +26,9 @@ const home = () => {
 
   const stories = useStoriesStore((state) => state.stories);
 
+  // Filter out read stories
+  const unreadStories = stories.filter((story) => !story.read);
+
   const goToUser = () => {
     router.push("/user");
   };
@@ -36,7 +39,7 @@ const home = () => {
 
       {stories && (
         <AllStories
-          stories={stories}
+          stories={unreadStories}
           ListHeaderComponent={
             <>
               <View

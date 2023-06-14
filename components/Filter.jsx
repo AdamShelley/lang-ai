@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
   }),
   text: (color, disabled) => ({
     color: disabled ? "#9e9797" : color,
-    fontFamily: FONT.regular,
+    fontFamily: FONT.bold,
   }),
 });

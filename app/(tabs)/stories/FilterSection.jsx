@@ -5,28 +5,49 @@ import { useState } from "react";
 
 import { genres } from "../../../constants/genres";
 
-const FilterSection = ({ selectedGenre, setSelectedGenre }) => {
+const FilterSection = ({
+  selectedData,
+  setSelectedData,
+  title,
+  data = null,
+}) => {
   const [showButtons, setShowButtons] = useState(false);
+  const [activeFilter, setActiveFilter] = useState(null);
 
   return (
     <View style={style.wrapper}>
       <Filter
-        text={"Select Genre"}
+        text={title}
         color="#fff"
-        size="40%"
-        onPress={() => setShowButtons((prev) => !prev)}
+        size="100%"
+        onPress={() => {
+          setShowButtons((prev) => !prev);
+          setActiveFilter(data ? "level" : "genre");
+        }}
       />
       {showButtons && (
         <View style={style.buttonContainer}>
-          {genres.map((genre) => (
-            <GenreButton
-              key={genre.genre}
-              text={genre.genre}
-              color={genre.color}
-              size="20%"
-              onPress={() => setSelectedGenre(genre.genre)}
-            />
-          ))}
+          {activeFilter === "genre" &&
+            genres.map((genre) => (
+              <GenreButton
+                key={genre.genre}
+                text={genre.genre}
+                color={genre.color}
+                size="20%"
+                onPress={() => setSelectedData(genre.genre)}
+              />
+            ))}
+          {data &&
+            activeFilter === "level" &&
+            data.map((item) => (
+              <GenreButton
+                key={item}
+                text={item}
+                color="#333"
+                size="20%"
+                onPress={() => setSelectedData(item)}
+              />
+            ))}
         </View>
       )}
     </View>
@@ -35,14 +56,14 @@ const FilterSection = ({ selectedGenre, setSelectedGenre }) => {
 
 const style = StyleSheet.create({
   wrapper: {
-    padding: 10,
+    // padding: 10,
   },
   buttonContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     // backgroundColor: "#414141",
-    marginTop: 10,
-    padding: 10,
+    marginTop: 5,
+    // padding: 10,
     alignContent: "space-evenly",
     justifyContent: "space-evenly",
   },

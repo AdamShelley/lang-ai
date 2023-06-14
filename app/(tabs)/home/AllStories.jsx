@@ -5,10 +5,12 @@ import { FONT } from "../../../constants/fonts";
 import { useState } from "react";
 import Filter from "../../../components/Filter";
 import useStoriesStore from "../../../state/storiesStore";
+import { useRouter } from "expo-router";
 
 const AllStories = ({ ListHeaderComponent, stories }) => {
   const [showUnread, setShowUnread] = useState("All");
   const [storiesToShow, setStoriesToShow] = useState(stories);
+  const router = useRouter();
   const localStorageStories = useStoriesStore(
     (state) => state.localStorageStories
   );
@@ -47,7 +49,7 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
     <View style={styles.container}>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={storiesToShow}
+        data={storiesToShow.slice(0, 7)} // Only show 7 stories on home page.
         renderItem={({ item }) => (
           <Card width={"90%"} wide={true} story={item} />
         )}
@@ -87,8 +89,7 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
                 text={"Show All"}
                 size="20%"
                 color="#fff"
-                onPress={() => setShowUnread("All")}
-                disabled={showUnread === "All"}
+                onPress={() => router.push(`/stories`)}
               />
             </View>
           </>
