@@ -95,11 +95,11 @@ export const updateLocalStorage = async (newData) => {
 };
 
 export const setStoryLevels = (stories) => {
-  // filter out and keep unique levels
-  const storyLevels = stories.map((story) => story.level);
+  // filter out and keep unique levels & Capitalize
+  const storyLevels = stories.map((story) => story.level.toUpperCase());
   const uniqueLevels = [...new Set(storyLevels)];
-  // sort levels
-  uniqueLevels.sort((a, b) => a - b);
+  // sort levels alphabetically
+  uniqueLevels.sort();
 
   return uniqueLevels;
 };

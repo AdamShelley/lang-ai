@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import {
   View,
@@ -8,42 +8,52 @@ import {
   StatusBar,
   Text,
 } from "react-native";
-import StoryCard from "./StoryCard";
 
-import useStoriesStore from "../../../state/storiesStore";
-import FilterSection from "./FilterSection";
 import {
   RecyclerListView,
   LayoutProvider,
   DataProvider,
 } from "recyclerlistview";
 
+import StoryCard from "./StoryCard";
+
+import useStoriesStore from "../../../state/storiesStore";
+import FilterSection from "./FilterSection";
+
 const stories = () => {
   // State
   const [selectedGenre, setSelectedGenre] = useState("All");
   const [selectedLevel, setSelectedLevel] = useState("All");
   const levels = useStoriesStore((state) => state.levels);
-
   // Screen Width
   const screenWidth = Dimensions.get("window").width;
   // Card width (40%)
   const cardWidth = screenWidth * 0.45;
-
   const allStories = useStoriesStore((state) => state.stories);
 
+  const [dataProvider, setDataProvider] = useState(
+    new DataProvider(
+      (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2)
+    ).cloneWithRows([])
+  );
+
   const filteredStories = useMemo(() => {
-    if (selectedGenre === "All") {
-      return allStories;
-    } else {
-      return allStories.filter(
+    let result = allStories;
+
+    if (selectedGenre !== "All") {
+      result = result.filter(
         (story) => story.topic.toLowerCase() === selectedGenre.toLowerCase()
       );
     }
-  }, [selectedGenre, allStories]);
 
-  const dataProvider = new DataProvider((r1, r2) => {
-    return r1 !== r2;
-  });
+    if (selectedLevel !== "All") {
+      result = result.filter(
+        (story) => story.level.toLowerCase() === selectedLevel.toLowerCase()
+      );
+    }
+
+    return result;
+  }, [selectedGenre, selectedLevel, allStories]);
 
   const numOfColumns = 2;
   const layoutProvider = new LayoutProvider(
@@ -64,31 +74,32 @@ const stories = () => {
     }
   );
 
+  // Update dataProvider when filteredStories changes
+  useEffect(() => {
+    setDataProvider(
+      new DataProvider((r1, r2) => r1 !== r2).cloneWithRows(filteredStories)
+    );
+  }, [filteredStories]);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
-      <View style={styles.filterSection}>
-        <FilterSection
-          selectedData={selectedGenre}
-          setSelectedData={setSelectedGenre}
-          title={"Select Genre"}
-        />
-        <FilterSection
-          selectedData={selectedLevel}
-          setSelectedData={setSelectedLevel}
-          title={"Select Level"}
-          data={levels}
-        />
-      </View>
+
+      <FilterSection
+        selectedGenre={selectedGenre}
+        selectedLevel={selectedLevel}
+        setSelectedGenre={setSelectedGenre}
+        setSelectedLevel={setSelectedLevel}
+        levels={levels}
+      />
+
       <View>
         {filteredStories && filteredStories.length > 0 ? (
           <RecyclerListView
             layoutProvider={layoutProvider}
-            dataProvider={dataProvider.cloneWithRows(
-              filteredStories ? filteredStories : []
-            )}
+            dataProvider={dataProvider}
             rowRenderer={(type, data) => (
-              <StoryCard story={data} width={cardWidth} />
+              <StoryCard story={data} width={cardWidth} key={data.gptId} />
             )}
             contentContainerStyle={{ marginTop: 5, paddingBottom: 100 }}
             renderAheadOffset={300}
