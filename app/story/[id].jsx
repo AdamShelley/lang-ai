@@ -27,6 +27,7 @@ const Story = () => {
   const showPinyin = useSettingsStore((state) => state.pinyin);
   const setPinyin = useSettingsStore((state) => state.setPinyin);
   const stories = useStoriesStore((state) => state.stories);
+  const setStories = useStoriesStore((state) => state.setStories);
 
   const [story, setStory] = useState();
 
@@ -91,8 +92,14 @@ const Story = () => {
       try {
         const storiesFromStorage = await AsyncStorage.getItem("stories");
         const stories = JSON.parse(storiesFromStorage);
-        stories[story.gptId].read = true;
+
+        // Find the story clicked and update it to read
+        const foundStory = stories.find((s) => s.gptId === story.gptId);
+
+        foundStory.read = true;
         await AsyncStorage.setItem("stories", JSON.stringify(stories));
+        // set the local state
+        setStories(stories);
       } catch (error) {
         console.log(error);
       }

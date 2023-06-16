@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#212121",
     marginTop: 20,
+    // paddingHorizontal: 20,
   }),
   text: (color, disabled) => ({
     color: disabled ? "#9e9797" : color,

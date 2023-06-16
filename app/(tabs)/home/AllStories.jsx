@@ -62,7 +62,6 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
             <Text style={styles.text}>Last week</Text>
             <View
               style={{
-                flex: 1,
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
@@ -71,7 +70,7 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
               {showUnread === "Unread" ? (
                 <Filter
                   text={"Read"}
-                  size="20%"
+                  size="50%"
                   color="#fff"
                   dark
                   onPress={() => setShowUnread("Read")}
@@ -80,14 +79,14 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
                 <Filter
                   text={"Unread"}
                   color="#fff"
-                  size="20%"
+                  size="50%"
                   onPress={() => setShowUnread("Unread")}
                 />
               )}
 
               <Filter
                 text={"Show All"}
-                size="20%"
+                size="50%"
                 color="#fff"
                 onPress={() => router.push(`/stories`)}
               />

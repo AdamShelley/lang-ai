@@ -21,9 +21,9 @@ const FilterSection = ({
         {selectedGenre && selectedGenre !== "All" && (
           // <Text style={{ color: "#fff" }}>{selectedGenre}</Text>
           <GenreButton
-            text={selectedGenre}
+            text={`X  ${selectedGenre}`}
             color="#414141"
-            size="20%"
+            size="30%"
             onPress={() => {
               setSelectedGenre("All");
             }}
@@ -31,7 +31,7 @@ const FilterSection = ({
         )}
         {selectedLevel && selectedLevel !== "All" && (
           <GenreButton
-            text={selectedLevel}
+            text={`X  ${selectedLevel}`}
             color="#414141"
             size="20%"
             onPress={() => {
@@ -97,9 +97,11 @@ const style = StyleSheet.create({
     alignItems: "center",
   },
   filteredButtons: {
+    alignSelf: "stretch",
     flexDirection: "row",
-    justifyContent: "space-evenly",
-    marginTop: 20,
+    justifyContent: "flex-start",
+    marginTop: 5,
+    paddingHorizontal: 10,
   },
   filters: {
     flexDirection: "row",
@@ -108,9 +110,8 @@ const style = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    // backgroundColor: "#414141",
-    marginTop: 5,
-    // padding: 10,
+    marginVertical: 5,
+    paddingVertical: 10,
     alignContent: "flex-start",
     justifyContent: "space-evenly",
   },
