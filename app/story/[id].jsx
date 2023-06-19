@@ -91,16 +91,23 @@ const Story = () => {
     const updateStory = async () => {
       try {
         const storiesFromStorage = await AsyncStorage.getItem("stories");
+
+        if (!storiesFromStorage) throw new Error("No Stories in storage");
+
         const stories = JSON.parse(storiesFromStorage);
 
         // Find the story clicked and update it to read
         const foundStory = stories.find((s) => s.gptId === story.gptId);
 
+        if (!foundStory) throw new Error("No story found");
+
         foundStory.read = true;
+        console.log(foundStory.title, foundStory.read);
         await AsyncStorage.setItem("stories", JSON.stringify(stories));
         // set the local state
         setStories(stories);
       } catch (error) {
+        console.log("Bugging out at updating story");
         console.log(error);
       }
     };

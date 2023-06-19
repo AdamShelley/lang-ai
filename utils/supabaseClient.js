@@ -15,7 +15,7 @@ import { SUPABASE_URL, SUPABASE_API_KEY } from "@env";
 //     SecureStore.deleteItemAsync(key);
 //   },
 // };
-
+//
 const options = {
   localStorage: AsyncStorage,
   autoRefreshToken: true,

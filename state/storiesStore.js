@@ -2,11 +2,11 @@ import { create } from "zustand";
 
 const useStoriesStore = create((set) => ({
   stories: [],
+  setStories: (stories) => set({ stories }),
   levels: [],
   setLevels: (levels) => set({ levels }),
-  isLoading: false,
-  setStories: (stories) => set({ stories }),
-  setIsLoading: (isLoading) => set({ isLoading }),
+  isLoaded: false,
+  setIsLoaded: (isLoaded) => set({ isLoaded }),
 }));
 
 export default useStoriesStore;
