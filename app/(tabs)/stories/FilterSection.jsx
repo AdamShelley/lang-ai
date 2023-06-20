@@ -1,19 +1,57 @@
+import { useState, useMemo } from "react";
 import { View, StyleSheet } from "react-native";
 import Filter from "../../../components/Filter";
 import GenreButton from "../../../components/GenreButton";
-import { useState } from "react";
 
-import { genres } from "../../../constants/genres";
+// import { genres } from "../../../constants/genres";
 
 const FilterSection = ({
   selectedGenre,
   selectedLevel,
   setSelectedGenre,
   setSelectedLevel,
-  levels,
+  allStories,
 }) => {
   const [showGenres, setShowGenre] = useState(false);
-  const [showLevels, setShowLevels] = useState(null);
+  const [showLevels, setShowLevels] = useState(false);
+
+  const capitalizeFirstLetter = (string) => {
+    if (typeof string === "string") {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    return "";
+  };
+
+  // Filter out levels/genres that have no stories
+  const availableGenres = useMemo(() => {
+    let genres;
+    if (selectedLevel === "All") {
+      genres = allStories.map((story) =>
+        story?.topic ? capitalizeFirstLetter(story.topic) : "Unknown"
+      );
+    } else {
+      genres = allStories
+        .filter((story) => story?.level === selectedLevel)
+        .map((story) =>
+          story?.topic ? capitalizeFirstLetter(story.topic) : "Unknown"
+        );
+    }
+    return new Set(genres);
+  }, [selectedLevel, allStories]);
+
+  const availableLevels = useMemo(() => {
+    let levels;
+    if (selectedGenre === "All") {
+      levels = allStories.map((story) =>
+        story?.level ? story.level.toUpperCase() : "Unknown"
+      );
+    } else {
+      levels = allStories
+        .filter((story) => story?.topic === selectedGenre)
+        .map((story) => (story?.level ? story.level.toUpperCase() : "Unknown"));
+    }
+    return new Set(levels);
+  }, [selectedGenre, allStories]);
 
   return (
     <View style={style.wrapper}>
@@ -63,29 +101,34 @@ const FilterSection = ({
       </View>
       {showGenres && (
         <View style={style.buttonContainer}>
-          {genres.map((genre) => (
+          {Array.from(availableGenres).map((genre) => (
             <GenreButton
-              key={genre.genre}
-              text={genre.genre}
-              color={genre.color}
+              key={genre}
+              text={genre}
+              color="#333"
               size="20%"
-              onPress={() => setSelectedGenre(genre.genre)}
+              onPress={() => {
+                setSelectedGenre(genre);
+                setShowGenre(false);
+              }}
             />
           ))}
         </View>
       )}
       {showLevels && (
         <View style={style.buttonContainer}>
-          {levels &&
-            levels.map((level) => (
-              <GenreButton
-                key={level}
-                text={level}
-                color="#333"
-                size="20%"
-                onPress={() => setSelectedLevel(level)}
-              />
-            ))}
+          {Array.from(availableLevels).map((level) => (
+            <GenreButton
+              key={level}
+              text={level}
+              color="#333"
+              size="20%"
+              onPress={() => {
+                setSelectedLevel(level);
+                setShowLevels(false);
+              }}
+            />
+          ))}
         </View>
       )}
     </View>

@@ -24,37 +24,39 @@ const stories = () => {
   // State
   const [selectedGenre, setSelectedGenre] = useState("All");
   const [selectedLevel, setSelectedLevel] = useState("All");
-  const levels = useStoriesStore((state) => state.levels);
   // Screen Width
   const screenWidth = Dimensions.get("window").width;
   // Card width (40%)
   const cardWidth = screenWidth * 0.45;
   const allStories = useStoriesStore((state) => state.stories);
 
+  // DataProvider for RecyclerListView
   const [dataProvider, setDataProvider] = useState(
     new DataProvider(
       (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2)
     ).cloneWithRows([])
   );
 
+  // Filter stories based on selectedGenre and selectedLevel
   const filteredStories = useMemo(() => {
     let result = allStories;
 
     if (selectedGenre !== "All") {
       result = result.filter(
-        (story) => story.topic.toLowerCase() === selectedGenre.toLowerCase()
+        (story) => story.topic?.toLowerCase() === selectedGenre.toLowerCase()
       );
     }
 
     if (selectedLevel !== "All") {
       result = result.filter(
-        (story) => story.level.toLowerCase() === selectedLevel.toLowerCase()
+        (story) => story.level?.toLowerCase() === selectedLevel.toLowerCase()
       );
     }
 
     return result;
   }, [selectedGenre, selectedLevel, allStories]);
 
+  // LayoutProvider for RecyclerListView
   const numOfColumns = 2;
   const layoutProvider = new LayoutProvider(
     () => {
@@ -90,7 +92,7 @@ const stories = () => {
         selectedLevel={selectedLevel}
         setSelectedGenre={setSelectedGenre}
         setSelectedLevel={setSelectedLevel}
-        levels={levels}
+        allStories={allStories}
       />
 
       <View>

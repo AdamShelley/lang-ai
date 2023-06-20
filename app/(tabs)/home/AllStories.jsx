@@ -49,7 +49,7 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
     <View style={styles.container}>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={storiesToShow.slice(0, 7)} // Only show 7 stories on home page.
+        data={storiesToShow.slice(5, 12)} // Only show 7 stories on home page.
         renderItem={({ item }) => (
           <Card width={"90%"} wide={true} story={item} />
         )}

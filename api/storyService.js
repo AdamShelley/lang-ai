@@ -21,6 +21,8 @@ export const fetchStoriesFromServer = async () => {
         return { ...story };
       });
 
+      console.log(newData.length);
+
       return newData;
     }
   } catch (error) {
@@ -95,11 +97,29 @@ export const updateLocalStorage = async (newData) => {
 };
 
 export const setStoryLevels = (stories) => {
-  // filter out and keep unique levels & Capitalize
-  const storyLevels = stories.map((story) => story.level.toUpperCase());
+  const storyLevels = stories.map((story) =>
+    story?.level ? story.level.toUpperCase() : "Unknown"
+  );
+
   const uniqueLevels = [...new Set(storyLevels)];
-  // sort levels alphabetically
+
+  // Sort levels alphabetically
   uniqueLevels.sort();
 
   return uniqueLevels;
+};
+
+export const setStoryGenres = (stories) => {
+  const storyGenres = stories.map((story) =>
+    story?.topic
+      ? story.topic.charAt(0).toUpperCase() + story.topic.slice(1)
+      : "Unknown"
+  );
+
+  const uniqueGenres = [...new Set(storyGenres)];
+
+  // Sort genres alphabetically
+  uniqueGenres.sort();
+
+  return uniqueGenres;
 };

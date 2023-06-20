@@ -57,7 +57,7 @@ const home = () => {
                 </TouchableOpacity>
               </View>
               <View style={{ flex: 11 }}>
-                <Recommended stories={unreadStories} />
+                <Recommended stories={unreadStories.slice(0, 5)} />
               </View>
             </>
           }

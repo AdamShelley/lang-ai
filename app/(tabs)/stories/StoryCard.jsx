@@ -32,6 +32,12 @@ const Card = ({ story, width }) => {
             alt="story-image"
           />
           <View style={styles.overlay} />
+
+          {story.read && (
+            <View style={styles.read}>
+              <Text style={styles.levelText}>Read</Text>
+            </View>
+          )}
           <View style={styles.level}>
             <Text style={styles.levelText}>{story.level || "Unknown"}</Text>
           </View>
@@ -118,6 +124,25 @@ const styles = StyleSheet.create({
     // borderColor: "#414141",
     position: "absolute",
     bottom: 5,
+    left: "5%",
+    right: "5%",
+    textAlign: "center",
+    alignSelf: "center",
+    width: "90%",
+    shadowColor: "rgba(0,0,0,0.9)",
+    // shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 5,
+  },
+  read: {
+    padding: 10,
+    backgroundColor: "#34582c",
+    borderRadius: 20,
+    borderWidth: 0,
+    // borderColor: "#414141",
+    position: "absolute",
+    top: 5,
     left: "5%",
     right: "5%",
     textAlign: "center",

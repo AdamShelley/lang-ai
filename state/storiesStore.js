@@ -5,6 +5,8 @@ const useStoriesStore = create((set) => ({
   setStories: (stories) => set({ stories }),
   levels: [],
   setLevels: (levels) => set({ levels }),
+  genres: [],
+  setGenres: (genres) => set({ genres }),
   isLoaded: false,
   setIsLoaded: (isLoaded) => set({ isLoaded }),
 }));

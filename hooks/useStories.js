@@ -8,6 +8,7 @@ const useStories = () => {
   const isLoaded = useStoriesStore((state) => state.isLoaded);
   const setIsLoaded = useStoriesStore((state) => state.setIsLoaded);
   const setLevels = useStoriesStore((state) => state.setLevels);
+  const setGenres = useStoriesStore((state) => state.setGenres);
 
   const fetchStories = async () => {
     // Fetch stories from server or local storage
@@ -18,6 +19,8 @@ const useStories = () => {
       fetchedStories = await storyService.fetchImagesFromServer(fetchedStories);
       const levels = storyService.setStoryLevels(fetchedStories);
       setLevels(levels);
+      const genres = storyService.setStoryGenres(fetchedStories);
+      setGenres(genres);
     }
 
     setStories(fetchedStories);
