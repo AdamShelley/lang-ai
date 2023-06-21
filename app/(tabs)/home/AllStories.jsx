@@ -8,38 +8,8 @@ import useStoriesStore from "../../../state/storiesStore";
 import { useRouter } from "expo-router";
 
 const AllStories = ({ ListHeaderComponent, stories }) => {
-  const [showUnread, setShowUnread] = useState("All");
   const [storiesToShow, setStoriesToShow] = useState(stories);
   const router = useRouter();
-  const localStorageStories = useStoriesStore(
-    (state) => state.localStorageStories
-  );
-
-  const unreadStories = Array.isArray(stories)
-    ? stories?.filter((story) => {
-        if (!localStorageStories) return;
-        const status = localStorageStories[story?.gptId] || null;
-        return status && !status.read;
-      })
-    : [];
-
-  const readStories = Array.isArray(stories)
-    ? stories.filter((story) => {
-        if (!localStorageStories) return;
-        const status = localStorageStories[story?.gptId];
-        return status && status.read;
-      })
-    : [];
-
-  useEffect(() => {
-    if (showUnread === "Unread") {
-      setStoriesToShow(unreadStories);
-    } else if (showUnread === "Read") {
-      setStoriesToShow(readStories);
-    } else {
-      setStoriesToShow(stories);
-    }
-  }, [showUnread]);
 
   useEffect(() => {
     setStoriesToShow(stories);
@@ -59,7 +29,6 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
         ListHeaderComponent={() => (
           <>
             {ListHeaderComponent}
-            <Text style={styles.text}>Last week</Text>
             <View
               style={{
                 flexDirection: "row",
@@ -67,23 +36,7 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
                 justifyContent: "space-between",
               }}
             >
-              {showUnread === "Unread" ? (
-                <Filter
-                  text={"Read"}
-                  size="50%"
-                  color="#fff"
-                  dark
-                  onPress={() => setShowUnread("Read")}
-                />
-              ) : (
-                <Filter
-                  text={"Unread"}
-                  color="#fff"
-                  size="50%"
-                  onPress={() => setShowUnread("Unread")}
-                />
-              )}
-
+              <Text style={styles.text}>Last week</Text>
               <Filter
                 text={"Show All"}
                 size="50%"
