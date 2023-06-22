@@ -86,11 +86,11 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     marginTop: 100,
-    width: "60%",
+    width: "80%",
   },
   text: {
     color: "#fff",
-    fontFamily: FONT.bold,
+    fontFamily: FONT.medium,
   },
   smallHeading: {
     color: "#fff",
@@ -102,6 +102,8 @@ const styles = StyleSheet.create({
 
   switch: {},
   row: {
+    height: 50,
+    maxHeight: 50,
     flexDirection: "row",
     borderWidth: 1,
     borderColor: "#fff",

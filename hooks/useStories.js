@@ -25,6 +25,8 @@ const useStories = () => {
 
     setStories(fetchedStories);
     setIsLoaded(true);
+
+    return fetchStories;
   };
 
   useEffect(() => {
@@ -77,6 +79,8 @@ const useStories = () => {
       }
     };
   }, []);
+
+  return { fetchStories };
 };
 
 export default useStories;

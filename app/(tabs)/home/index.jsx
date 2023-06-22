@@ -1,33 +1,39 @@
+import { useCallback, useState } from "react";
 import {
-  View,
   Text,
+  View,
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
+  RefreshControl,
+  ScrollView,
 } from "react-native";
-
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import { FONT } from "../../../constants/fonts";
 import Recommended from "./Recommended";
 import AllStories from "./AllStories";
-
 import useStories from "../../../hooks/useStories";
 import useDictionary from "../../../hooks/useDictionary";
 import useStoriesStore from "../../../state/storiesStore";
 
 const home = () => {
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
+  const stories = useStoriesStore((state) => state.stories);
+  // Filter out read stories
+  const unreadStories = stories.filter((story) => !story.read);
 
   // Initialize data
   useDictionary();
-  useStories();
+  const { fetchStories } = useStories();
 
-  const stories = useStoriesStore((state) => state.stories);
-
-  // Filter out read stories
-  const unreadStories = stories.filter((story) => !story.read);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    // Fetch new data
+    fetchStories().then(() => setRefreshing(false));
+  }, []);
 
   const goToUser = () => {
     router.push("/user");
@@ -40,6 +46,15 @@ const home = () => {
       {stories && (
         <AllStories
           stories={unreadStories}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={"#fff"}
+              title={"Pull to refresh"}
+              titleColor={"#fff"}
+            />
+          }
           ListHeaderComponent={
             <>
               <View

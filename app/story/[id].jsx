@@ -58,20 +58,13 @@ const Story = () => {
   // Button functionality
   const showWord = (e, word) => {
     // If word is puntionation, don't do anything
-    if (
-      word === "." ||
-      word === "," ||
-      word === "!" ||
-      word === "?" ||
-      word === "。" ||
-      word === "，"
-    ) {
+    if (/^[\p{Punctuation}]+$/u.test(word.chineseWord)) {
       setShownWord("");
       setWordDef("");
       return;
     }
 
-    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
     setShownWord(word);
 
@@ -81,12 +74,12 @@ const Story = () => {
   };
 
   const handleFilterPress = () => {
-    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setPinyin();
   };
 
   const handleFinishedStory = () => {
-    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Get entry out of local storage and update it with read:true
     const updateStory = async () => {
       try {
@@ -101,7 +94,7 @@ const Story = () => {
 
         if (!foundStory) throw new Error("No story found");
 
-        foundStory.read = true;
+        foundStory.read = foundStory.read ? false : true;
         console.log(foundStory.title, foundStory.read);
         await AsyncStorage.setItem("stories", JSON.stringify(stories));
         // set the local state
@@ -146,6 +139,7 @@ const Story = () => {
           />
 
           <View style={styles.wrapper}>
+            <Text style={styles.synopsis}>{story.synopsis}</Text>
             <View style={styles.translationContainer}>
               <Text style={{ color: "#fff", fontSize: 20 }}>
                 {shownWord &&
@@ -171,13 +165,23 @@ const Story = () => {
                   }}
                   key={`${word}-${index}`}
                 >
-                  <View>
+                  <View style={{ textAlign: "center" }}>
                     {showPinyin && (
                       <Text style={styles.pinyinText}>{word.pinyin}</Text>
                     )}
-                    <Text style={styles.text(shownWord === word, showPinyin)}>
-                      {word.chineseWord}
-                    </Text>
+                    <View
+                      style={styles.textWrapper(shownWord === word, showPinyin)}
+                    >
+                      <Text
+                        style={
+                          /^[\p{Punctuation}]+$/u.test(word.chineseWord)
+                            ? styles.punctuation(showPinyin)
+                            : styles.text
+                        }
+                      >
+                        {word.chineseWord}
+                      </Text>
+                    </View>
                   </View>
                 </Pressable>
               ))}
@@ -206,14 +210,14 @@ const Story = () => {
             <View style={styles.buttonContainer}>
               <Filter
                 text={"Pinyin"}
-                color="#fff"
+                color="#e6e6e6"
                 size="30%"
                 storyFilter
                 onPress={handleFilterPress}
               />
               <Filter
-                text={"Finish"}
-                color="#fff"
+                text={story.read ? "Mark as unread" : "Mark as read"}
+                color="#e6e6e6"
                 size="30%"
                 storyFilter
                 // disabled={localStorageMatch?.read}
@@ -231,6 +235,7 @@ export default Story;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#212124",
     flexDirection: "column",
     alignItems: "center",
@@ -242,6 +247,15 @@ const styles = StyleSheet.create({
     objectFit: "cover",
     position: "absolute",
     opacity: 0.1,
+  },
+  synopsis: {
+    color: "#fff",
+    fontSize: 16,
+    fontFamily: FONT.regular,
+    width: "90%",
+    alignSelf: "center",
+    textAlign: "center",
+    marginVertical: 20,
   },
 
   translationContainer: {
@@ -289,21 +303,22 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
     fontFamily: FONT.medium,
   },
-  text: (shownWord, showPinyin) => ({
-    color: "#e6e6e6",
-    paddingVertical: 10,
-    paddingHorizontal: 2,
-    margin: 2,
-    letterSpacing: 10,
-    marginTop: showPinyin ? 0 : 17,
-    marginBottom: 0,
-    fontSize: 30,
-    fontWeight: 400,
+  textWrapper: (shownWord, showPinyin) => ({
     borderWidth: 1,
-    borderRadius: 20,
+    borderRadius: 10,
+    marginTop: showPinyin ? 0 : 17,
     borderColor: shownWord ? "#464646" : "transparent",
     backgroundColor: shownWord ? "#464646" : "transparent",
   }),
+  text: {
+    color: "#e6e6e6",
+    paddingVertical: 2,
+    paddingHorizontal: 5,
+    margin: 2,
+    marginBottom: 0,
+    fontSize: 30,
+    fontWeight: 400,
+  },
   pinyinText: {
     color: "#fff",
     fontSize: 14,
@@ -313,16 +328,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "space-evenly",
-    marginBottom: 10,
   },
   fullTranslation: {
     width: "100%",
-    marginTop: 20,
+    // marginTop: 20,
     paddingTop: 20,
     paddingHorizontal: "10%",
-    borderTopColor: "#00000013",
-    borderTopWidth: 1,
-    backgroundColor: "#00000013",
+    // borderTopColor: "#00000013",
+    // borderTopWidth: 1,
+    backgroundColor: "#212124",
   },
   translationText: (hidden) => ({
     color: "#fff",
@@ -331,5 +345,20 @@ const styles = StyleSheet.create({
     fontFamily: FONT.regular,
     marginBottom: 20,
     textAlign: hidden ? "center" : "justify",
+  }),
+  punctuation: (showPinyin) => ({
+    color: "#e6e6e6",
+    // margin: 2,
+    // letterSpacing: 10,
+    marginTop: showPinyin ? 0 : 17,
+    marginBottom: 0,
+    fontSize: 20,
+    fontWeight: 400,
+    // borderWidth: 1,
+    // borderRadius: 10,
+    borderColor: "transparent",
+    backgroundColor: "transparent",
+    paddingHorizontal: 0,
+    paddingVertical: 0,
   }),
 });

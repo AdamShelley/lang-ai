@@ -66,7 +66,7 @@ const stories = () => {
       if (filteredStories && filteredStories.length > 0) {
         const isEvenIndex = index % 2 === 0;
         dim.width = screenWidth / numOfColumns;
-        dim.height = cardWidth * 2 + 25;
+        dim.height = cardWidth * 2 + 50;
 
         dim.x = isEvenIndex ? 0 : dim.width;
       } else {
@@ -103,7 +103,7 @@ const stories = () => {
             rowRenderer={(type, data) => (
               <StoryCard story={data} width={cardWidth} key={data.gptId} />
             )}
-            contentContainerStyle={{ marginTop: 5, paddingBottom: 100 }}
+            contentContainerStyle={{ marginTop: 5, paddingBottom: 50 }}
             renderAheadOffset={300}
             renderFooter={() => <View style={{ paddingVertical: 100 }} />}
           />

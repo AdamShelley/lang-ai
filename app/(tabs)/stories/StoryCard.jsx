@@ -10,7 +10,7 @@ const Card = ({ story, width }) => {
   const haptics = useSettingsStore((state) => state.haptics);
   const [imageUrl, setImageUrl] = useState(story?.imageUrl);
   const handlePress = () => {
-    // haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push(`/story/${story.gptId}`);
   };
 
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   level: {
     padding: 10,
     backgroundColor: "#212121",
-    borderRadius: 20,
+    borderRadius: 10,
     borderWidth: 0,
     // borderColor: "#414141",
     position: "absolute",
@@ -137,8 +137,8 @@ const styles = StyleSheet.create({
   },
   read: {
     padding: 10,
-    backgroundColor: "#34582c",
-    borderRadius: 20,
+    backgroundColor: "#242c23",
+    borderRadius: 10,
     borderWidth: 0,
     // borderColor: "#414141",
     position: "absolute",
@@ -156,11 +156,13 @@ const styles = StyleSheet.create({
   },
   levelText: {
     color: "#fff",
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: 400,
     fontFamily: FONT.medium,
     textAlign: "center",
     alignSelf: "center",
+    textTransform: "uppercase",
+    letterSpacing: 1.5,
   },
 
   smallText: {

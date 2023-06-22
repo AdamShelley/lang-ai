@@ -25,15 +25,16 @@ export default Filter;
 
 const styles = StyleSheet.create({
   container: (size, color, dark, storyFilter) => ({
-    padding: storyFilter ? 10 : 5,
-    width: size,
-    borderRadius: 5,
+    padding: storyFilter ? 5 : 5,
+    width: storyFilter ? "50%" : size,
+    borderRadius: 2,
     borderWidth: 1,
-    borderColor: storyFilter ? "#696464" : "#212121",
+    borderColor: storyFilter ? "transparent" : "#212121",
     alignItems: "center",
-    backgroundColor: "#212121",
-    marginTop: 20,
+    backgroundColor: "transparent",
+    // marginTop: 20,
     // paddingHorizontal: 20,
+    backgroundColor: storyFilter ? "#212124" : "transparent",
   }),
   text: (color, disabled) => ({
     color: disabled ? "#9e9797" : color,

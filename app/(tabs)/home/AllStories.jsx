@@ -7,7 +7,7 @@ import Filter from "../../../components/Filter";
 import useStoriesStore from "../../../state/storiesStore";
 import { useRouter } from "expo-router";
 
-const AllStories = ({ ListHeaderComponent, stories }) => {
+const AllStories = ({ ListHeaderComponent, stories, refreshControl }) => {
   const [storiesToShow, setStoriesToShow] = useState(stories);
   const router = useRouter();
 
@@ -18,6 +18,7 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
   return (
     <View style={styles.container}>
       <FlatList
+        refreshControl={refreshControl}
         showsVerticalScrollIndicator={false}
         data={storiesToShow.slice(5, 12)} // Only show 7 stories on home page.
         renderItem={({ item }) => (
@@ -32,14 +33,14 @@ const AllStories = ({ ListHeaderComponent, stories }) => {
             <View
               style={{
                 flexDirection: "row",
-                alignItems: "center",
+                alignItems: "space-between",
                 justifyContent: "space-between",
               }}
             >
               <Text style={styles.text}>Last week</Text>
               <Filter
                 text={"Show All"}
-                size="50%"
+                size="100%"
                 color="#fff"
                 onPress={() => router.push(`/stories`)}
               />
@@ -63,5 +64,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
     fontFamily: FONT.regular,
     paddingHorizontal: 20,
+    alignSelf: "flex-start",
   },
 });

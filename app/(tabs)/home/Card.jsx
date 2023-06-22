@@ -11,7 +11,7 @@ const Card = ({ story, width, wide = false }) => {
   const [imageUrl, setImageUrl] = useState(story?.imageUrl);
 
   const handlePress = (id) => {
-    // haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
     router.push(`/story/${id}`);
   };
@@ -38,13 +38,17 @@ const Card = ({ story, width, wide = false }) => {
           />
           <View style={styles.overlay} />
           {wide && (
-            <Text style={styles.level(wide)}>{story.level || "Unknown"}</Text>
+            <View style={styles.wideLevel}>
+              <Text style={styles.levelText}>{story.level || "Unknown"}</Text>
+            </View>
           )}
         </View>
       </View>
       <View style={styles.bottomSection(wide)}>
         {!wide && (
-          <Text style={styles.level(wide)}>{story.level || "Unknown"}</Text>
+          <Text style={styles.nonWideLevel(wide)}>
+            {story.level || "Unknown"}
+          </Text>
         )}
 
         <Text style={styles.text(wide)}>{story.title}</Text>
@@ -110,6 +114,32 @@ const styles = StyleSheet.create({
     marginLeft: wide ? 10 : null,
     width: wide ? "65%" : null,
   }),
+  wideLevel: {
+    padding: 5,
+    backgroundColor: "#212121",
+    borderRadius: 10,
+    borderWidth: 0,
+    borderColor: "#313131",
+    position: "absolute",
+    bottom: 5,
+    left: "10%",
+    right: "10%",
+    textAlign: "center",
+    alignSelf: "center",
+    shadowColor: "rgba(0,0,0,0.9)",
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 5,
+  },
+  levelText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: 400,
+    fontFamily: FONT.medium,
+    textAlign: "center",
+    alignSelf: "center",
+    textTransform: "uppercase",
+  },
   text: (wide) => ({
     color: "#fff",
     fontSize: wide ? 14 : 16,
@@ -120,7 +150,7 @@ const styles = StyleSheet.create({
     marginTop: wide ? 0 : 10,
     alignSelf: wide ? "flex-start" : "center",
   }),
-  level: (wide) => ({
+  nonWideLevel: (wide) => ({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: wide ? "#313131" : "#414141",
