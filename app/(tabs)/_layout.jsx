@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { FONT } from "../../constants/fonts";
 
 export default () => {
@@ -31,7 +30,7 @@ export default () => {
           headerShown: false,
           tabBarLabel: "Stories",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="book-open" size={20} color="#fff" />
+            <Ionicons name="library" size={20} color="#fff" />
           ),
         }}
       />
@@ -41,7 +40,7 @@ export default () => {
           headerShown: false,
           tabBarLabel: "Settings",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="book-open" size={20} color="#fff" />
+            <FontAwesome5 name="cog" size={20} color="#fff" />
           ),
         }}
       />

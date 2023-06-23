@@ -46,7 +46,9 @@ const Card = ({ story, width }) => {
       <View style={styles.bottomSection()}>
         <Text style={styles.text}>{story.title}</Text>
 
-        <Text style={styles.smallText}>{story.synopsis}</Text>
+        <Text style={styles.smallText} numberOfLines={5}>
+          {story.synopsis}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -69,6 +71,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 20,
+    marginBottom: 10,
   }),
   imageContainer: () => ({
     marginTop: 5,

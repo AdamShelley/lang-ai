@@ -52,7 +52,11 @@ const Card = ({ story, width, wide = false }) => {
         )}
 
         <Text style={styles.text(wide)}>{story.title}</Text>
-        {wide && <Text style={styles.smallText}>{story.synopsis}</Text>}
+        {wide && (
+          <Text style={styles.smallText} numberOfLines={3}>
+            {story.synopsis}
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   );

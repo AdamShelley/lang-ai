@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { Feather } from "@expo/vector-icons";
 
 import { FONT } from "../../../constants/fonts";
 import Recommended from "./Recommended";
@@ -68,7 +69,7 @@ const home = () => {
               >
                 <Text style={styles.title}>Home</Text>
                 <TouchableOpacity style={styles.circle} onPress={goToUser}>
-                  <Text style={styles.text}>AS</Text>
+                  <Feather name="user" size={24} color="#fff" />
                 </TouchableOpacity>
               </View>
               <View style={{ flex: 11 }}>

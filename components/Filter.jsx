@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     width: storyFilter ? "50%" : size,
     borderRadius: 2,
     borderWidth: 1,
-    borderColor: storyFilter ? "transparent" : "#212121",
+    borderColor: storyFilter ? "transparent" : "#212124",
     alignItems: "center",
     backgroundColor: "transparent",
     // marginTop: 20,

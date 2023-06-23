@@ -55,6 +55,22 @@ const Story = () => {
   const dictionary = useDictionaryStore((state) => state.words);
   if (!dictionary) useDictionary();
 
+  const joinWordsAndFullStops = (words) => {
+    return words.reduce((acc, word, index) => {
+      if (word.chineseWord === "." && acc.length > 0) {
+        acc[acc.length - 1] = {
+          ...acc[acc.length - 1],
+          chineseWord: acc[acc.length - 1].chineseWord + ".",
+        };
+      } else {
+        acc.push(word);
+      }
+      return acc;
+    }, []);
+  };
+
+  const modifiedWords = story ? joinWordsAndFullStops(story.words) : [];
+
   // Button functionality
   const showWord = (e, word) => {
     // If word is puntionation, don't do anything
@@ -109,6 +125,10 @@ const Story = () => {
     router.replace("/");
   };
 
+  const goToVotePage = () => {
+    router.push(`/vote/${id}`);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
@@ -125,13 +145,14 @@ const Story = () => {
           />
           <Stack.Screen
             options={{
-              headerTitle: `${story.title} (${story.level})`,
+              headerTitle: `${story.title}`,
+
               headerStyle: {
-                backgroundColor: "#161616",
+                backgroundColor: "#212124",
               },
               headerTintColor: "#eee",
               headerTitleStyle: {
-                fontSize: 20,
+                fontSize: 16,
                 fontFamily: FONT.medium,
                 color: "#eee",
               },
@@ -139,24 +160,27 @@ const Story = () => {
           />
 
           <View style={styles.wrapper}>
-            <Text style={styles.synopsis}>{story.synopsis}</Text>
+            <View style={styles.levelCard}>
+              <Text style={styles.level}>{story.level}</Text>
+            </View>
             <View style={styles.translationContainer}>
               <Text style={{ color: "#fff", fontSize: 20 }}>
                 {shownWord &&
                   `${shownWord.chineseWord} - ${
-                    wordDef?.englishWord || "-???-"
+                    wordDef?.englishWord || "-TBC-"
                   }`}
               </Text>
-              <Text style={{ color: "#fff", fontSize: 20 }}>
+              {/* <Text style={{ color: "#fff", fontSize: 20 }}>
                 {shownWord && `${wordDef?.definition || ""} `}
-              </Text>
+              </Text> */}
             </View>
 
             <ScrollView
               horizontal={false}
               contentContainerStyle={styles.wordWrapper}
             >
-              {story.words.map((word, index) => (
+              <Text style={styles.synopsis}>{story.synopsis}</Text>
+              {modifiedWords.map((word, index) => (
                 <Pressable
                   onPressIn={(e) => showWord(e, word)}
                   onPressOut={() => {
@@ -185,6 +209,14 @@ const Story = () => {
                   </View>
                 </Pressable>
               ))}
+
+              {story.options && (
+                <Pressable onPress={goToVotePage}>
+                  <Text style={{ color: "#fff" }}>
+                    Vote on the next stage of the story!
+                  </Text>
+                </Pressable>
+              )}
             </ScrollView>
 
             {showTranslation ? (
@@ -241,6 +273,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "100%",
   },
+  titleContainer: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 5,
+  },
   image: {
     height: "100%",
     width: "100%",
@@ -248,14 +286,34 @@ const styles = StyleSheet.create({
     position: "absolute",
     opacity: 0.1,
   },
+
+  levelCard: {
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    top: 20,
+    left: 20,
+    zIndex: 5,
+  },
+  level: {
+    fontSize: 12,
+    fontFamily: FONT.medium,
+    color: "#212124",
+    textTransform: "uppercase",
+  },
   synopsis: {
     color: "#fff",
     fontSize: 16,
     fontFamily: FONT.regular,
-    width: "90%",
+    width: "100%",
     alignSelf: "center",
     textAlign: "center",
     marginVertical: 20,
+    lineHeight: 25,
   },
 
   translationContainer: {
@@ -284,15 +342,15 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   wordWrapper: {
-    width: "100%",
+    width: "95%",
     marginTop: 10,
     paddingBottom: 100,
     flexDirection: "row",
     flexWrap: "wrap",
     alignSelf: "center",
     alignItems: "center",
-    justifyContent: "space-evenly",
-    paddingHorizontal: "10%",
+    justifyContent: "flex-start",
+    paddingHorizontal: "5%",
   },
   title: {
     marginTop: 10,
@@ -312,8 +370,9 @@ const styles = StyleSheet.create({
   }),
   text: {
     color: "#e6e6e6",
-    paddingVertical: 2,
-    paddingHorizontal: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 2,
+    marginHorizontal: 2,
     margin: 2,
     marginBottom: 0,
     fontSize: 30,
@@ -340,9 +399,9 @@ const styles = StyleSheet.create({
   },
   translationText: (hidden) => ({
     color: "#fff",
-    fontSize: 20,
+    fontSize: 16,
     lineHeight: 30,
-    fontFamily: FONT.regular,
+    fontFamily: FONT.medium,
     marginBottom: 20,
     textAlign: hidden ? "center" : "justify",
   }),
