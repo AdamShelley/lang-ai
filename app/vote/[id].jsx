@@ -1,22 +1,18 @@
 import {
   Image,
+  View,
+  Text,
   Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
 } from "react-native";
-import { Redirect, Stack, useRouter, useSearchParams } from "expo-router";
-import { View, Text } from "react-native";
+import { Stack, useRouter, useSearchParams } from "expo-router";
 import { FONT } from "../../constants/fonts";
 import { useEffect, useState } from "react";
-import Filter from "../../components/Filter";
 import * as Haptics from "expo-haptics";
-import useSettingsStore from "../../state/store";
 import useStoriesStore from "../../state/storiesStore";
-import useDictionaryStore from "../../state/dictionaryStore";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import useDictionary from "../../hooks/useDictionary";
 
 const Vote = () => {
   const router = useRouter();
@@ -45,6 +41,16 @@ const Vote = () => {
     }
   };
 
+  const handleOptionChoice = async (option) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // router.push(`/vote/${option.gptId}`);
+
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
@@ -62,7 +68,6 @@ const Vote = () => {
           <Stack.Screen
             options={{
               headerTitle: `Vote on the next part!`,
-
               headerStyle: {
                 backgroundColor: "#212124",
               },
@@ -91,16 +96,15 @@ const Vote = () => {
                 </Text>
                 <View style={styles.optionsContainer}>
                   {story.options.map((option, index) => (
-                    <Pressable
-                      style={styles.option}
-                      key={index}
-                      onPress={() => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                        // router.push(`/vote/${option.gptId}`);
-                      }}
-                    >
-                      <Text style={styles.text}>{option}</Text>
-                    </Pressable>
+                    <View style={styles.option} key={index}>
+                      <Pressable
+                        style={styles.choiceButton}
+                        onPress={handleOptionChoice}
+                      >
+                        <Text>{index + 1}</Text>
+                      </Pressable>
+                      <Text style={styles.optionText}>{option}</Text>
+                    </View>
                   ))}
                 </View>
               </View>
@@ -181,7 +185,7 @@ const styles = StyleSheet.create({
   optionsContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    alignItems: "flex-end",
+    alignItems: "center",
     width: "100%",
     height: "100%",
   },
@@ -192,9 +196,26 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 2,
     marginHorizontal: 2,
+    flexDirection: "column",
+    alignItems: "center",
     margin: 2,
     marginBottom: 0,
     fontSize: 10,
     fontWeight: 400,
+  },
+  optionText: {
+    color: "#e6e6e6",
+    marginTop: 20,
+    textAlign: "left",
+    fontSize: 14,
+  },
+  choiceButton: {
+    width: 80,
+    height: 80,
+    borderRadius: 50,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 5,
   },
 });

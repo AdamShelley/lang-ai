@@ -6,7 +6,7 @@ import {
   StatusBar,
   StyleSheet,
 } from "react-native";
-import { Redirect, Stack, useRouter, useSearchParams } from "expo-router";
+import { Stack, useRouter, useSearchParams } from "expo-router";
 import { View, Text } from "react-native";
 import { FONT } from "../../constants/fonts";
 import { useEffect, useState } from "react";
@@ -160,9 +160,13 @@ const Story = () => {
           />
 
           <View style={styles.wrapper}>
-            <View style={styles.levelCard}>
+            <View style={styles.levelCard(true)}>
+              <Text style={styles.level}>{story.topic}</Text>
+            </View>
+            <View style={styles.levelCard(false)}>
               <Text style={styles.level}>{story.level}</Text>
             </View>
+
             <View style={styles.translationContainer}>
               <Text style={{ color: "#fff", fontSize: 20 }}>
                 {shownWord &&
@@ -211,7 +215,7 @@ const Story = () => {
               ))}
 
               {story.options && (
-                <Pressable onPress={goToVotePage}>
+                <Pressable onPress={goToVotePage} style={styles.voteButton}>
                   <Text style={{ color: "#fff" }}>
                     Vote on the next stage of the story!
                   </Text>
@@ -287,23 +291,24 @@ const styles = StyleSheet.create({
     opacity: 0.1,
   },
 
-  levelCard: {
+  levelCard: (genre) => ({
     height: 40,
-    width: 40,
+    width: genre ? 100 : 50,
     borderRadius: 20,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
     top: 20,
-    left: 20,
+    left: genre ? 20 : 130,
     zIndex: 5,
-  },
+  }),
   level: {
     fontSize: 12,
-    fontFamily: FONT.medium,
-    color: "#212124",
+    fontFamily: FONT.bold,
+    color: "#424242",
     textTransform: "uppercase",
+    letterSpacing: 0.2,
   },
   synopsis: {
     color: "#fff",
@@ -317,6 +322,7 @@ const styles = StyleSheet.create({
   },
 
   translationContainer: {
+    marginTop: 60,
     height: 80,
     width: "100%",
     alignItems: "center",
@@ -420,4 +426,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingVertical: 0,
   }),
+  voteButton: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#424242",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 100,
+    marginBottom: 20,
+    borderRadius: 10,
+  },
 });
