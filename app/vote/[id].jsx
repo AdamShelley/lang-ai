@@ -13,12 +13,19 @@ import { FONT } from "../../constants/fonts";
 import { useEffect, useState } from "react";
 import * as Haptics from "expo-haptics";
 import useStoriesStore from "../../state/storiesStore";
+import { Option } from "./Option";
+import { URL_DEV } from "@env";
+
+import useVoteOptionsStore from "../../state/voteOptionsStore";
 
 const Vote = () => {
   const router = useRouter();
   const { id } = useSearchParams();
   const stories = useStoriesStore((state) => state.stories);
   const [story, setStory] = useState();
+
+  const { selectedOption, submitted, selectOption, submit } =
+    useVoteOptionsStore();
 
   useEffect(() => {
     if (!stories.length) {
@@ -32,7 +39,7 @@ const Vote = () => {
   // Fetch specific story from DB
   const fetchSpecificStory = async (id) => {
     try {
-      const response = await fetch(`http://192.168.1.160:8888/api/db/${id}`);
+      const response = await fetch(`${URL_DEV}/db/${id}`);
       const data = await response.json();
       data[0].words = data[0].words.map((obj) => JSON.parse(obj));
       setStory(data[0]);
@@ -41,11 +48,23 @@ const Vote = () => {
     }
   };
 
-  const handleOptionChoice = async (option) => {
+  const handleOptionChoice = async (option, index) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // router.push(`/vote/${option.gptId}`);
+    selectOption(index);
+  };
+
+  const handleVoteSubmission = async () => {
+    // Animate the other 2 options to fade out and move the clicked item to the middle
+    if (selectedOption.value === -1) {
+      alert("Please select an option!");
+      return;
+    }
 
     try {
+      submit();
+      // Add voted:true to this stories asyncStorage
+
+      // Send the vote to DB
     } catch (error) {
       console.log(error);
     }
@@ -81,33 +100,58 @@ const Vote = () => {
           />
 
           <View style={styles.wrapper}>
-            <View style={styles.levelCard}>
+            <View style={styles.levelCard(false)}>
               <Text style={styles.level}>{story.level}</Text>
+            </View>
+            <View style={styles.levelCard(true)}>
+              <Text style={styles.level}>{story.title}</Text>
             </View>
 
             <ScrollView
               horizontal={false}
               contentContainerStyle={styles.wordWrapper}
             >
-              <Text style={styles.synopsis}>{story.synopsis}</Text>
+              <Text style={styles.synopsis}>
+                Story so far: {story.synopsis}
+              </Text>
               <View>
                 <Text style={styles.text}>
                   Vote on how you want the story to progress.
                 </Text>
                 <View style={styles.optionsContainer}>
                   {story.options.map((option, index) => (
-                    <View style={styles.option} key={index}>
-                      <Pressable
-                        style={styles.choiceButton}
-                        onPress={handleOptionChoice}
-                      >
-                        <Text>{index + 1}</Text>
-                      </Pressable>
-                      <Text style={styles.optionText}>{option}</Text>
-                    </View>
+                    <Option
+                      key={index}
+                      option={option}
+                      index={index}
+                      handleOptionChoice={handleOptionChoice}
+                      selectedOption={selectedOption}
+                      submitted={submitted}
+                    />
                   ))}
                 </View>
               </View>
+              {!submitted && (
+                <Pressable
+                  style={({ pressed }) => [
+                    {
+                      backgroundColor: pressed
+                        ? "rgba(0, 0, 0, 0.3)"
+                        : "#464646",
+                    },
+                    styles.submitButton,
+                  ]}
+                  onPress={handleVoteSubmission}
+                  disabled={selectedOption.value === -1}
+                >
+                  <Text style={styles.submitButtonText}>Submit Vote</Text>
+                </Pressable>
+              )}
+              {submitted && (
+                <Text style={styles.text}>
+                  Thanks, your vote has been cast!
+                </Text>
+              )}
             </ScrollView>
           </View>
         </>
@@ -139,34 +183,38 @@ const styles = StyleSheet.create({
     position: "absolute",
     opacity: 0.1,
   },
-  levelCard: {
+  levelCard: (title) => ({
     height: 40,
-    width: 40,
+    width: title ? "50%" : 50,
+    minWidth: title ? 100 : 50,
     borderRadius: 20,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
     top: 20,
-    left: 20,
+    left: title ? 100 : 20,
     zIndex: 5,
-  },
+    paddingHorizontal: 5,
+  }),
   level: {
     fontSize: 12,
-    fontFamily: FONT.medium,
+    fontFamily: FONT.bold,
     color: "#212124",
     textTransform: "uppercase",
+    textAlign: "center",
   },
   synopsis: {
     color: "#fff",
     fontSize: 16,
-    fontFamily: FONT.regular,
+    fontFamily: FONT.medium,
     width: "100%",
     alignSelf: "center",
     textAlign: "center",
     marginVertical: 20,
+    paddingHorizontal: 20,
     lineHeight: 25,
-    marginTop: 100,
+    marginTop: 90,
   },
   wrapper: {
     width: "100%",
@@ -179,43 +227,38 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     margin: 2,
     marginBottom: 0,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 400,
+    textAlign: "center",
   },
   optionsContainer: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-evenly",
     alignItems: "center",
     width: "100%",
-    height: "100%",
+    height: "90%",
   },
-  option: {
-    width: "30%",
-    color: "#e6e6e6",
-    height: 100,
-    paddingVertical: 5,
-    paddingHorizontal: 2,
-    marginHorizontal: 2,
-    flexDirection: "column",
-    alignItems: "center",
-    margin: 2,
-    marginBottom: 0,
-    fontSize: 10,
-    fontWeight: 400,
-  },
-  optionText: {
-    color: "#e6e6e6",
-    marginTop: 20,
-    textAlign: "left",
-    fontSize: 14,
-  },
-  choiceButton: {
-    width: 80,
-    height: 80,
+  submitButton: {
+    // backgroundColor: "#464646",
+    width: "50%",
     borderRadius: 50,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 5,
+    marginTop: 30,
+    alignSelf: "center",
+    padding: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  submitButtonText: {
+    color: "#fff",
+    fontSize: 14,
+    fontFamily: FONT.medium,
+    paddingVertical: 10,
+    textAlign: "center",
   },
 });

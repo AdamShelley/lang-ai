@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginLeft: wide ? 10 : null,
     width: wide ? "65%" : null,
+    flex: 1,
   }),
   wideLevel: {
     padding: 5,
@@ -146,13 +147,13 @@ const styles = StyleSheet.create({
   },
   text: (wide) => ({
     color: "#fff",
-    fontSize: wide ? 14 : 16,
+    fontSize: wide ? 14 : 15,
     fontWeight: 400,
     fontFamily: FONT.medium,
     flexWrap: "wrap",
     flexShrink: wide ? null : 1,
     marginTop: wide ? 0 : 10,
-    alignSelf: wide ? "flex-start" : "center",
+    alignSelf: wide ? "flex-start" : "flex-start",
   }),
   nonWideLevel: (wide) => ({
     borderRadius: 10,
