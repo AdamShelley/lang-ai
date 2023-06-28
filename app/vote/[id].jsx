@@ -17,6 +17,7 @@ import { Option } from "./Option";
 import { URL_DEV } from "@env";
 
 import useVoteOptionsStore from "../../state/voteOptionsStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Vote = () => {
   const router = useRouter();
@@ -63,7 +64,16 @@ const Vote = () => {
     try {
       submit();
       // Add voted:true to this stories asyncStorage
-
+      const storiesFromStorage = await AsyncStorage.getItem("stories");
+      if (!storiesFromStorage) throw new Error("No Stories in storage");
+      const stories = JSON.parse(storiesFromStorage);
+      // Find the story clicked and update the voted property
+      const foundStory = stories.find((s) => s.gptId === story.gptId);
+      if (!foundStory) throw new Error("No story found");
+      foundStory.voted = foundStory.voted ? false : true;
+      foundStory.votedOption = selectedOption;
+      await AsyncStorage.setItem("stories", JSON.stringify(stories));
+      setStory(foundStory);
       // Send the vote to DB
     } catch (error) {
       console.log(error);
@@ -119,35 +129,46 @@ const Vote = () => {
                   Vote on how you want the story to progress.
                 </Text>
                 <View style={styles.optionsContainer}>
-                  {story.options.map((option, index) => (
+                  {!story.voted &&
+                    story.options.map((option, index) => (
+                      <Option
+                        key={index}
+                        option={option}
+                        index={index}
+                        handleOptionChoice={handleOptionChoice}
+                        selectedOption={selectedOption}
+                        submitted={submitted}
+                      />
+                    ))}
+                  {story.voted && (
                     <Option
-                      key={index}
-                      option={option}
-                      index={index}
-                      handleOptionChoice={handleOptionChoice}
-                      selectedOption={selectedOption}
-                      submitted={submitted}
+                      key={story.votedOption}
+                      index={story.votedOption}
+                      option={story.options[story.votedOption]}
+                      selectedOption={story.options[story.votedOption]}
+                      submitted={true}
                     />
-                  ))}
+                  )}
                 </View>
               </View>
-              {!submitted && (
-                <Pressable
-                  style={({ pressed }) => [
-                    {
-                      backgroundColor: pressed
-                        ? "rgba(0, 0, 0, 0.3)"
-                        : "#464646",
-                    },
-                    styles.submitButton,
-                  ]}
-                  onPress={handleVoteSubmission}
-                  disabled={selectedOption.value === -1}
-                >
-                  <Text style={styles.submitButtonText}>Submit Vote</Text>
-                </Pressable>
-              )}
-              {submitted && (
+              {story.voted ||
+                (!submitted && (
+                  <Pressable
+                    style={({ pressed }) => [
+                      {
+                        backgroundColor: pressed
+                          ? "rgba(0, 0, 0, 0.3)"
+                          : "#464646",
+                      },
+                      styles.submitButton,
+                    ]}
+                    onPress={handleVoteSubmission}
+                    disabled={selectedOption.value === -1}
+                  >
+                    <Text style={styles.submitButtonText}>Submit Vote</Text>
+                  </Pressable>
+                ))}
+              {story.voted && (
                 <Text style={styles.text}>
                   Thanks, your vote has been cast!
                 </Text>
@@ -208,7 +229,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontFamily: FONT.medium,
-    width: "100%",
+    width: "80%",
     alignSelf: "center",
     textAlign: "center",
     marginVertical: 20,
@@ -232,11 +253,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   optionsContainer: {
+    marginTop: 20,
     flexDirection: "column",
     justifyContent: "space-evenly",
     alignItems: "center",
     width: "100%",
-    height: "90%",
+    height: "80%",
   },
   submitButton: {
     // backgroundColor: "#464646",
