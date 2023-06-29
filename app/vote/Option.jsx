@@ -11,8 +11,14 @@ import Animated, {
 import { FONT } from "../../constants/fonts";
 import useVoteOptionsStore from "../../state/voteOptionsStore";
 
-export const Option = ({ option, index, handleOptionChoice }) => {
-  const { selectedOption, submitted } = useVoteOptionsStore();
+export const Option = ({
+  option,
+  index,
+  selectedOption,
+  handleOptionChoice,
+  disabled,
+}) => {
+  const { submitted } = useVoteOptionsStore();
 
   const opacity = useSharedValue(1);
   const animOptions = {
@@ -100,7 +106,10 @@ export const Option = ({ option, index, handleOptionChoice }) => {
       style={[opacityStyles, translateStyle, styles.option]}
       key={index}
     >
-      <Pressable onPress={() => handleOptionChoice(option, index)}>
+      <Pressable
+        onPress={() => handleOptionChoice(option, index)}
+        disabled={disabled}
+      >
         <Animated.View style={[animatedStyle, styles.choiceButton]}>
           <Animated.Text style={textAnimation}>{index + 1}</Animated.Text>
         </Animated.View>

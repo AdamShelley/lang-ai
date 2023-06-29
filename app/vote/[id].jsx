@@ -25,8 +25,10 @@ const Vote = () => {
   const stories = useStoriesStore((state) => state.stories);
   const [story, setStory] = useState();
 
-  const { selectedOption, submitted, selectOption, submit } =
-    useVoteOptionsStore();
+  const { selectOption, submit } = useVoteOptionsStore();
+
+  const [selectedOption, setSelectedOption] = useState(-1);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (!stories.length) {
@@ -51,12 +53,12 @@ const Vote = () => {
 
   const handleOptionChoice = async (option, index) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    selectOption(index);
+    setSelectedOption(index);
   };
 
   const handleVoteSubmission = async () => {
     // Animate the other 2 options to fade out and move the clicked item to the middle
-    if (selectedOption.value === -1) {
+    if (selectedOption === -1) {
       alert("Please select an option!");
       return;
     }
@@ -147,6 +149,7 @@ const Vote = () => {
                       option={story.options[story.votedOption]}
                       selectedOption={story.options[story.votedOption]}
                       submitted={true}
+                      disabled
                     />
                   )}
                 </View>
@@ -163,7 +166,7 @@ const Vote = () => {
                       styles.submitButton,
                     ]}
                     onPress={handleVoteSubmission}
-                    disabled={selectedOption.value === -1}
+                    disabled={selectedOption === -1}
                   >
                     <Text style={styles.submitButtonText}>Submit Vote</Text>
                   </Pressable>
