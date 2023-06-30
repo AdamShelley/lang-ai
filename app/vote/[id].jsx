@@ -131,7 +131,7 @@ const Vote = () => {
                   Vote on how you want the story to progress.
                 </Text>
                 <View style={styles.optionsContainer}>
-                  {!story.voted &&
+                  {!story.voted ? (
                     story.options.map((option, index) => (
                       <Option
                         key={index}
@@ -140,9 +140,10 @@ const Vote = () => {
                         handleOptionChoice={handleOptionChoice}
                         selectedOption={selectedOption}
                         submitted={submitted}
+                        disabled={story.voted}
                       />
-                    ))}
-                  {story.voted && (
+                    ))
+                  ) : (
                     <Option
                       key={story.votedOption}
                       index={story.votedOption}

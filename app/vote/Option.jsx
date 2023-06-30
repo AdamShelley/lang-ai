@@ -94,7 +94,7 @@ export const Option = ({
         }
       } else {
         // This is not the selected option, fade it out
-        opacity.value = 0;
+        withTiming(0, animOptions);
       }
     }
   }, [submitted]);
