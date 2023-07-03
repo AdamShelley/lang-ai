@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: storyFilter ? "transparent" : "#212124",
     alignItems: "center",
-    backgroundColor: "transparent",
     backgroundColor: storyFilter ? "#212124" : "transparent",
     paddingBottom: storyFilter ? 10 : 0,
   }),

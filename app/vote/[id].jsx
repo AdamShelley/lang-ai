@@ -8,6 +8,7 @@ import {
   StatusBar,
   StyleSheet,
 } from "react-native";
+
 import { Stack, useRouter, useSearchParams } from "expo-router";
 import { FONT } from "../../constants/fonts";
 import { useEffect, useState } from "react";
@@ -24,6 +25,7 @@ const Vote = () => {
   const { id } = useSearchParams();
   const stories = useStoriesStore((state) => state.stories);
   const [story, setStory] = useState();
+  const setStories = useStoriesStore((state) => state.setStories);
 
   const { selectOption, submit } = useVoteOptionsStore();
 
@@ -76,6 +78,9 @@ const Vote = () => {
       foundStory.votedOption = selectedOption;
       await AsyncStorage.setItem("stories", JSON.stringify(stories));
       setStory(foundStory);
+      // Update global state
+      setStories(stories);
+
       // Send the vote to DB
     } catch (error) {
       console.log(error);
@@ -130,6 +135,10 @@ const Vote = () => {
                 <Text style={styles.text}>
                   Vote on how you want the story to progress.
                 </Text>
+                {/* <Text style={styles.text}>
+                  {story.voted ? "voted" : "not voted"}
+                  {story.votedOption}
+                </Text> */}
                 <View style={styles.optionsContainer}>
                   {!story.voted ? (
                     story.options.map((option, index) => (

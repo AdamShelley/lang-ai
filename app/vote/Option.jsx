@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { Pressable, View, Text, StyleSheet } from "react-native";
 import Animated, {
-  FadeOut,
   Layout,
   SlideInDown,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
+  Easing,
+  withDelay,
 } from "react-native-reanimated";
 import { FONT } from "../../constants/fonts";
 import useVoteOptionsStore from "../../state/voteOptionsStore";
@@ -20,7 +21,8 @@ export const Option = ({
 }) => {
   const { submitted } = useVoteOptionsStore();
 
-  const opacity = useSharedValue(1);
+  const opacity = useSharedValue(submitted && index !== selectedOption ? 0 : 1);
+
   const animOptions = {
     duration: 500,
   };
@@ -35,34 +37,22 @@ export const Option = ({
 
   const opacityStyles = useAnimatedStyle(() => {
     return {
-      opacity: withTiming(opacity.value, animOptions),
+      opacity: opacity.value,
     };
   });
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      borderColor:
-        selectedOption === index
-          ? withTiming("#e6e6e6", animOptions)
-          : withTiming("transparent", animOptions),
-      backgroundColor:
-        selectedOption === index
-          ? withTiming("#323232", animOptions)
-          : withTiming("#e6e6e6", animOptions),
+      borderColor: selectedOption === index ? "#e6e6e6" : "transparent",
+      backgroundColor: selectedOption === index ? "#323232" : "#e6e6e6",
       borderRadius: 40,
-      borderWidth:
-        selectedOption === index
-          ? withTiming(3, animOptions)
-          : withTiming(0, animOptions),
+      borderWidth: selectedOption === index ? 3 : 0,
     };
   });
 
   const textAnimation = useAnimatedStyle(() => {
     return {
-      color:
-        selectedOption === index
-          ? withTiming("#e6e6e6", animOptions)
-          : withTiming("#323232", animOptions),
+      color: selectedOption === index ? "#e6e6e6" : "#323232",
       fontSize: 25,
       alignContent: "center",
       justifyContent: "center",
@@ -74,27 +64,33 @@ export const Option = ({
     if (submitted) {
       if (index === selectedOption) {
         // This is the selected option, animate it to the middle
+        let targetValue = 0;
         switch (index) {
           case 0:
-            translateY.value = translateY.value = withTiming(120, {
-              ...animOptions,
-              delay: 500,
-            });
+            targetValue = 20;
             break;
           case 1:
             break;
           case 2:
-            translateY.value = withTiming(-110, {
-              ...animOptions,
-              delay: 500,
-            });
+            targetValue = -40;
             break;
           default:
             break;
         }
+
+        translateY.value = withDelay(
+          500,
+          withTiming(targetValue, {
+            duration: 1000,
+            easing: Easing.inOut(Easing.ease),
+          })
+        );
       } else {
         // This is not the selected option, fade it out
-        withTiming(0, animOptions);
+        opacity.value = withTiming(0, {
+          ...animOptions,
+          easing: Easing.linear,
+        });
       }
     }
   }, [submitted]);

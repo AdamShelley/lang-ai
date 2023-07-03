@@ -33,7 +33,7 @@ const Story = () => {
 
   useEffect(() => {
     if (!stories.length) {
-      fetchSpecificStory(id);
+      getStoryFromAsyncStorage(id);
     } else {
       const foundStory = stories.find((story) => story.gptId === id);
       setStory(foundStory);
@@ -49,6 +49,23 @@ const Story = () => {
       setStory(data[0]);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const getStoryFromAsyncStorage = async (storyId) => {
+    try {
+      const storiesFromStorage = await AsyncStorage.getItem("stories");
+
+      if (!storiesFromStorage) throw new Error("No Stories in storage");
+
+      const stories = JSON.parse(storiesFromStorage);
+      const foundStory = stories.find((story) => story.gptId === storyId);
+
+      if (!foundStory) throw new Error("No story found");
+
+      setStory(foundStory);
+    } catch (error) {
+      console.log("Error fetching story from AsyncStorage", error);
     }
   };
 
