@@ -28,7 +28,7 @@ const Vote = () => {
   const setStories = useStoriesStore((state) => state.setStories);
 
   const { selectOption, submit } = useVoteOptionsStore();
-
+  const [voteId, setVoteId] = useState(null);
   const [selectedOption, setSelectedOption] = useState(-1);
   const [submitted, setSubmitted] = useState(false);
 
@@ -39,6 +39,19 @@ const Vote = () => {
       const foundStory = stories.find((story) => story.gptId === id);
       setStory(foundStory);
     }
+
+    // Check for vote
+    const checkForVote = async () => {
+      try {
+        const response = await fetch(`${URL_DEV}/voting/${id}`);
+        const data = await response.json();
+        setVoteId(data.id);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    checkForVote();
   }, [id, stories]);
 
   // Fetch specific story from DB
@@ -78,11 +91,38 @@ const Vote = () => {
       foundStory.votedOption = selectedOption;
       await AsyncStorage.setItem("stories", JSON.stringify(stories));
       setStory(foundStory);
+
       // Update global state
       setStories(stories);
+      setSubmitted(true);
+
+      console.log(
+        JSON.stringify({
+          pollId: voteId,
+          option: `option_${selectedOption + 1}`,
+        })
+      );
 
       // Send the vote to DB
+      const response = await fetch(`${URL_DEV}/voting/vote`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pollId: voteId,
+          option: `option_${selectedOption + 1}`,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        console.error("Network Issue", response.statusText);
+      }
     } catch (error) {
+      console.log("Error in submitting vote");
       console.log(error);
     }
   };
@@ -135,10 +175,7 @@ const Vote = () => {
                 <Text style={styles.text}>
                   Vote on how you want the story to progress.
                 </Text>
-                {/* <Text style={styles.text}>
-                  {story.voted ? "voted" : "not voted"}
-                  {story.votedOption}
-                </Text> */}
+
                 <View style={styles.optionsContainer}>
                   {!story.voted ? (
                     story.options.map((option, index) => (
@@ -157,8 +194,8 @@ const Vote = () => {
                       key={story.votedOption}
                       index={story.votedOption}
                       option={story.options[story.votedOption]}
-                      selectedOption={story.options[story.votedOption]}
-                      submitted={true}
+                      selectedOption={story.votedOption}
+                      submitted={submitted}
                       disabled
                     />
                   )}

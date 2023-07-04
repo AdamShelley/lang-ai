@@ -18,16 +18,15 @@ export const Option = ({
   selectedOption,
   handleOptionChoice,
   disabled,
+  submitted,
 }) => {
-  const { submitted } = useVoteOptionsStore();
-
-  const opacity = useSharedValue(submitted && index !== selectedOption ? 0 : 1);
-
+  // const { submitted } = useVoteOptionsStore();
+  const opacity = useSharedValue(1);
+  const selectedOpacity = useSharedValue(1);
+  const translateY = useSharedValue(0);
   const animOptions = {
     duration: 500,
   };
-
-  const translateY = useSharedValue(0);
 
   const translateStyle = useAnimatedStyle(() => {
     return {
@@ -36,23 +35,30 @@ export const Option = ({
   });
 
   const opacityStyles = useAnimatedStyle(() => {
+    // if (index === selectedOption) {
     return {
-      opacity: opacity.value,
+      opacity: index === selectedOption ? selectedOpacity.value : opacity.value,
     };
+    // } else {
+    //   return {
+    //     opacity: opacity.value,
+    //   };
+    // }
   });
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
       borderColor: selectedOption === index ? "#e6e6e6" : "transparent",
-      backgroundColor: selectedOption === index ? "#323232" : "#e6e6e6",
+      backgroundColor:
+        selectedOption === index || submitted ? "#323232" : "#e6e6e6",
       borderRadius: 40,
-      borderWidth: selectedOption === index ? 3 : 0,
+      borderWidth: selectedOption === index && !submitted ? 3 : 0,
     };
   });
 
   const textAnimation = useAnimatedStyle(() => {
     return {
-      color: selectedOption === index ? "#e6e6e6" : "#323232",
+      color: selectedOption === index || submitted ? "#e6e6e6" : "#323232",
       fontSize: 25,
       alignContent: "center",
       justifyContent: "center",
@@ -87,10 +93,10 @@ export const Option = ({
         );
       } else {
         // This is not the selected option, fade it out
-        opacity.value = withTiming(0, {
-          ...animOptions,
-          easing: Easing.linear,
-        });
+        // opacity.value = withTiming(0, {
+        //   ...animOptions,
+        //   easing: Easing.linear,
+        // });
       }
     }
   }, [submitted]);
@@ -143,7 +149,7 @@ const styles = StyleSheet.create({
   choiceButton: {
     width: 60,
     height: 60,
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     zIndex: 5,

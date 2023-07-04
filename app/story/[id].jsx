@@ -18,6 +18,9 @@ import useDictionaryStore from "../../state/dictionaryStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useDictionary from "../../hooks/useDictionary";
 
+// Dev
+import { URL_DEV } from "@env";
+
 const Story = () => {
   const router = useRouter();
   const { id } = useSearchParams();
@@ -234,7 +237,9 @@ const Story = () => {
               {story.options && (
                 <Pressable onPress={goToVotePage} style={styles.voteButton}>
                   <Text style={{ color: "#fff" }}>
-                    Vote on the next stage of the story!
+                    {story.voted
+                      ? "You have voted already"
+                      : "Vote on the next stage of the story!"}
                   </Text>
                 </Pressable>
               )}
