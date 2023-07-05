@@ -5,6 +5,9 @@ const useSettingsStore = create((set) => ({
   setHaptics: () => set((state) => ({ haptics: !state.haptics })),
   pinyin: false,
   setPinyin: () => set((state) => ({ pinyin: !state.pinyin })),
+  textSize: "medium",
+  setTextSize: (size) => set(() => ({ textSize: size })),
+  darkMode: true,
 }));
 
 export default useSettingsStore;

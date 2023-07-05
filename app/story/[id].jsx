@@ -31,8 +31,25 @@ const Story = () => {
   const setPinyin = useSettingsStore((state) => state.setPinyin);
   const stories = useStoriesStore((state) => state.stories);
   const setStories = useStoriesStore((state) => state.setStories);
+  const textSize = useSettingsStore((state) => state.textSize);
 
   const [story, setStory] = useState();
+
+  // Set textSize
+  let fontSize = 30;
+  switch (textSize) {
+    case "small":
+      fontSize = 20;
+      break;
+    case "medium":
+      fontSize = 30;
+      break;
+    case "large":
+      fontSize = 40;
+      break;
+    default:
+      fontSize = 30;
+  }
 
   useEffect(() => {
     if (!stories.length) {
@@ -180,12 +197,17 @@ const Story = () => {
           />
 
           <View style={styles.wrapper}>
-            <View style={styles.levelCard(true)}>
+            <View style={styles.levelCard(100, 20)}>
               <Text style={styles.level}>{story.topic}</Text>
             </View>
-            <View style={styles.levelCard(false)}>
+            <View style={styles.levelCard(50, 130)}>
               <Text style={styles.level}>{story.level}</Text>
             </View>
+            {story.options && (
+              <View style={styles.levelCard(50, 190)}>
+                <Text style={styles.level}>Vote</Text>
+              </View>
+            )}
 
             <View style={styles.translationContainer}>
               <Text style={{ color: "#fff", fontSize: 20 }}>
@@ -224,7 +246,7 @@ const Story = () => {
                         style={
                           /^[\p{Punctuation}]+$/u.test(word.chineseWord)
                             ? styles.punctuation(showPinyin)
-                            : styles.text
+                            : styles.text(fontSize)
                         }
                       >
                         {word.chineseWord}
@@ -313,16 +335,16 @@ const styles = StyleSheet.create({
     opacity: 0.1,
   },
 
-  levelCard: (genre) => ({
+  levelCard: (width, left) => ({
     height: 40,
-    width: genre ? 100 : 50,
+    width: width,
     borderRadius: 20,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
     top: 20,
-    left: genre ? 20 : 130,
+    left: left,
     zIndex: 5,
   }),
   level: {
@@ -396,16 +418,16 @@ const styles = StyleSheet.create({
     borderColor: shownWord ? "#464646" : "transparent",
     backgroundColor: shownWord ? "#464646" : "transparent",
   }),
-  text: {
+  text: (fontSize) => ({
     color: "#e6e6e6",
     paddingVertical: 5,
     paddingHorizontal: 2,
     marginHorizontal: 2,
     margin: 2,
     marginBottom: 0,
-    fontSize: 30,
+    fontSize: fontSize,
     fontWeight: 400,
-  },
+  }),
   pinyinText: {
     color: "#fff",
     fontSize: 14,

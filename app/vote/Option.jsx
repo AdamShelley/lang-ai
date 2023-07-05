@@ -10,7 +10,6 @@ import Animated, {
   withDelay,
 } from "react-native-reanimated";
 import { FONT } from "../../constants/fonts";
-import useVoteOptionsStore from "../../state/voteOptionsStore";
 
 export const Option = ({
   option,
@@ -20,13 +19,10 @@ export const Option = ({
   disabled,
   submitted,
 }) => {
-  // const { submitted } = useVoteOptionsStore();
   const opacity = useSharedValue(1);
   const selectedOpacity = useSharedValue(1);
   const translateY = useSharedValue(0);
-  const animOptions = {
-    duration: 500,
-  };
+  const borderAnimation = useSharedValue(selectedOption === index ? 3 : 0);
 
   const translateStyle = useAnimatedStyle(() => {
     return {
@@ -35,24 +31,18 @@ export const Option = ({
   });
 
   const opacityStyles = useAnimatedStyle(() => {
-    // if (index === selectedOption) {
     return {
       opacity: index === selectedOption ? selectedOpacity.value : opacity.value,
     };
-    // } else {
-    //   return {
-    //     opacity: opacity.value,
-    //   };
-    // }
   });
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      borderColor: selectedOption === index ? "#e6e6e6" : "transparent",
+      borderColor: selectedOption === index ? "#e6e6e6" : "#323232",
       backgroundColor:
         selectedOption === index || submitted ? "#323232" : "#e6e6e6",
       borderRadius: 40,
-      borderWidth: selectedOption === index && !submitted ? 3 : 0,
+      borderWidth: borderAnimation.value,
     };
   });
 
@@ -91,6 +81,13 @@ export const Option = ({
             easing: Easing.inOut(Easing.ease),
           })
         );
+
+        borderAnimation.value = withTiming(3, {
+          duration: 1000,
+          easing: Easing.inOut(Easing.ease),
+        });
+
+        borderAnimation.value = 3;
       } else {
         // This is not the selected option, fade it out
         // opacity.value = withTiming(0, {
@@ -109,7 +106,13 @@ export const Option = ({
       key={index}
     >
       <Pressable
-        onPress={() => handleOptionChoice(option, index)}
+        onPress={() => {
+          handleOptionChoice(option, index);
+          borderAnimation.value = withTiming(3, {
+            duration: 300,
+            easing: Easing.inOut(Easing.ease),
+          });
+        }}
         disabled={disabled}
       >
         <Animated.View style={[animatedStyle, styles.choiceButton]}>

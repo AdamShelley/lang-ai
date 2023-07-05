@@ -6,6 +6,7 @@ import {
   Text,
   Switch,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { FONT } from "../../../constants/fonts";
 import useSettingsStore from "../../../state/store";
@@ -18,6 +19,8 @@ const settings = () => {
   const setHaptics = useSettingsStore((state) => state.setHaptics);
   const pinyin = useSettingsStore((state) => state.pinyin);
   const setPinyin = useSettingsStore((state) => state.setPinyin);
+  const textSize = useSettingsStore((state) => state.textSize);
+  const setTextSize = useSettingsStore((state) => state.setTextSize);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -57,6 +60,29 @@ const settings = () => {
           />
         </View>
         <View style={styles.row}>
+          <Text style={styles.text}>Text Size</Text>
+          <View style={styles.pressableOptions}>
+            <Pressable
+              style={styles.pressable(textSize === "small")}
+              onPress={() => setTextSize("small")}
+            >
+              <Text style={styles.buttonText(textSize === "small")}>S</Text>
+            </Pressable>
+            <Pressable
+              style={styles.pressable(textSize === "medium")}
+              onPress={() => setTextSize("medium")}
+            >
+              <Text style={styles.buttonText(textSize === "medium")}>M</Text>
+            </Pressable>
+            <Pressable
+              style={styles.pressable(textSize === "large")}
+              onPress={() => setTextSize("large")}
+            >
+              <Text style={styles.buttonText(textSize === "large")}>L</Text>
+            </Pressable>
+          </View>
+        </View>
+        <View style={styles.row}>
           <Text style={styles.text}>About</Text>
         </View>
 
@@ -91,7 +117,13 @@ const styles = StyleSheet.create({
   text: {
     color: "#fff",
     fontFamily: FONT.medium,
+    textAlign: "center",
   },
+  buttonText: (textSize) => ({
+    color: textSize ? "#000" : "#fff",
+    fontFamily: FONT.medium,
+    textAlign: "center",
+  }),
   smallHeading: {
     color: "#fff",
     fontFamily: FONT.bold,
@@ -101,6 +133,18 @@ const styles = StyleSheet.create({
   },
 
   switch: {},
+  pressableOptions: {
+    flexDirection: "row",
+    // marginHorizontal: 20,
+  },
+  pressable: (textSize) => ({
+    width: 30,
+    textAlign: "center",
+    marginHorizontal: 10,
+    borderRadius: 10,
+    padding: 5,
+    backgroundColor: textSize ? "#fff" : "transparent",
+  }),
   row: {
     height: 50,
     maxHeight: 50,
