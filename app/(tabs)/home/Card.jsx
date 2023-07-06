@@ -4,10 +4,14 @@ import { FONT } from "../../../constants/fonts";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import useSettingsStore from "../../../state/store";
+import { darkTheme, lightTheme } from "../../../constants/theme";
 
 const Card = ({ story, width, wide = false }) => {
   const router = useRouter();
   const haptics = useSettingsStore((state) => state.haptics);
+  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+  const theme = isDarkMode ? darkTheme : lightTheme;
+
   const [imageUrl, setImageUrl] = useState(story?.imageUrl);
 
   const handlePress = (id) => {
@@ -18,7 +22,7 @@ const Card = ({ story, width, wide = false }) => {
 
   return (
     <TouchableOpacity
-      style={styles.container(width, wide)}
+      style={styles.container(width, wide, theme)}
       onPress={() => handlePress(story.gptId)}
     >
       <View style={styles.imageContainer(wide)}>
@@ -39,21 +43,23 @@ const Card = ({ story, width, wide = false }) => {
           <View style={styles.overlay} />
           {wide && (
             <View style={styles.wideLevel}>
-              <Text style={styles.levelText}>{story.level || "Unknown"}</Text>
+              <Text style={styles.levelText(theme)}>
+                {story.level || "Unknown"}
+              </Text>
             </View>
           )}
         </View>
       </View>
       <View style={styles.bottomSection(wide)}>
         {!wide && (
-          <Text style={styles.nonWideLevel(wide)}>
+          <Text style={styles.nonWideLevel(wide, theme)}>
             {story.level || "Unknown"}
           </Text>
         )}
 
-        <Text style={styles.text(wide)}>{story.title}</Text>
+        <Text style={styles.text(wide, theme)}>{story.title}</Text>
         {wide && (
-          <Text style={styles.smallText} numberOfLines={3}>
+          <Text style={styles.smallText(theme)} numberOfLines={3}>
             {story.synopsis}
           </Text>
         )}
@@ -65,8 +71,8 @@ const Card = ({ story, width, wide = false }) => {
 export default Card;
 
 const styles = StyleSheet.create({
-  container: (width, wide) => ({
-    backgroundColor: "#313131",
+  container: (width, wide, theme) => ({
+    backgroundColor: theme.cardColor,
     flexDirection: wide ? "row" : "column",
     alignItems: wide ? "flex-start" : "center",
     justifyContent: wide ? "flex-start" : "flex-start",
@@ -136,17 +142,17 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     elevation: 5,
   },
-  levelText: {
-    color: "#fff",
+  levelText: (theme) => ({
+    color: "#eee",
     fontSize: 14,
     fontWeight: 400,
     fontFamily: FONT.medium,
     textAlign: "center",
     alignSelf: "center",
     textTransform: "uppercase",
-  },
-  text: (wide) => ({
-    color: "#e6e6e6",
+  }),
+  text: (wide, theme) => ({
+    color: theme.text,
     fontSize: wide ? 14 : 14,
     fontWeight: 400,
     fontFamily: FONT.bold,
@@ -155,14 +161,14 @@ const styles = StyleSheet.create({
     marginTop: wide ? 0 : 10,
     alignSelf: wide ? "flex-start" : "center",
   }),
-  nonWideLevel: (wide) => ({
+  nonWideLevel: (wide, theme) => ({
     borderRadius: 10,
-    borderWidth: 1,
+    borderWidth: theme === lightTheme ? 0 : 1,
     borderColor: wide ? "#313131" : "#e6e6e6b1",
     padding: 5,
     paddingHorizontal: 10,
-    backgroundColor: "#313131",
-    color: "#fff",
+    backgroundColor: theme.background,
+    color: theme.text,
     fontSize: 12,
     alignSelf: wide ? "auto" : "center",
     position: wide ? "absolute" : "relative",
@@ -173,12 +179,12 @@ const styles = StyleSheet.create({
     fontFamily: FONT.medium,
     textTransform: "uppercase",
   }),
-  smallText: {
+  smallText: (theme) => ({
     fontSize: 12,
-    color: "#fff",
+    color: theme.text,
     marginTop: 8,
     marginRight: 5,
     fontFamily: FONT.regular,
     height: "100%",
-  },
+  }),
 });

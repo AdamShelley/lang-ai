@@ -13,14 +13,18 @@ import { StatusBar } from "expo-status-bar";
 import { Feather } from "@expo/vector-icons";
 
 import { FONT } from "../../../constants/fonts";
+import { darkTheme, lightTheme } from "../../../constants/theme";
 import Recommended from "./Recommended";
 import AllStories from "./AllStories";
 import useStories from "../../../hooks/useStories";
 import useDictionary from "../../../hooks/useDictionary";
 import useStoriesStore from "../../../state/storiesStore";
+import useSettingsStore from "../../../state/store";
 
 const home = () => {
   const router = useRouter();
+  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+  const theme = isDarkMode ? darkTheme : lightTheme;
   const [refreshing, setRefreshing] = useState(false);
   const stories = useStoriesStore((state) => state.stories);
   // Filter out read stories
@@ -41,8 +45,8 @@ const home = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+    <SafeAreaView style={styles.container(theme)}>
+      <StatusBar style={isDarkMode ? "light" : "dark"} />
 
       {stories && (
         <AllStories
@@ -51,9 +55,9 @@ const home = () => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              tintColor={"#fff"}
+              tintColor={theme.text}
               title={"Pull to refresh"}
-              titleColor={"#fff"}
+              titleColor={theme.text}
             />
           }
           ListHeaderComponent={
@@ -67,7 +71,7 @@ const home = () => {
                   marginTop: 10,
                 }}
               >
-                <Text style={styles.title}>Home</Text>
+                <Text style={styles.title(theme)}>Home</Text>
                 <TouchableOpacity style={styles.circle} onPress={goToUser}>
                   <Feather name="user" size={24} color="#fff" />
                 </TouchableOpacity>
@@ -86,21 +90,21 @@ const home = () => {
 export default home;
 
 const styles = StyleSheet.create({
-  container: {
+  container: (theme) => ({
     flex: 1,
-    backgroundColor: "#212121",
+    backgroundColor: theme.background,
     alignItems: "flex-start",
     justifyContent: "center",
-  },
-  title: {
+  }),
+  title: (theme) => ({
     paddingTop: 40,
     fontFamily: FONT.medium,
     fontSize: 30,
     fontWeight: 100,
     fontWeight: "medium",
-    color: "#fff",
+    color: theme.text,
     paddingHorizontal: 20,
-  },
+  }),
   circle: {
     width: 50,
     height: 50,
@@ -111,7 +115,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginTop: 30,
   },
-  text: {
-    color: "#e6e6e6",
-  },
+  text: (theme) => ({
+    color: theme.text,
+  }),
 });

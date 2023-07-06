@@ -149,6 +149,7 @@ const style = StyleSheet.create({
   filters: {
     flexDirection: "row",
     justifyContent: "space-evenly",
+    marginBottom: 10,
   },
   buttonContainer: {
     flexDirection: "row",

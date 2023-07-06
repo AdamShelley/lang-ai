@@ -19,6 +19,7 @@ import StoryCard from "./StoryCard";
 
 import useStoriesStore from "../../../state/storiesStore";
 import FilterSection from "./FilterSection";
+import useSettingsStore from "../../../state/store";
 
 const stories = () => {
   // State
@@ -29,6 +30,7 @@ const stories = () => {
   // Card width (40%)
   const cardWidth = screenWidth * 0.45;
   const allStories = useStoriesStore((state) => state.stories);
+  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
 
   // DataProvider for RecyclerListView
   const [dataProvider, setDataProvider] = useState(
@@ -66,7 +68,7 @@ const stories = () => {
       if (filteredStories && filteredStories.length > 0) {
         const isEvenIndex = index % 2 === 0;
         dim.width = screenWidth / numOfColumns;
-        dim.height = cardWidth * 2 + 50;
+        dim.height = cardWidth * 2 - 40;
 
         dim.x = isEvenIndex ? 0 : dim.width;
       } else {
@@ -85,7 +87,7 @@ const stories = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style={isDarkMode ? "light" : "dark"} />
 
       <FilterSection
         selectedGenre={selectedGenre}
@@ -103,9 +105,12 @@ const stories = () => {
             rowRenderer={(type, data) => (
               <StoryCard story={data} width={cardWidth} key={data.gptId} />
             )}
-            contentContainerStyle={{ marginTop: 5, paddingBottom: 50 }}
-            renderAheadOffset={300}
-            renderFooter={() => <View style={{ paddingVertical: 100 }} />}
+            contentContainerStyle={{
+              marginTop: 5,
+              paddingBottom: 100,
+            }}
+            renderAheadOffset={500}
+            renderFooter={() => <View style={{ paddingVertical: 0 }} />}
           />
         ) : (
           <Text style={{ color: "white" }}>No items to display</Text>

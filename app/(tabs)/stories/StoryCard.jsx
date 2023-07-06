@@ -46,7 +46,7 @@ const Card = ({ story, width }) => {
       <View style={styles.bottomSection()}>
         <Text style={styles.text}>{story.title}</Text>
 
-        <Text style={styles.smallText} numberOfLines={5}>
+        <Text style={styles.smallText} numberOfLines={3}>
           {story.synopsis}
         </Text>
       </View>
@@ -64,24 +64,25 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignSelf: "center",
     width: width ? width : 200,
-    minHeight: 350,
+    height: 300,
+    minHeight: 300,
     borderRadius: 10,
     marginTop: 15,
     shadowColor: "#262626",
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 20,
-    marginBottom: 10,
+    // marginBottom: 10,
   }),
   imageContainer: () => ({
-    marginTop: 5,
-    width: "95%",
+    // marginTop: 5,
+    width: "100%",
     minWidth: 10,
     height: "50%",
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    // borderBottomLeftRadius: 10,
+    // borderBottomRightRadius: 10,
     overflow: "hidden",
     position: "relative",
     backgroundColor: "transparent",

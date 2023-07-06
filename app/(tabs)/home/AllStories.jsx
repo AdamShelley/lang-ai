@@ -2,14 +2,17 @@ import { useEffect } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import Card from "./Card";
 import { FONT } from "../../../constants/fonts";
+import { darkTheme, lightTheme } from "../../../constants/theme";
 import { useState } from "react";
 import Filter from "../../../components/Filter";
-import useStoriesStore from "../../../state/storiesStore";
+import useSettingsStore from "../../../state/store";
 import { useRouter } from "expo-router";
 
 const AllStories = ({ ListHeaderComponent, stories, refreshControl }) => {
   const [storiesToShow, setStoriesToShow] = useState(stories);
   const router = useRouter();
+  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+  const theme = isDarkMode ? darkTheme : lightTheme;
 
   useEffect(() => {
     setStoriesToShow(stories);
@@ -37,7 +40,7 @@ const AllStories = ({ ListHeaderComponent, stories, refreshControl }) => {
                 justifyContent: "space-between",
               }}
             >
-              <Text style={styles.text}>Last week</Text>
+              <Text style={styles.text(theme)}>Last week</Text>
               <Filter
                 text={"Show All"}
                 size="100%"
@@ -58,12 +61,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  text: {
-    color: "#fff",
+  text: (theme) => ({
+    color: theme.text,
     fontSize: 20,
     marginTop: 50,
     fontFamily: FONT.regular,
     paddingHorizontal: 20,
     alignSelf: "flex-start",
-  },
+  }),
 });

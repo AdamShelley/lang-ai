@@ -7,7 +7,8 @@ const useSettingsStore = create((set) => ({
   setPinyin: () => set((state) => ({ pinyin: !state.pinyin })),
   textSize: "medium",
   setTextSize: (size) => set(() => ({ textSize: size })),
-  darkMode: true,
+  isDarkMode: true,
+  toggleTheme: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
 }));
 
 export default useSettingsStore;

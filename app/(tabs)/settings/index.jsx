@@ -21,10 +21,12 @@ const settings = () => {
   const setPinyin = useSettingsStore((state) => state.setPinyin);
   const textSize = useSettingsStore((state) => state.textSize);
   const setTextSize = useSettingsStore((state) => state.setTextSize);
+  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+  const toggleTheme = useSettingsStore((state) => state.toggleTheme);
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      {/* <StatusBar style={isDarkMode ? "dark" : "light"} /> */}
       <View style={styles.wrapper}>
         <View style={styles.row}>
           <Text style={styles.text}>Haptics</Text>
@@ -49,14 +51,14 @@ const settings = () => {
           />
         </View>
         <View style={styles.row}>
-          <Text style={styles.text}>Dark/Light Mode</Text>
+          <Text style={styles.text}>Dark Mode</Text>
           <Switch
             style={styles.switch}
             trackColor={{ false: "#767577", true: "#81b0ff" }}
             thumbColor={"#f4f3f4"}
             ios_backgroundColor="#3e3e3e"
-            onValueChange={() => {}}
-            value={false}
+            onValueChange={toggleTheme}
+            value={isDarkMode}
           />
         </View>
         <View style={styles.row}>

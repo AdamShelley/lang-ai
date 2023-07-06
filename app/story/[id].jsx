@@ -17,6 +17,7 @@ import useStoriesStore from "../../state/storiesStore";
 import useDictionaryStore from "../../state/dictionaryStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useDictionary from "../../hooks/useDictionary";
+import { darkTheme, lightTheme } from "../../constants/theme";
 
 // Dev
 import { URL_DEV } from "@env";
@@ -32,6 +33,8 @@ const Story = () => {
   const stories = useStoriesStore((state) => state.stories);
   const setStories = useStoriesStore((state) => state.setStories);
   const textSize = useSettingsStore((state) => state.textSize);
+  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+  const theme = isDarkMode ? darkTheme : lightTheme;
 
   const [story, setStory] = useState();
 
@@ -167,8 +170,8 @@ const Story = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+    <SafeAreaView style={styles.container(theme)}>
+      <StatusBar style="dark" />
       {story && (
         <>
           <Image
@@ -185,32 +188,32 @@ const Story = () => {
               headerTitle: `${story.title}`,
 
               headerStyle: {
-                backgroundColor: "#212124",
+                backgroundColor: theme.headerBackground,
               },
-              headerTintColor: "#eee",
+              headerTintColor: theme.text,
               headerTitleStyle: {
                 fontSize: 16,
                 fontFamily: FONT.medium,
-                color: "#eee",
+                color: theme.text,
               },
             }}
           />
 
           <View style={styles.wrapper}>
-            <View style={styles.levelCard(100, 20)}>
-              <Text style={styles.level}>{story.topic}</Text>
+            <View style={styles.levelCard(theme, 100, 20)}>
+              <Text style={styles.level(theme)}>{story.topic}</Text>
             </View>
-            <View style={styles.levelCard(50, 130)}>
-              <Text style={styles.level}>{story.level}</Text>
+            <View style={styles.levelCard(theme, 50, 130)}>
+              <Text style={styles.level(theme)}>{story.level}</Text>
             </View>
             {story.options && (
-              <View style={styles.levelCard(50, 190)}>
-                <Text style={styles.level}>Vote</Text>
+              <View style={styles.levelCard(theme, 50, 190)}>
+                <Text style={styles.level(theme)}>Vote</Text>
               </View>
             )}
 
             <View style={styles.translationContainer}>
-              <Text style={{ color: "#fff", fontSize: 20 }}>
+              <Text style={{ color: theme.text, fontSize: 20 }}>
                 {shownWord &&
                   `${shownWord.chineseWord} - ${
                     wordDef?.englishWord || "-TBC-"
@@ -225,7 +228,7 @@ const Story = () => {
               horizontal={false}
               contentContainerStyle={styles.wordWrapper}
             >
-              <Text style={styles.synopsis}>{story.synopsis}</Text>
+              <Text style={styles.synopsis(theme)}>{story.synopsis}</Text>
               {modifiedWords.map((word, index) => (
                 <Pressable
                   onPressIn={(e) => showWord(e, word)}
@@ -237,16 +240,22 @@ const Story = () => {
                 >
                   <View style={{ textAlign: "center" }}>
                     {showPinyin && (
-                      <Text style={styles.pinyinText}>{word.pinyin}</Text>
+                      <Text style={styles.pinyinText(theme)}>
+                        {word.pinyin}
+                      </Text>
                     )}
                     <View
-                      style={styles.textWrapper(shownWord === word, showPinyin)}
+                      style={styles.textWrapper(
+                        shownWord === word,
+                        showPinyin,
+                        theme
+                      )}
                     >
                       <Text
                         style={
                           /^[\p{Punctuation}]+$/u.test(word.chineseWord)
                             ? styles.punctuation(showPinyin)
-                            : styles.text(fontSize)
+                            : styles.text(fontSize, theme)
                         }
                       >
                         {word.chineseWord}
@@ -269,19 +278,19 @@ const Story = () => {
 
             {showTranslation ? (
               <Pressable
-                style={styles.fullTranslation}
+                style={styles.fullTranslation(theme)}
                 onPress={() => setShowTranslation(false)}
               >
-                <Text style={styles.translationText((hidden = false))}>
+                <Text style={styles.translationText(theme, false)}>
                   {story.translation}
                 </Text>
               </Pressable>
             ) : (
               <Pressable
-                style={styles.fullTranslation}
+                style={styles.fullTranslation(theme)}
                 onPress={() => setShowTranslation(true)}
               >
-                <Text style={styles.translationText((hidden = true))}>
+                <Text style={styles.translationText(theme, true)}>
                   Tap to see translation
                 </Text>
               </Pressable>
@@ -314,13 +323,13 @@ const Story = () => {
 export default Story;
 
 const styles = StyleSheet.create({
-  container: {
+  container: (theme) => ({
     flex: 1,
-    backgroundColor: "#212124",
+    backgroundColor: theme.headerBackground,
     flexDirection: "column",
     alignItems: "center",
     height: "100%",
-  },
+  }),
   titleContainer: {
     width: "100%",
     alignItems: "center",
@@ -335,7 +344,7 @@ const styles = StyleSheet.create({
     opacity: 0.1,
   },
 
-  levelCard: (width, left) => ({
+  levelCard: (theme, width, left) => ({
     height: 40,
     width: width,
     borderRadius: 20,
@@ -347,15 +356,15 @@ const styles = StyleSheet.create({
     left: left,
     zIndex: 5,
   }),
-  level: {
+  level: (theme) => ({
     fontSize: 12,
     fontFamily: FONT.bold,
-    color: "#424242",
+    color: "#212121",
     textTransform: "uppercase",
     letterSpacing: 0.2,
-  },
-  synopsis: {
-    color: "#fff",
+  }),
+  synopsis: (theme) => ({
+    color: theme.text,
     fontSize: 16,
     fontFamily: FONT.regular,
     width: "100%",
@@ -363,7 +372,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 20,
     lineHeight: 25,
-  },
+  }),
 
   translationContainer: {
     marginTop: 60,
@@ -411,15 +420,15 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
     fontFamily: FONT.medium,
   },
-  textWrapper: (shownWord, showPinyin) => ({
+  textWrapper: (shownWord, showPinyin, theme) => ({
     borderWidth: 1,
     borderRadius: 10,
     marginTop: showPinyin ? 0 : 17,
-    borderColor: shownWord ? "#464646" : "transparent",
-    backgroundColor: shownWord ? "#464646" : "transparent",
+    borderColor: shownWord ? theme.headerBackground : "transparent",
+    backgroundColor: shownWord ? theme.headerBackground : "transparent",
   }),
-  text: (fontSize) => ({
-    color: "#e6e6e6",
+  text: (fontSize, theme) => ({
+    color: theme.text,
     paddingVertical: 5,
     paddingHorizontal: 2,
     marginHorizontal: 2,
@@ -428,27 +437,27 @@ const styles = StyleSheet.create({
     fontSize: fontSize,
     fontWeight: 400,
   }),
-  pinyinText: {
-    color: "#fff",
+  pinyinText: (theme) => ({
+    color: theme.text,
     fontSize: 14,
     textAlign: "center",
-  },
+  }),
   buttonContainer: {
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "space-evenly",
   },
-  fullTranslation: {
+  fullTranslation: (theme) => ({
     width: "100%",
     // marginTop: 20,
     paddingTop: 20,
     paddingHorizontal: "10%",
     // borderTopColor: "#00000013",
     // borderTopWidth: 1,
-    backgroundColor: "#212124",
-  },
-  translationText: (hidden) => ({
-    color: "#fff",
+    backgroundColor: theme.headerBackground,
+  }),
+  translationText: (theme, hidden) => ({
+    color: theme.text,
     fontSize: 16,
     lineHeight: 30,
     fontFamily: FONT.medium,

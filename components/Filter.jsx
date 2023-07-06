@@ -1,5 +1,7 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { FONT } from "../constants/fonts";
+import { darkTheme, lightTheme } from "../constants/theme";
+import useSettingsStore from "../state/store";
 
 const Filter = ({
   text,
@@ -10,13 +12,16 @@ const Filter = ({
   disabled,
   storyFilter,
 }) => {
+  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+  const theme = isDarkMode ? darkTheme : lightTheme;
+
   return (
     <TouchableOpacity
       disabled={disabled}
       onPress={onPress}
-      style={styles.container(size, color, dark, storyFilter)}
+      style={styles.container(size, color, dark, storyFilter, theme)}
     >
-      <Text style={styles.text(color, disabled)}>{text}</Text>
+      <Text style={styles.text(color, disabled, theme)}>{text}</Text>
     </TouchableOpacity>
   );
 };
@@ -24,18 +29,20 @@ const Filter = ({
 export default Filter;
 
 const styles = StyleSheet.create({
-  container: (size, color, dark, storyFilter) => ({
+  container: (size, color, dark, storyFilter, theme) => ({
     padding: storyFilter ? 5 : 5,
     width: storyFilter ? "50%" : size,
-    borderRadius: 2,
-    borderWidth: 1,
-    borderColor: storyFilter ? "transparent" : "#212124",
+    // borderRadius: 2,
+    // borderWidth: 1,
+    // borderColor: storyFilter ? "transparent" : "#212124",
     alignItems: "center",
-    backgroundColor: storyFilter ? "#212124" : "transparent",
+    // backgroundColor: storyFilter ? "#212124" : "transparent",
+    backgroundColor: theme.headerBackground,
     paddingBottom: storyFilter ? 10 : 0,
   }),
-  text: (color, disabled) => ({
-    color: disabled ? "#9e9797" : color,
+  text: (color, disabled, theme) => ({
+    // color: disabled ? "#9e9797" : color,
+    color: theme.text,
     fontFamily: FONT.bold,
   }),
 });
