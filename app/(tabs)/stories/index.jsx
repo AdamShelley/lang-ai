@@ -20,6 +20,7 @@ import StoryCard from "./StoryCard";
 import useStoriesStore from "../../../state/storiesStore";
 import FilterSection from "./FilterSection";
 import useSettingsStore from "../../../state/store";
+import { darkTheme, lightTheme } from "../../../constants/theme";
 
 const stories = () => {
   // State
@@ -31,6 +32,7 @@ const stories = () => {
   const cardWidth = screenWidth * 0.45;
   const allStories = useStoriesStore((state) => state.stories);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+  const theme = isDarkMode ? darkTheme : lightTheme;
 
   // DataProvider for RecyclerListView
   const [dataProvider, setDataProvider] = useState(
@@ -86,7 +88,7 @@ const stories = () => {
   }, [filteredStories]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container(theme)}>
       <StatusBar style={isDarkMode ? "light" : "dark"} />
 
       <FilterSection
@@ -123,11 +125,11 @@ const stories = () => {
 export default stories;
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#212121",
+  container: (theme) => ({
+    backgroundColor: theme.background,
     flex: 1,
     width: "100%",
-  },
+  }),
 
   filterSection: {
     flexDirection: "row",

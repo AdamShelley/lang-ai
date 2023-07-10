@@ -24,3 +24,12 @@ export const fetchDictionaryFromServer = async () => {
     return null;
   }
 };
+
+export const updateLocalStorage = async (newData) => {
+  try {
+    // Update local storage with new data
+    await AsyncStorage.setItem("dictionary", JSON.stringify(newData));
+  } catch (error) {
+    console.error("Error updating local storage:", error);
+  }
+};

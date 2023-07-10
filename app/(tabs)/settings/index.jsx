@@ -13,6 +13,7 @@ import useSettingsStore from "../../../state/store";
 
 // Dev
 import { clearAll } from "../../../utils/devFunctions";
+import { darkTheme, lightTheme } from "../../../constants/theme";
 
 const settings = () => {
   const haptics = useSettingsStore((state) => state.haptics);
@@ -24,9 +25,11 @@ const settings = () => {
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const toggleTheme = useSettingsStore((state) => state.toggleTheme);
 
+  const theme = isDarkMode ? darkTheme : lightTheme;
+
   return (
-    <SafeAreaView style={styles.container}>
-      {/* <StatusBar style={isDarkMode ? "dark" : "light"} /> */}
+    <SafeAreaView style={styles.container(theme)}>
+      <StatusBar style={isDarkMode ? "dark" : "light"} />
       <View style={styles.wrapper}>
         <View style={styles.row}>
           <Text style={styles.text}>Haptics</Text>
@@ -104,13 +107,13 @@ const settings = () => {
 export default settings;
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#212121",
+  container: (theme) => ({
+    backgroundColor: theme.headerBackground,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
-  },
+  }),
   wrapper: {
     flex: 1,
     marginTop: 100,

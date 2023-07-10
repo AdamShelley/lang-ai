@@ -32,12 +32,9 @@ const styles = StyleSheet.create({
   container: (size, color, dark, storyFilter, theme) => ({
     padding: storyFilter ? 5 : 5,
     width: storyFilter ? "50%" : size,
-    // borderRadius: 2,
-    // borderWidth: 1,
-    // borderColor: storyFilter ? "transparent" : "#212124",
     alignItems: "center",
     // backgroundColor: storyFilter ? "#212124" : "transparent",
-    backgroundColor: theme.headerBackground,
+    backgroundColor: storyFilter && theme.headerBackground,
     paddingBottom: storyFilter ? 10 : 0,
   }),
   text: (color, disabled, theme) => ({

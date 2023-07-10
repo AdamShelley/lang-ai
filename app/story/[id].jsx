@@ -424,11 +424,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     marginTop: showPinyin ? 0 : 17,
-    borderColor: shownWord ? theme.headerBackground : "transparent",
-    backgroundColor: shownWord ? theme.headerBackground : "transparent",
+    borderColor: shownWord ? "#414141" : "transparent",
+    backgroundColor: shownWord ? "#414141" : "transparent",
   }),
   text: (fontSize, theme) => ({
     color: theme.text,
+
     paddingVertical: 5,
     paddingHorizontal: 2,
     marginHorizontal: 2,
