@@ -52,9 +52,11 @@ const Card = ({ story, width, wide = false }) => {
       </View>
       <View style={styles.bottomSection(wide)}>
         {!wide && (
-          <Text style={styles.nonWideLevel(wide, theme)}>
-            {story.level || "Unknown"}
-          </Text>
+          <View style={styles.nonWideLevel(wide, theme)}>
+            <Text style={styles.levelText(theme)}>
+              {story.level || "Unknown"}
+            </Text>
+          </View>
         )}
 
         <Text style={styles.text(wide, theme)}>{story.title}</Text>

@@ -145,6 +145,7 @@ const style = StyleSheet.create({
     justifyContent: "flex-start",
     marginTop: 5,
     paddingHorizontal: 10,
+    marginBottom: 10,
   },
   filters: {
     flexDirection: "row",

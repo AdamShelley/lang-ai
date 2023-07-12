@@ -21,8 +21,18 @@ export const fetchDictionaryFromServer = async () => {
     }
   } catch (error) {
     console.error(error);
+    console.error(error.message);
+    console.log(error.stack);
     return null;
   }
+};
+
+export const getDictionaryFromStorage = async () => {
+  const dictionaryFromStorage = await AsyncStorage.getItem("dictionary");
+  if (dictionaryFromStorage) {
+    return JSON.parse(dictionaryFromStorage);
+  }
+  return null;
 };
 
 export const updateLocalStorage = async (newData) => {

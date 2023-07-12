@@ -44,7 +44,9 @@ const Card = ({ story, width }) => {
         </View>
       </View>
       <View style={styles.bottomSection()}>
-        <Text style={styles.text}>{story.title}</Text>
+        <Text style={styles.text} numberOfLines={3} ellipsizeMode="tail">
+          {story.title}
+        </Text>
 
         <Text style={styles.smallText} numberOfLines={3}>
           {story.synopsis}
@@ -112,7 +114,8 @@ const styles = StyleSheet.create({
   }),
   text: {
     color: "#eee",
-    fontSize: 16,
+    fontSize: 15,
+    lineHeight: 20,
     fontWeight: 400,
     fontFamily: FONT.bold,
     marginTop: 10,
@@ -172,7 +175,7 @@ const styles = StyleSheet.create({
   smallText: {
     fontSize: 12,
     color: "#fff",
-    marginTop: 20,
+    marginTop: 10,
     fontFamily: FONT.regular,
     fontWeight: 100,
     flexWrap: "wrap",

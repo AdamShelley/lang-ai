@@ -127,6 +127,10 @@ const Story = () => {
     if (word.chineseWord in dictionary) {
       setWordDef(dictionary[word.chineseWord]);
     }
+
+    // Capitalzie first letter of english word
+    wordDef?.englishWord?.charAt(0)?.toUppercase() +
+      wordDef?.englishWord?.slice(1);
   };
 
   const handleFilterPress = () => {
@@ -215,9 +219,7 @@ const Story = () => {
             <View style={styles.translationContainer}>
               <Text style={{ color: theme.text, fontSize: 20 }}>
                 {shownWord &&
-                  `${shownWord.chineseWord} - ${
-                    wordDef?.englishWord || "-TBC-"
-                  }`}
+                  `${shownWord.chineseWord} - ${wordDef?.englishWord || ""}`}
               </Text>
               {/* <Text style={{ color: "#fff", fontSize: 20 }}>
                 {shownWord && `${wordDef?.definition || ""} `}

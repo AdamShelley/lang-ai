@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import * as storyService from "../api/storyService";
+
 import { supabase } from "../utils/supabaseClient";
 import useStoriesStore from "../state/storiesStore";
 
@@ -61,19 +62,6 @@ const useStories = () => {
       }
     };
 
-    // const handleDictionary = async (payload) => {
-    //   if (!isMounted) return;
-    //   if (payload.eventType === "INSERT") {
-    //     try {
-    //       // Combine the new data with the existing data
-    //       console.log("Handling new words");
-    //     } catch (error) {
-    //       console.log("Error in handling payload");
-    //       console.log(error);
-    //     }
-    //   }
-    // };
-
     // Call fetchStories initially to load the stories
     fetchStoriesAndUpdate();
 
@@ -83,20 +71,10 @@ const useStories = () => {
       .on("postgres_changes", { event: "*", table: "stories" }, handlePayload)
       .subscribe();
 
-    // const subscription2 = supabase
-    //   .channel("any")
-    //   .on(
-    //     "postgres_changes",
-    //     { event: "*", table: "dictionary" },
-    //     handleDictionary
-    //   )
-    //   .subscribe();
-
     return () => {
       try {
         isMounted = false;
         supabase.removeChannel(subscription);
-        // supabase.removeChannel(subscription2);
       } catch (error) {
         console.log("Error in return");
         console.log(error);
