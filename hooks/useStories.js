@@ -11,9 +11,9 @@ const useStories = () => {
   const setLevels = useStoriesStore((state) => state.setLevels);
   const setGenres = useStoriesStore((state) => state.setGenres);
 
-  const fetchStories = async () => {
+  const fetchStories = async (forceFetch) => {
     // Fetch stories from server or local storage
-    let fetchedStories = await storyService.fetchStoriesFromServer();
+    let fetchedStories = await storyService.fetchStoriesFromServer(forceFetch);
 
     // Fetch images for the stories
     if (fetchedStories) {

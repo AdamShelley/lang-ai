@@ -70,7 +70,7 @@ const stories = () => {
       if (filteredStories && filteredStories.length > 0) {
         const isEvenIndex = index % 2 === 0;
         dim.width = screenWidth / numOfColumns;
-        dim.height = cardWidth * 2 - 40;
+        dim.height = cardWidth * 2 - 30;
 
         dim.x = isEvenIndex ? 0 : dim.width;
       } else {

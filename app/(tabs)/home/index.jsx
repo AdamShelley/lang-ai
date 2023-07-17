@@ -37,7 +37,7 @@ const home = () => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     // Fetch new data
-    fetchStories().then(() => setRefreshing(false));
+    fetchStories(true).then(() => setRefreshing(false));
   }, []);
 
   const goToUser = () => {

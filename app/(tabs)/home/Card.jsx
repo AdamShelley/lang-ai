@@ -53,7 +53,14 @@ const Card = ({ story, width, wide = false }) => {
       <View style={styles.bottomSection(wide)}>
         {!wide && (
           <View style={styles.nonWideLevel(wide, theme)}>
-            <Text style={styles.levelText(theme)}>
+            <Text
+              style={[
+                styles.levelText(theme),
+                {
+                  fontSize: 12,
+                },
+              ]}
+            >
               {story.level || "Unknown"}
             </Text>
           </View>
@@ -155,8 +162,7 @@ const styles = StyleSheet.create({
   }),
   text: (wide, theme) => ({
     color: theme.text,
-    fontSize: wide ? 14 : 14,
-    fontWeight: 400,
+    fontSize: 14,
     fontFamily: FONT.bold,
     flexWrap: "wrap",
     flexShrink: wide ? null : 1,
@@ -166,12 +172,11 @@ const styles = StyleSheet.create({
   nonWideLevel: (wide, theme) => ({
     borderRadius: 10,
     borderWidth: theme === lightTheme ? 0 : 1,
-    borderColor: wide ? "#313131" : "#e6e6e6b1",
+    borderColor: wide ? "#313131" : "transparent",
     padding: 5,
     paddingHorizontal: 10,
     backgroundColor: theme.background,
     color: theme.text,
-    fontSize: 12,
     alignSelf: wide ? "auto" : "center",
     position: wide ? "absolute" : "relative",
     left: wide ? 10 : null,

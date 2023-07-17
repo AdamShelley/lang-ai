@@ -24,7 +24,13 @@ const user = () => {
       <View style={styles.wrapper}>
         <Text style={styles.smallHeading}>Account</Text>
         <View style={styles.row}>
-          <Text style={styles.text}>Haptics</Text>
+          <Text style={styles.text}>Setting 1</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.text}>Setting 2</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.text}>Setting 3</Text>
         </View>
       </View>
     </SafeAreaView>

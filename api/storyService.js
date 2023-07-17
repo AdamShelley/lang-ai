@@ -1,11 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { URL_DEV } from "@env";
 
-export const fetchStoriesFromServer = async () => {
+export const fetchStoriesFromServer = async (forceFetch = false) => {
   try {
     // Check for stories in async storage
     const storiesFromStorage = await AsyncStorage.getItem("stories");
-    if (storiesFromStorage) {
+    if (storiesFromStorage && !forceFetch) {
       console.log("Using local storage Stories");
 
       const parsedStories = JSON.parse(storiesFromStorage);

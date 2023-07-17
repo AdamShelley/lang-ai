@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // backgroundColor: storyFilter ? "#212124" : "transparent",
     backgroundColor: storyFilter && theme.headerBackground,
-    paddingBottom: storyFilter ? 10 : 0,
+    paddingTop: 10,
+    paddingBottom: 10,
   }),
   text: (color, disabled, theme) => ({
     // color: disabled ? "#9e9797" : color,

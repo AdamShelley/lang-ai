@@ -126,11 +126,10 @@ const Story = () => {
 
     if (word.chineseWord in dictionary) {
       setWordDef(dictionary[word.chineseWord]);
+      // Capitalzie first letter of english word
+      wordDef?.englishWord?.charAt(0)?.toUppercase() +
+        wordDef?.englishWord?.slice(1);
     }
-
-    // Capitalzie first letter of english word
-    wordDef?.englishWord?.charAt(0)?.toUppercase() +
-      wordDef?.englishWord?.slice(1);
   };
 
   const handleFilterPress = () => {
@@ -277,41 +276,32 @@ const Story = () => {
                 </Pressable>
               )}
             </ScrollView>
+            {/* style={styles.translationText(theme, false) */}
 
-            {showTranslation ? (
-              <Pressable
-                style={styles.fullTranslation(theme)}
-                onPress={() => setShowTranslation(false)}
+            {showTranslation && (
+              <ScrollView
+                contentContainerStyle={styles.translationText(theme, false)}
               >
                 <Text style={styles.translationText(theme, false)}>
                   {story.translation}
                 </Text>
-              </Pressable>
-            ) : (
-              <Pressable
-                style={styles.fullTranslation(theme)}
-                onPress={() => setShowTranslation(true)}
-              >
-                <Text style={styles.translationText(theme, true)}>
-                  Tap to see translation
-                </Text>
-              </Pressable>
+              </ScrollView>
             )}
 
-            <View style={styles.buttonContainer}>
+            <View style={styles.buttonContainer(theme)}>
               <Filter
                 text={"Pinyin"}
                 color="#e6e6e6"
-                size="30%"
-                storyFilter
                 onPress={handleFilterPress}
+              />
+              <Filter
+                text={"Translation"}
+                color="#e6e6e6"
+                onPress={() => setShowTranslation(!showTranslation)}
               />
               <Filter
                 text={story.read ? "Mark as unread" : "Mark as read"}
                 color="#e6e6e6"
-                size="30%"
-                storyFilter
-                // disabled={localStorageMatch?.read}
                 onPress={handleFinishedStory}
               />
             </View>
@@ -445,21 +435,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
   }),
-  buttonContainer: {
+  buttonContainer: (theme) => ({
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "space-evenly",
-  },
+
+    backgroundColor: theme.headerBackground,
+  }),
   fullTranslation: (theme) => ({
     width: "100%",
-    // marginTop: 20,
     paddingTop: 20,
     paddingHorizontal: "10%",
-    // borderTopColor: "#00000013",
-    // borderTopWidth: 1,
     backgroundColor: theme.headerBackground,
   }),
   translationText: (theme, hidden) => ({
+    padding: 20,
     color: theme.text,
     fontSize: 16,
     lineHeight: 30,
@@ -469,14 +459,10 @@ const styles = StyleSheet.create({
   }),
   punctuation: (showPinyin) => ({
     color: "#e6e6e6",
-    // margin: 2,
-    // letterSpacing: 10,
     marginTop: showPinyin ? 0 : 17,
     marginBottom: 0,
     fontSize: 20,
     fontWeight: 400,
-    // borderWidth: 1,
-    // borderRadius: 10,
     borderColor: "transparent",
     backgroundColor: "transparent",
     paddingHorizontal: 0,
@@ -485,11 +471,11 @@ const styles = StyleSheet.create({
   voteButton: {
     width: "100%",
     height: 50,
-    backgroundColor: "#424242",
+    backgroundColor: "#323232",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 100,
     marginBottom: 20,
-    borderRadius: 10,
+    borderRadius: 5,
   },
 });

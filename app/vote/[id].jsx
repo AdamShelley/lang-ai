@@ -43,7 +43,7 @@ const Vote = () => {
     // Check for vote
     const checkForVote = async () => {
       try {
-        const response = await fetch(`${URL_DEV}/voting/${id}`);
+        const response = await fetch(`${URL_DEV}/voting/getPoll/${id}`);
         const data = await response.json();
         setVoteId(data.id);
       } catch (error) {
@@ -168,7 +168,7 @@ const Vote = () => {
               horizontal={false}
               contentContainerStyle={styles.wordWrapper}
             >
-              <Text style={styles.synopsis}>
+              <Text style={styles.synopsis} numberOfLines={3}>
                 Story so far: {story.synopsis}
               </Text>
               <View>
