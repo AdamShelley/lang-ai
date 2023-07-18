@@ -2,11 +2,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { URL_DEV } from "@env";
 
-export const fetchDictionaryFromServer = async () => {
+export const fetchDictionaryFromServer = async (forceFetch = false) => {
   try {
     // Check if a dictionary is already in the async storage
     const dictionaryFromStorage = await AsyncStorage.getItem("dictionary");
-    if (dictionaryFromStorage) {
+    if (dictionaryFromStorage && !forceFetch) {
       console.log("Using local storage Dictionary");
       return JSON.parse(dictionaryFromStorage);
     } else {
@@ -32,7 +32,7 @@ export const getDictionaryFromStorage = async () => {
   if (dictionaryFromStorage) {
     return JSON.parse(dictionaryFromStorage);
   }
-  return null;
+  return {};
 };
 
 export const updateLocalStorage = async (newData) => {

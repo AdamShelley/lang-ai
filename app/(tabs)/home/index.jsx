@@ -20,6 +20,7 @@ import useStories from "../../../hooks/useStories";
 import useDictionary from "../../../hooks/useDictionary";
 import useStoriesStore from "../../../state/storiesStore";
 import useSettingsStore from "../../../state/store";
+// import { fetchDictionaryFromServer } from "../../../api/dictionaryService";
 
 const home = () => {
   const router = useRouter();
@@ -31,12 +32,15 @@ const home = () => {
   const unreadStories = stories.filter((story) => !story.read);
 
   // Initialize data
-  useDictionary();
+  // useDictionary();
   const { fetchStories } = useStories();
+  const { fetchDictionary } = useDictionary();
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     // Fetch new data
+    // fetchDictionaryFromServer(true);
+    fetchDictionary(true);
     fetchStories(true).then(() => setRefreshing(false));
   }, []);
 

@@ -66,7 +66,9 @@ const Card = ({ story, width, wide = false }) => {
           </View>
         )}
 
-        <Text style={styles.text(wide, theme)}>{story.title}</Text>
+        <Text style={styles.text(wide, theme)}>
+          {story.title} Part {story.part}
+        </Text>
         {wide && (
           <Text style={styles.smallText(theme)} numberOfLines={3}>
             {story.synopsis}
@@ -168,6 +170,7 @@ const styles = StyleSheet.create({
     flexShrink: wide ? null : 1,
     marginTop: wide ? 0 : 10,
     alignSelf: wide ? "flex-start" : "center",
+    textAlign: wide ? "left" : "center",
   }),
   nonWideLevel: (wide, theme) => ({
     borderRadius: 10,

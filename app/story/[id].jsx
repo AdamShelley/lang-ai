@@ -124,11 +124,13 @@ const Story = () => {
 
     setShownWord(word);
 
+    // alert(word.chineseWord);
+
+    // console.log(dictionary[word.chineseWord]);
+
     if (word.chineseWord in dictionary) {
+      // alert(JSON.stringify(dictionary[word.chineseWord]));
       setWordDef(dictionary[word.chineseWord]);
-      // Capitalzie first letter of english word
-      wordDef?.englishWord?.charAt(0)?.toUppercase() +
-        wordDef?.englishWord?.slice(1);
     }
   };
 
@@ -172,6 +174,8 @@ const Story = () => {
     router.push(`/vote/${id}`);
   };
 
+  console.log(story?.imageUrl);
+
   return (
     <SafeAreaView style={styles.container(theme)}>
       <StatusBar style="dark" />
@@ -188,7 +192,7 @@ const Story = () => {
           />
           <Stack.Screen
             options={{
-              headerTitle: `${story.title}`,
+              headerTitle: `${story.title} ${story.part}`,
 
               headerStyle: {
                 backgroundColor: theme.headerBackground,
@@ -218,11 +222,13 @@ const Story = () => {
             <View style={styles.translationContainer}>
               <Text style={{ color: theme.text, fontSize: 20 }}>
                 {shownWord &&
-                  `${shownWord.chineseWord} - ${wordDef?.englishWord || ""}`}
+                  `Chinese: ${shownWord.chineseWord} English: ${
+                    wordDef?.englishWord || ""
+                  }`}
               </Text>
-              {/* <Text style={{ color: "#fff", fontSize: 20 }}>
+              <Text style={{ color: "#fff", fontSize: 20, marginTop: 5 }}>
                 {shownWord && `${wordDef?.definition || ""} `}
-              </Text> */}
+              </Text>
             </View>
 
             <ScrollView
@@ -471,11 +477,13 @@ const styles = StyleSheet.create({
   voteButton: {
     width: "100%",
     height: 50,
-    backgroundColor: "#323232",
+    backgroundColor: "#212121",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 100,
     marginBottom: 20,
     borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#424242",
   },
 });

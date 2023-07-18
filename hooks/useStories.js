@@ -5,6 +5,7 @@ import { supabase } from "../utils/supabaseClient";
 import useStoriesStore from "../state/storiesStore";
 
 const useStories = () => {
+  const stories = useStoriesStore((state) => state.stories);
   const setStories = useStoriesStore((state) => state.setStories);
   const isLoaded = useStoriesStore((state) => state.isLoaded);
   const setIsLoaded = useStoriesStore((state) => state.setIsLoaded);

@@ -59,7 +59,7 @@ export const fetchImagesFromServer = async (stories, batchSize = 5) => {
 
     // Now merge the stories with their corresponding image URLs
     const storiesWithImages = stories.map((story) => {
-      const key = story.title;
+      const key = `${story.gptId}-${story.title}`;
       return {
         ...story,
         imageUrl: imageMap[key],

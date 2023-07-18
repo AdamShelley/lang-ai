@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import { FONT } from "../../../constants/fonts";
 import useSettingsStore from "../../../state/store";
+import useDictionary from "../../../hooks/useDictionary";
+import { darkTheme, lightTheme } from "../../../constants/theme";
+import { useRouter } from "expo-router";
 
 // Dev
 import { clearAll } from "../../../utils/devFunctions";
-import { darkTheme, lightTheme } from "../../../constants/theme";
 
 const settings = () => {
   const haptics = useSettingsStore((state) => state.haptics);
@@ -24,8 +26,10 @@ const settings = () => {
   const setTextSize = useSettingsStore((state) => state.setTextSize);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const toggleTheme = useSettingsStore((state) => state.toggleTheme);
-
+  const router = useRouter();
   const theme = isDarkMode ? darkTheme : lightTheme;
+
+  const { fetchDictionary } = useDictionary();
 
   return (
     <SafeAreaView style={styles.container(theme)}>
@@ -88,7 +92,14 @@ const settings = () => {
           </View>
         </View>
         <View style={styles.row}>
-          <Text style={styles.text}>About</Text>
+          <Pressable onPress={() => fetchDictionary(true)}>
+            <Text style={styles.text}>Update Dictionary</Text>
+          </Pressable>
+        </View>
+        <View style={styles.row}>
+          <Pressable onPress={() => router.push("/about")}>
+            <Text style={styles.text}>About</Text>
+          </Pressable>
         </View>
 
         {/* DEV ONLY */}
