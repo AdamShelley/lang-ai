@@ -30,13 +30,13 @@ export default Filter;
 
 const styles = StyleSheet.create({
   container: (size, color, dark, storyFilter, theme) => ({
-    padding: storyFilter ? 5 : 5,
+    padding: 5,
     width: storyFilter ? "50%" : size,
     alignItems: "center",
     // backgroundColor: storyFilter ? "#212124" : "transparent",
     backgroundColor: storyFilter && theme.headerBackground,
     paddingTop: 10,
-    paddingBottom: 10,
+    paddingBottom: storyFilter ? 10 : 0,
   }),
   text: (color, disabled, theme) => ({
     // color: disabled ? "#9e9797" : color,

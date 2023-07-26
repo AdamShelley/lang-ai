@@ -1,18 +1,32 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { URL_DEV } from "@env";
+import { URL_DEV, LIVE_URL } from "@env";
+import moment from "moment";
+
+const { getTimestamp, shouldUpdate } = require("../utils/shouldUpdate");
 
 export const fetchStoriesFromServer = async (forceFetch = false) => {
   try {
+    const lastUpdate = await AsyncStorage.getItem("lastUpdateStories");
+    const shouldUpdateStories = lastUpdate ? parseInt(lastUpdate, 10) : null;
+
     // Check for stories in async storage
     const storiesFromStorage = await AsyncStorage.getItem("stories");
-    if (storiesFromStorage && !forceFetch) {
+
+    //  If no need to fetch new data, use local storage
+
+    console.log("UPDATE REQUIRED?:", shouldUpdate(shouldUpdateStories));
+    if (
+      storiesFromStorage?.length &&
+      !forceFetch &&
+      !shouldUpdate(shouldUpdateStories)
+    ) {
       console.log("Using local storage Stories");
 
       const parsedStories = JSON.parse(storiesFromStorage);
       return parsedStories;
     } else {
       console.log("FETCHING STORIES FROM SERVER");
-      const response = await fetch(`${URL_DEV}/db`);
+      const response = await fetch(`${LIVE_URL}/db`);
       const data = await response.json();
 
       // Parse the word array in each story
@@ -23,9 +37,13 @@ export const fetchStoriesFromServer = async (forceFetch = false) => {
 
       console.log(newData.length);
 
+      const timestamp = getTimestamp();
+      await AsyncStorage.setItem("lastUpdateStories", timestamp.toString());
+
       return newData;
     }
   } catch (error) {
+    console.log("----fetch stories from server");
     console.error(error);
     return error;
   }
@@ -41,7 +59,7 @@ export const fetchImagesFromServer = async (stories, batchSize = 5) => {
       const imageList = batch.map((story) => `${story.gptId}-${story.title}`);
 
       // Fetch this batch of images from the server
-      const response = await fetch(`${URL_DEV}/db/images`, {
+      const response = await fetch(`${LIVE_URL}/db/images`, {
         method: "POST",
         body: JSON.stringify({ imageList }),
         headers: {
@@ -71,6 +89,8 @@ export const fetchImagesFromServer = async (stories, batchSize = 5) => {
 
     return storiesWithImages;
   } catch (error) {
+    console.log("----fetch images from server");
+
     return console.log(error);
   }
 };
@@ -97,7 +117,9 @@ export const updateLocalStorage = async (newData) => {
 };
 
 export const setStoryLevels = (stories) => {
-  const storyLevels = stories.map((story) =>
+  if (!stories) return [];
+
+  const storyLevels = stories?.map((story) =>
     story?.level ? story.level.toUpperCase() : "Unknown"
   );
 

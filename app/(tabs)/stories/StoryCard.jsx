@@ -5,17 +5,26 @@ import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import useSettingsStore from "../../../state/store";
 
+import { darkTheme, lightTheme } from "../../../constants/theme";
+
 const Card = ({ story, width }) => {
   const router = useRouter();
   const haptics = useSettingsStore((state) => state.haptics);
   const [imageUrl, setImageUrl] = useState(story?.imageUrl);
+  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+
+  const theme = isDarkMode ? darkTheme : lightTheme;
+
   const handlePress = () => {
     haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push(`/story/${story.gptId}`);
   };
 
   return (
-    <TouchableOpacity style={styles.container(width)} onPress={handlePress}>
+    <TouchableOpacity
+      style={styles.container(width, theme)}
+      onPress={handlePress}
+    >
       <View style={styles.imageContainer()}>
         <View style={{ alignSelf: "stretch" }}>
           <Image
@@ -35,20 +44,22 @@ const Card = ({ story, width }) => {
 
           {story.read && (
             <View style={styles.read}>
-              <Text style={styles.levelText}>Read</Text>
+              <Text style={styles.levelText(theme)}>Read</Text>
             </View>
           )}
           <View style={styles.level}>
-            <Text style={styles.levelText}>{story.level || "Unknown"}</Text>
+            <Text style={styles.levelText(theme)}>
+              {story.level || "Unknown"}
+            </Text>
           </View>
         </View>
       </View>
       <View style={styles.bottomSection()}>
-        <Text style={styles.text} numberOfLines={3} ellipsizeMode="tail">
+        <Text style={styles.text(theme)} numberOfLines={3} ellipsizeMode="tail">
           {story.title}
         </Text>
 
-        <Text style={styles.smallText} numberOfLines={3}>
+        <Text style={styles.smallText(theme)} numberOfLines={3}>
           {story.synopsis}
         </Text>
       </View>
@@ -59,8 +70,8 @@ const Card = ({ story, width }) => {
 export default Card;
 
 const styles = StyleSheet.create({
-  container: (width) => ({
-    backgroundColor: "#313131",
+  container: (width, theme) => ({
+    backgroundColor: theme.cardColor,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
@@ -112,8 +123,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     padding: 10,
   }),
-  text: {
-    color: "#eee",
+  text: (theme) => ({
+    color: theme.text,
     fontSize: 15,
     lineHeight: 20,
     fontWeight: 400,
@@ -122,7 +133,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     flexWrap: "wrap",
     paddingHorizontal: 10,
-  },
+  }),
   level: {
     padding: 10,
     backgroundColor: "#212121",
@@ -161,8 +172,8 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     elevation: 5,
   },
-  levelText: {
-    color: "#fff",
+  levelText: (theme) => ({
+    color: "#eee",
     fontSize: 12,
     fontWeight: 400,
     fontFamily: FONT.medium,
@@ -170,11 +181,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textTransform: "uppercase",
     letterSpacing: 1.5,
-  },
+  }),
 
-  smallText: {
+  smallText: (theme) => ({
     fontSize: 12,
-    color: "#fff",
+    color: theme.text,
     marginTop: 10,
     fontFamily: FONT.regular,
     fontWeight: 100,
@@ -182,5 +193,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingBottom: 10,
     lineHeight: 20,
-  },
+  }),
 });

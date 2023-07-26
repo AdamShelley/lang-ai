@@ -35,8 +35,8 @@ const settings = () => {
     <SafeAreaView style={styles.container(theme)}>
       <StatusBar style={isDarkMode ? "dark" : "light"} />
       <View style={styles.wrapper}>
-        <View style={styles.row}>
-          <Text style={styles.text}>Haptics</Text>
+        <View style={styles.row(theme)}>
+          <Text style={styles.text(theme)}>Haptics</Text>
           <Switch
             style={styles.switch}
             trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -46,8 +46,8 @@ const settings = () => {
             value={haptics}
           />
         </View>
-        <View style={styles.row}>
-          <Text style={styles.text}>Show Pinyin</Text>
+        <View style={styles.row(theme)}>
+          <Text style={styles.text(theme)}>Show Pinyin</Text>
           <Switch
             style={styles.switch}
             trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -57,8 +57,8 @@ const settings = () => {
             value={pinyin}
           />
         </View>
-        <View style={styles.row}>
-          <Text style={styles.text}>Dark Mode</Text>
+        <View style={styles.row(theme)}>
+          <Text style={styles.text(theme)}>Dark Mode</Text>
           <Switch
             style={styles.switch}
             trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -68,44 +68,50 @@ const settings = () => {
             value={isDarkMode}
           />
         </View>
-        <View style={styles.row}>
-          <Text style={styles.text}>Text Size</Text>
+        <View style={styles.row(theme)}>
+          <Text style={styles.text(theme)}>Text Size</Text>
           <View style={styles.pressableOptions}>
             <Pressable
-              style={styles.pressable(textSize === "small")}
+              style={styles.pressable(textSize === "small", theme)}
               onPress={() => setTextSize("small")}
             >
-              <Text style={styles.buttonText(textSize === "small")}>S</Text>
+              <Text style={styles.buttonText(textSize === "small", theme)}>
+                S
+              </Text>
             </Pressable>
             <Pressable
-              style={styles.pressable(textSize === "medium")}
+              style={styles.pressable(textSize === "medium", theme)}
               onPress={() => setTextSize("medium")}
             >
-              <Text style={styles.buttonText(textSize === "medium")}>M</Text>
+              <Text style={styles.buttonText(textSize === "medium", theme)}>
+                M
+              </Text>
             </Pressable>
             <Pressable
-              style={styles.pressable(textSize === "large")}
+              style={styles.pressable(textSize === "large", theme)}
               onPress={() => setTextSize("large")}
             >
-              <Text style={styles.buttonText(textSize === "large")}>L</Text>
+              <Text style={styles.buttonText(textSize === "large", theme)}>
+                L
+              </Text>
             </Pressable>
           </View>
         </View>
-        <View style={styles.row}>
+        <View style={styles.row(theme)}>
           <Pressable onPress={() => fetchDictionary(true)}>
-            <Text style={styles.text}>Update Dictionary</Text>
+            <Text style={styles.text(theme)}>Update Dictionary</Text>
           </Pressable>
         </View>
-        <View style={styles.row}>
+        <View style={styles.row(theme)}>
           <Pressable onPress={() => router.push("/about")}>
-            <Text style={styles.text}>About</Text>
+            <Text style={styles.text(theme)}>About</Text>
           </Pressable>
         </View>
 
         {/* DEV ONLY */}
 
-        <Text style={styles.smallHeading}>----Dev Only----</Text>
-        <View style={styles.row}>
+        <Text style={styles.smallHeading(theme)}>----Dev Only----</Text>
+        <View style={styles.row(theme)}>
           <TouchableOpacity onPress={clearAll}>
             <Text style={{ color: "red", padding: 5 }}>Clear Storage</Text>
           </TouchableOpacity>
@@ -130,38 +136,38 @@ const styles = StyleSheet.create({
     marginTop: 100,
     width: "80%",
   },
-  text: {
-    color: "#fff",
-    fontFamily: FONT.medium,
-    textAlign: "center",
-  },
-  buttonText: (textSize) => ({
-    color: textSize ? "#000" : "#fff",
+  text: (theme) => ({
+    color: theme.text,
     fontFamily: FONT.medium,
     textAlign: "center",
   }),
-  smallHeading: {
-    color: "#fff",
+  buttonText: (textSize, theme) => ({
+    color: textSize ? theme.background : theme.text,
+    fontFamily: FONT.medium,
+    textAlign: "center",
+  }),
+  smallHeading: (theme) => ({
+    color: theme.text,
     fontFamily: FONT.bold,
     fontSize: 12,
     marginTop: 20,
     marginBottom: 10,
-  },
+  }),
 
   switch: {},
   pressableOptions: {
     flexDirection: "row",
     // marginHorizontal: 20,
   },
-  pressable: (textSize) => ({
+  pressable: (textSize, theme) => ({
     width: 30,
     textAlign: "center",
     marginHorizontal: 10,
     borderRadius: 10,
     padding: 5,
-    backgroundColor: textSize ? "#fff" : "transparent",
+    backgroundColor: textSize ? theme.text : "transparent",
   }),
-  row: {
+  row: (theme) => ({
     height: 50,
     maxHeight: 50,
     flexDirection: "row",
@@ -173,8 +179,8 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     padding: 10,
     paddingHorizontal: 20,
-    backgroundColor: "#323232",
+    backgroundColor: theme.settingRow,
     width: "100%",
     marginTop: 10,
-  },
+  }),
 });

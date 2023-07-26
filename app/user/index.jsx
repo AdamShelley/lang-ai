@@ -1,4 +1,11 @@
-import { View, Text, SafeAreaView, StyleSheet, StatusBar } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  StatusBar,
+  Platform,
+} from "react-native";
 import React from "react";
 import { FONT } from "../../constants/fonts";
 import { Stack } from "expo-router";
@@ -24,13 +31,16 @@ const user = () => {
       <View style={styles.wrapper}>
         <Text style={styles.smallHeading}>Account</Text>
         <View style={styles.row}>
-          <Text style={styles.text}>Setting 1</Text>
+          <Text style={styles.text}>OS:</Text>
+          <Text style={styles.text}>{Platform.OS}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.text}>Setting 2</Text>
+          <Text style={styles.text}>App Version:</Text>
+          <Text style={styles.text}>0.1</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.text}>Setting 3</Text>
+          <Text style={styles.text}>Email:</Text>
+          <Text style={styles.text}>test@test.com</Text>
         </View>
       </View>
     </SafeAreaView>
@@ -69,9 +79,6 @@ const styles = StyleSheet.create({
     height: 50,
     maxHeight: 50,
     flexDirection: "row",
-    borderWidth: 1,
-    borderColor: "#fff",
-    borderRadius: 10,
     alignItems: "center",
     justifyContent: "space-between",
     alignSelf: "stretch",

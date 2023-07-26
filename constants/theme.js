@@ -4,12 +4,14 @@ export const darkTheme = {
   info: "#eee",
   text: "#eee",
   headerBackground: "#212124",
+  settingRow: "#313131",
 };
 
 export const lightTheme = {
   background: "#ffffff",
-  cardColor: "#f5f5f5",
+  cardColor: "#fff",
   info: "#212121",
   text: "#333333",
   headerBackground: "#eee",
+  settingRow: "#fff",
 };

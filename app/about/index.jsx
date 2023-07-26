@@ -49,11 +49,11 @@ const About = () => {
           placeholder={"Search..."}
         />
         <ScrollView>
-          {keys.map((key) => (
+          {/* {keys.map((key) => (
             <Text style={styles.text} key={key}>
               {`${key} - ${dictionary[key].englishWord} - ${dictionary[key].definition}`}
             </Text>
-          ))}
+          ))} */}
         </ScrollView>
       </View>
     </SafeAreaView>

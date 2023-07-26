@@ -5,11 +5,28 @@
       "bundler": "metro"
     },
     "name": "language_native",
-    "slug": "language_native",
+    "slug": "lang-ai",
     "splash": {
       "image": "./assets/splash/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#FFFFFF"
+      "backgroundColor": "#000000"
+    },
+    "icon": "./assets/icon.png",
+    "extra": {
+      "eas": {
+        "projectId": "56a0ce62-123a-4d4a-9d58-d7e6646975ce"
+      }
+    },
+    "owner": "gunlord31",
+    "android": {
+      "package": "com.gunlord31.langai",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#000000"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.gunlord31.langai"
     }
   }
 }

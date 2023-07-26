@@ -126,7 +126,7 @@ export default stories;
 
 const styles = StyleSheet.create({
   container: (theme) => ({
-    backgroundColor: theme.background,
+    backgroundColor: theme.headerBackground,
     flex: 1,
     width: "100%",
   }),

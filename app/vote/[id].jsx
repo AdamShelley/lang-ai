@@ -15,10 +15,13 @@ import { useEffect, useState } from "react";
 import * as Haptics from "expo-haptics";
 import useStoriesStore from "../../state/storiesStore";
 import { Option } from "./Option";
-import { URL_DEV } from "@env";
+import { URL_DEV, LIVE_URL } from "@env";
 
 import useVoteOptionsStore from "../../state/voteOptionsStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { darkTheme, lightTheme } from "../../constants/theme";
+import useSettingsStore from "../../state/store";
 
 const Vote = () => {
   const router = useRouter();
@@ -31,6 +34,9 @@ const Vote = () => {
   const [voteId, setVoteId] = useState(null);
   const [selectedOption, setSelectedOption] = useState(-1);
   const [submitted, setSubmitted] = useState(false);
+  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+
+  const theme = isDarkMode ? darkTheme : lightTheme;
 
   useEffect(() => {
     if (!stories.length) {
@@ -43,7 +49,7 @@ const Vote = () => {
     // Check for vote
     const checkForVote = async () => {
       try {
-        const response = await fetch(`${URL_DEV}/voting/getPoll/${id}`);
+        const response = await fetch(`${LIVE_URL}/voting/getPoll/${id}`);
         const data = await response.json();
         setVoteId(data.id);
       } catch (error) {
@@ -57,7 +63,7 @@ const Vote = () => {
   // Fetch specific story from DB
   const fetchSpecificStory = async (id) => {
     try {
-      const response = await fetch(`${URL_DEV}/db/${id}`);
+      const response = await fetch(`${LIVE_URL}/db/${id}`);
       const data = await response.json();
       data[0].words = data[0].words.map((obj) => JSON.parse(obj));
       setStory(data[0]);
@@ -104,7 +110,7 @@ const Vote = () => {
       );
 
       // Send the vote to DB
-      const response = await fetch(`${URL_DEV}/voting/vote`, {
+      const response = await fetch(`${LIVE_URL}/voting/vote`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -128,7 +134,7 @@ const Vote = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container(theme)}>
       <StatusBar style="light" />
       {story && (
         <>
@@ -166,17 +172,17 @@ const Vote = () => {
 
             <ScrollView
               horizontal={false}
-              contentContainerStyle={styles.wordWrapper}
+              contentContainerStyle={{ flexGrow: 1 }}
             >
-              <Text style={styles.synopsis} numberOfLines={3}>
+              <Text style={styles.synopsis(theme)} numberOfLines={3}>
                 Story so far: {story.synopsis}
               </Text>
-              <View>
-                <Text style={styles.text}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.text(theme)}>
                   Vote on how you want the story to progress.
                 </Text>
 
-                <View style={styles.optionsContainer}>
+                <View style={styles.optionsContainer(theme)}>
                   {!story.voted ? (
                     story.options.map((option, index) => (
                       <Option
@@ -187,6 +193,7 @@ const Vote = () => {
                         selectedOption={selectedOption}
                         submitted={submitted}
                         disabled={story.voted}
+                        theme={theme}
                       />
                     ))
                   ) : (
@@ -196,6 +203,7 @@ const Vote = () => {
                       option={story.options[story.votedOption]}
                       selectedOption={story.votedOption}
                       submitted={submitted}
+                      theme={theme}
                       disabled
                     />
                   )}
@@ -219,7 +227,7 @@ const Vote = () => {
                   </Pressable>
                 ))}
               {story.voted && (
-                <Text style={styles.text}>
+                <Text style={{ ...styles.text(theme), marginBottom: 50 }}>
                   Thanks, your vote has been cast!
                 </Text>
               )}
@@ -234,13 +242,13 @@ const Vote = () => {
 export default Vote;
 
 const styles = StyleSheet.create({
-  container: {
+  container: (theme) => ({
     flex: 1,
-    backgroundColor: "#212124",
+    backgroundColor: theme.background,
     flexDirection: "column",
     alignItems: "center",
     height: "100%",
-  },
+  }),
   titleContainer: {
     width: "100%",
     alignItems: "center",
@@ -275,8 +283,8 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     textAlign: "center",
   },
-  synopsis: {
-    color: "#fff",
+  synopsis: (theme) => ({
+    color: theme.text,
     fontSize: 16,
     fontFamily: FONT.medium,
     width: "80%",
@@ -286,13 +294,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     lineHeight: 25,
     marginTop: 90,
-  },
+  }),
   wrapper: {
     width: "100%",
-    height: "100%",
+    // height: "100%",
+    flex: 1,
   },
-  text: {
-    color: "#e6e6e6",
+  text: (theme) => ({
+    color: theme.text,
     paddingVertical: 5,
     paddingHorizontal: 2,
     marginHorizontal: 2,
@@ -301,20 +310,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 400,
     textAlign: "center",
-  },
-  optionsContainer: {
+  }),
+  optionsContainer: (theme) => ({
+    flex: 1,
     marginTop: 20,
     flexDirection: "column",
     justifyContent: "space-evenly",
     alignItems: "center",
     width: "100%",
-    height: "80%",
-  },
+    maxHeight: "50%",
+  }),
   submitButton: {
     // backgroundColor: "#464646",
     width: "50%",
     borderRadius: 50,
     marginTop: 30,
+    marginBottom: 20,
     alignSelf: "center",
     padding: 15,
     shadowColor: "#000",

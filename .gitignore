@@ -13,6 +13,7 @@ data.js
 dictionary.js
 Design/
 .env
+eas.json
 
 # macOS
 .DS_Store

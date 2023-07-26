@@ -67,7 +67,7 @@ const Card = ({ story, width, wide = false }) => {
         )}
 
         <Text style={styles.text(wide, theme)}>
-          {story.title} Part {story.part}
+          {story.title} {story.part > 1 && `Part ${story.part}`}
         </Text>
         {wide && (
           <Text style={styles.smallText(theme)} numberOfLines={3}>
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   levelText: (theme) => ({
-    color: "#eee",
+    color: theme.text,
     fontSize: 14,
     fontWeight: 400,
     fontFamily: FONT.medium,

@@ -5,6 +5,7 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  Platform,
 } from "react-native";
 import { Stack, useRouter, useSearchParams } from "expo-router";
 import { View, Text } from "react-native";
@@ -20,7 +21,7 @@ import useDictionary from "../../hooks/useDictionary";
 import { darkTheme, lightTheme } from "../../constants/theme";
 
 // Dev
-import { URL_DEV } from "@env";
+import { URL_DEV, LIVE_URL } from "@env";
 
 const Story = () => {
   const router = useRouter();
@@ -35,6 +36,7 @@ const Story = () => {
   const textSize = useSettingsStore((state) => state.textSize);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
+  const dictionary = useDictionaryStore((state) => state.words);
 
   const [story, setStory] = useState();
 
@@ -66,7 +68,7 @@ const Story = () => {
   // Fetch specific story from DB
   const fetchSpecificStory = async (id) => {
     try {
-      const response = await fetch(`http://192.168.1.160:8888/api/db/${id}`);
+      const response = await fetch(`${LIVE_URL}/api/db/${id}`);
       const data = await response.json();
       data[0].words = data[0].words.map((obj) => JSON.parse(obj));
       setStory(data[0]);
@@ -92,7 +94,6 @@ const Story = () => {
     }
   };
 
-  const dictionary = useDictionaryStore((state) => state.words);
   if (!dictionary) useDictionary();
 
   const joinWordsAndFullStops = (words) => {
@@ -174,8 +175,6 @@ const Story = () => {
     router.push(`/vote/${id}`);
   };
 
-  console.log(story?.imageUrl);
-
   return (
     <SafeAreaView style={styles.container(theme)}>
       <StatusBar style="dark" />
@@ -226,9 +225,9 @@ const Story = () => {
                     wordDef?.englishWord || ""
                   }`}
               </Text>
-              <Text style={{ color: "#fff", fontSize: 20, marginTop: 5 }}>
+              {/* <Text style={{ color: "#fff", fontSize: 20, marginTop: 5 }}>
                 {shownWord && `${wordDef?.definition || ""} `}
-              </Text>
+              </Text> */}
             </View>
 
             <ScrollView
@@ -262,7 +261,7 @@ const Story = () => {
                         style={
                           /^[\p{Punctuation}]+$/u.test(word.chineseWord)
                             ? styles.punctuation(showPinyin)
-                            : styles.text(fontSize, theme)
+                            : styles.text(fontSize, theme, shownWord === word)
                         }
                       >
                         {word.chineseWord}
@@ -272,9 +271,12 @@ const Story = () => {
                 </Pressable>
               ))}
 
-              {story.options && (
-                <Pressable onPress={goToVotePage} style={styles.voteButton}>
-                  <Text style={{ color: "#fff" }}>
+              {story.options && !story.vote_finished && (
+                <Pressable
+                  onPress={goToVotePage}
+                  style={styles.voteButton(theme)}
+                >
+                  <Text style={{ color: theme.text }}>
                     {story.voted
                       ? "You have voted already"
                       : "Vote on the next stage of the story!"}
@@ -382,17 +384,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     opacity: 0.8,
     zIndex: 5,
-    ...Platform.select({
-      ios: {
-        shadowColor: "#212121",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
   },
   wrapper: {
     width: "100%",
@@ -422,12 +413,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     marginTop: showPinyin ? 0 : 17,
-    borderColor: shownWord ? "#414141" : "transparent",
-    backgroundColor: shownWord ? "#414141" : "transparent",
+    borderColor: shownWord ? theme.cardColor : "transparent",
+    // backgroundColor: shownWord ? theme.cardColor : "transparent",
   }),
-  text: (fontSize, theme) => ({
-    color: theme.text,
-
+  text: (fontSize, theme, shownWord) => ({
+    color: shownWord
+      ? theme === darkTheme
+        ? theme.text
+        : theme.background
+      : theme.text,
     paddingVertical: 5,
     paddingHorizontal: 2,
     marginHorizontal: 2,
@@ -445,8 +439,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "space-evenly",
-
     backgroundColor: theme.headerBackground,
+    paddingBottom: Platform.OS !== "ios" ? 20 : 0,
   }),
   fullTranslation: (theme) => ({
     width: "100%",
@@ -474,16 +468,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingVertical: 0,
   }),
-  voteButton: {
+
+  voteButton: (theme) => ({
     width: "100%",
     height: 50,
-    backgroundColor: "#212121",
+    backgroundColor:
+      theme === darkTheme ? "rgba(0, 0, 0, 0.9)" : "rgba(255, 255, 255, 0.9)",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 100,
     marginBottom: 20,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: "#424242",
-  },
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  }),
 });

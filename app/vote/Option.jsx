@@ -18,6 +18,7 @@ export const Option = ({
   handleOptionChoice,
   disabled,
   submitted,
+  theme,
 }) => {
   const opacity = useSharedValue(1);
   const selectedOpacity = useSharedValue(1);
@@ -38,7 +39,7 @@ export const Option = ({
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      borderColor: selectedOption === index ? "#e6e6e6" : "#323232",
+      borderColor: selectedOption === index ? theme.text : "transparent",
       backgroundColor:
         selectedOption === index || submitted ? "#323232" : "#e6e6e6",
       borderRadius: 40,
@@ -88,12 +89,6 @@ export const Option = ({
         });
 
         borderAnimation.value = 3;
-      } else {
-        // This is not the selected option, fade it out
-        // opacity.value = withTiming(0, {
-        //   ...animOptions,
-        //   easing: Easing.linear,
-        // });
       }
     }
   }, [submitted]);
@@ -102,7 +97,7 @@ export const Option = ({
     <Animated.View
       entering={!submitted && SlideInDown.delay(200 * index).duration(700)}
       layout={Layout.springify()}
-      style={[opacityStyles, translateStyle, styles.option]}
+      style={[opacityStyles, translateStyle, styles.option(theme)]}
       key={index}
     >
       <Pressable
@@ -119,15 +114,15 @@ export const Option = ({
           <Animated.Text style={textAnimation}>{index + 1}</Animated.Text>
         </Animated.View>
       </Pressable>
-      <Text style={styles.optionText}>{option}</Text>
+      <Text style={styles.optionText(theme)}>{option}</Text>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
-  option: {
-    color: "#e6e6e6",
-    height: 50,
+  option: (theme) => ({
+    color: theme.text,
+    height: 20,
     width: "90%",
     paddingVertical: 5,
     paddingHorizontal: 2,
@@ -140,15 +135,15 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     borderRadius: 40,
     flex: 1,
-  },
-  optionText: {
-    color: "#e6e6e6",
+  }),
+  optionText: (theme) => ({
+    color: theme.text,
     textAlign: "left",
     fontSize: 16,
     fontFamily: FONT.medium,
     marginLeft: 20,
     flexShrink: 1,
-  },
+  }),
   choiceButton: {
     width: 60,
     height: 60,

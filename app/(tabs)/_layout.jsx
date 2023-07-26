@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, Platform, StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { FONT } from "../../constants/fonts";
@@ -56,5 +56,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     alignSelf: "center",
     paddingTop: 10,
+    paddingBottom: Platform.OS === "ios" ? 20 : 5,
   },
 });

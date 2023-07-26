@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -20,7 +20,6 @@ import useStories from "../../../hooks/useStories";
 import useDictionary from "../../../hooks/useDictionary";
 import useStoriesStore from "../../../state/storiesStore";
 import useSettingsStore from "../../../state/store";
-// import { fetchDictionaryFromServer } from "../../../api/dictionaryService";
 
 const home = () => {
   const router = useRouter();
@@ -39,7 +38,6 @@ const home = () => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     // Fetch new data
-    // fetchDictionaryFromServer(true);
     fetchDictionary(true);
     fetchStories(true).then(() => setRefreshing(false));
   }, []);
@@ -96,7 +94,7 @@ export default home;
 const styles = StyleSheet.create({
   container: (theme) => ({
     flex: 1,
-    backgroundColor: theme.background,
+    backgroundColor: theme.headerBackground,
     alignItems: "flex-start",
     justifyContent: "center",
   }),
