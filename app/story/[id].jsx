@@ -414,8 +414,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: showPinyin ? 0 : 17,
     borderColor: shownWord ? theme.cardColor : "transparent",
-    // backgroundColor: shownWord ? theme.cardColor : "transparent",
+    backgroundColor: shownWord ? theme.background : "transparent",
   }),
+
   text: (fontSize, theme, shownWord) => ({
     color: shownWord
       ? theme === darkTheme
