@@ -3,15 +3,7 @@ import { FONT } from "../constants/fonts";
 import { darkTheme, lightTheme } from "../constants/theme";
 import useSettingsStore from "../state/store";
 
-const Filter = ({
-  text,
-  size,
-  color,
-  onPress,
-  dark,
-  disabled,
-  storyFilter,
-}) => {
+const Filter = ({ text, size, onPress, disabled }) => {
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
 
@@ -19,9 +11,9 @@ const Filter = ({
     <TouchableOpacity
       disabled={disabled}
       onPress={onPress}
-      style={styles.container(size, color, dark, storyFilter, theme)}
+      style={styles.container(size, theme)}
     >
-      <Text style={styles.text(color, disabled, theme)}>{text}</Text>
+      <Text style={styles.text(theme)}>{text}</Text>
     </TouchableOpacity>
   );
 };
@@ -29,17 +21,15 @@ const Filter = ({
 export default Filter;
 
 const styles = StyleSheet.create({
-  container: (size, color, dark, storyFilter, theme) => ({
+  container: (size, theme) => ({
     padding: 5,
-    width: storyFilter ? "50%" : size,
+    width: size,
     alignItems: "center",
-    // backgroundColor: storyFilter ? "#212124" : "transparent",
-    backgroundColor: storyFilter && theme.headerBackground,
+    backgroundColor: theme.headerBackground,
     paddingTop: 10,
-    paddingBottom: storyFilter ? 10 : 0,
+    paddingBottom: 0,
   }),
-  text: (color, disabled, theme) => ({
-    // color: disabled ? "#9e9797" : color,
+  text: (theme) => ({
     color: theme.text,
     fontFamily: FONT.bold,
   }),

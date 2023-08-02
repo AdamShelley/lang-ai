@@ -132,16 +132,22 @@ export const setStoryLevels = (stories) => {
 };
 
 export const setStoryGenres = (stories) => {
-  const storyGenres = stories.map((story) =>
-    story?.topic
-      ? story.topic.charAt(0).toUpperCase() + story.topic.slice(1)
-      : "Unknown"
-  );
+  try {
+    const storyGenres = stories.map((story) =>
+      story?.topic
+        ? story.topic.charAt(0).toUpperCase() + story.topic.slice(1)
+        : "Unknown"
+    );
 
-  const uniqueGenres = [...new Set(storyGenres)];
+    const uniqueGenres = [...new Set(storyGenres)];
 
-  // Sort genres alphabetically
-  uniqueGenres.sort();
+    // Sort genres alphabetically
+    uniqueGenres.sort();
 
-  return uniqueGenres;
+    return uniqueGenres;
+  } catch (error) {
+    console.log("----setStoryGenres");
+    console.log(error);
+    return [];
+  }
 };

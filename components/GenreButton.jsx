@@ -1,5 +1,5 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { FONT } from "../constants/fonts";
+import { FONT, SIZES } from "../constants";
 
 const GenreButton = ({ text, size, color, onPress }) => {
   return (
@@ -19,14 +19,13 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff",
     marginTop: 20,
     marginHorizontal: 2,
     backgroundColor: color,
   }),
   text: (color) => ({
     color: "#fff",
-    fontSize: 12,
+    fontSize: SIZES.small,
     fontFamily: FONT.bold,
     textAlign: "center",
   }),

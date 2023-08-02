@@ -2,39 +2,39 @@ import {
   Image,
   View,
   Text,
-  Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
 } from "react-native";
-
-import { Stack, useRouter, useSearchParams } from "expo-router";
-import { FONT } from "../../constants/fonts";
+import SubmitButton from "./SubmitButton";
+import { Stack, useSearchParams } from "expo-router";
+import { FONT, SIZES } from "../../constants";
 import { useEffect, useState } from "react";
-import * as Haptics from "expo-haptics";
 import useStoriesStore from "../../state/storiesStore";
 import { Option } from "./Option";
-import { URL_DEV, LIVE_URL } from "@env";
-
-import useVoteOptionsStore from "../../state/voteOptionsStore";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { darkTheme, lightTheme } from "../../constants/theme";
 import useSettingsStore from "../../state/store";
+import { useVoteHandler } from "../../hooks/useVoteHandler";
+import LevelCards from "./LevelCards";
+
+const DEFAULT_IMAGE_URI =
+  "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80";
 
 const Vote = () => {
-  const router = useRouter();
   const { id } = useSearchParams();
   const stories = useStoriesStore((state) => state.stories);
   const [story, setStory] = useState();
-  const setStories = useStoriesStore((state) => state.setStories);
-
-  const { selectOption, submit } = useVoteOptionsStore();
-  const [voteId, setVoteId] = useState(null);
-  const [selectedOption, setSelectedOption] = useState(-1);
-  const [submitted, setSubmitted] = useState(false);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+  const {
+    selectedOption,
+    submitted,
+    error,
+    handleOptionChoice,
+    handleVoteSubmission,
+    checkForVote,
+    fetchSpecificStory,
+  } = useVoteHandler(id, story, setStory);
 
   const theme = isDarkMode ? darkTheme : lightTheme;
 
@@ -46,92 +46,8 @@ const Vote = () => {
       setStory(foundStory);
     }
 
-    // Check for vote
-    const checkForVote = async () => {
-      try {
-        const response = await fetch(`${LIVE_URL}/voting/getPoll/${id}`);
-        const data = await response.json();
-        setVoteId(data.id);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     checkForVote();
   }, [id, stories]);
-
-  // Fetch specific story from DB
-  const fetchSpecificStory = async (id) => {
-    try {
-      const response = await fetch(`${LIVE_URL}/db/${id}`);
-      const data = await response.json();
-      data[0].words = data[0].words.map((obj) => JSON.parse(obj));
-      setStory(data[0]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleOptionChoice = async (option, index) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setSelectedOption(index);
-  };
-
-  const handleVoteSubmission = async () => {
-    // Animate the other 2 options to fade out and move the clicked item to the middle
-    if (selectedOption === -1) {
-      alert("Please select an option!");
-      return;
-    }
-
-    try {
-      submit();
-      // Add voted:true to this stories asyncStorage
-      const storiesFromStorage = await AsyncStorage.getItem("stories");
-      if (!storiesFromStorage) throw new Error("No Stories in storage");
-      const stories = JSON.parse(storiesFromStorage);
-      // Find the story clicked and update the voted property
-      const foundStory = stories.find((s) => s.gptId === story.gptId);
-      if (!foundStory) throw new Error("No story found");
-      foundStory.voted = foundStory.voted ? false : true;
-      foundStory.votedOption = selectedOption;
-      await AsyncStorage.setItem("stories", JSON.stringify(stories));
-      setStory(foundStory);
-
-      // Update global state
-      setStories(stories);
-      setSubmitted(true);
-
-      console.log(
-        JSON.stringify({
-          pollId: voteId,
-          option: `option_${selectedOption + 1}`,
-        })
-      );
-
-      // Send the vote to DB
-      const response = await fetch(`${LIVE_URL}/voting/vote`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          pollId: voteId,
-          option: `option_${selectedOption + 1}`,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-      } else {
-        console.error("Network Issue", response.statusText);
-      }
-    } catch (error) {
-      console.log("Error in submitting vote");
-      console.log(error);
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container(theme)}>
@@ -140,9 +56,7 @@ const Vote = () => {
         <>
           <Image
             source={{
-              uri: story?.imageUrl
-                ? story.imageUrl
-                : "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+              uri: story?.imageUrl ? story.imageUrl : DEFAULT_IMAGE_URI,
             }}
             style={styles.image}
             alt="story-image"
@@ -155,7 +69,7 @@ const Vote = () => {
               },
               headerTintColor: "#eee",
               headerTitleStyle: {
-                fontSize: 16,
+                fontSize: SIZES.medium,
                 fontFamily: FONT.medium,
                 color: "#eee",
               },
@@ -163,12 +77,7 @@ const Vote = () => {
           />
 
           <View style={styles.wrapper}>
-            <View style={styles.levelCard(false)}>
-              <Text style={styles.level}>{story.level}</Text>
-            </View>
-            <View style={styles.levelCard(true)}>
-              <Text style={styles.level}>{story.title}</Text>
-            </View>
+            <LevelCards level={story.level} title={story.title} />
 
             <ScrollView
               horizontal={false}
@@ -210,26 +119,14 @@ const Vote = () => {
                 </View>
               </View>
               {story.voted ||
-                (!submitted && (
-                  <Pressable
-                    style={({ pressed }) => [
-                      {
-                        backgroundColor: pressed
-                          ? "rgba(0, 0, 0, 0.3)"
-                          : "#464646",
-                      },
-                      styles.submitButton,
-                    ]}
-                    onPress={handleVoteSubmission}
-                    disabled={selectedOption === -1}
-                  >
-                    <Text style={styles.submitButtonText}>Submit Vote</Text>
-                  </Pressable>
-                ))}
+                (!submitted && <SubmitButton onPress={handleVoteSubmission} />)}
               {story.voted && (
                 <Text style={{ ...styles.text(theme), marginBottom: 50 }}>
                   Thanks, your vote has been cast!
                 </Text>
+              )}
+              {error && (
+                <Text style={styles.text(theme)}>Oh dear - {error}</Text>
               )}
             </ScrollView>
           </View>
@@ -262,30 +159,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     opacity: 0.1,
   },
-  levelCard: (title) => ({
-    height: 40,
-    width: title ? "50%" : 50,
-    minWidth: title ? 100 : 50,
-    borderRadius: 20,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "absolute",
-    top: 20,
-    left: title ? 100 : 20,
-    zIndex: 5,
-    paddingHorizontal: 5,
-  }),
-  level: {
-    fontSize: 12,
-    fontFamily: FONT.bold,
-    color: "#212124",
-    textTransform: "uppercase",
-    textAlign: "center",
-  },
   synopsis: (theme) => ({
     color: theme.text,
-    fontSize: 16,
+    fontSize: SIZES.medium,
     fontFamily: FONT.medium,
     width: "80%",
     alignSelf: "center",
@@ -297,7 +173,6 @@ const styles = StyleSheet.create({
   }),
   wrapper: {
     width: "100%",
-    // height: "100%",
     flex: 1,
   },
   text: (theme) => ({
@@ -307,7 +182,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     margin: 2,
     marginBottom: 0,
-    fontSize: 16,
+    fontSize: SIZES.medium,
     fontWeight: 400,
     textAlign: "center",
   }),
@@ -320,28 +195,4 @@ const styles = StyleSheet.create({
     width: "100%",
     maxHeight: "50%",
   }),
-  submitButton: {
-    // backgroundColor: "#464646",
-    width: "50%",
-    borderRadius: 50,
-    marginTop: 30,
-    marginBottom: 20,
-    alignSelf: "center",
-    padding: 15,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  submitButtonText: {
-    color: "#fff",
-    fontSize: 14,
-    fontFamily: FONT.medium,
-    paddingVertical: 10,
-    textAlign: "center",
-  },
 });

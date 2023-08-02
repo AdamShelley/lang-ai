@@ -11,7 +11,6 @@ import {
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Feather } from "@expo/vector-icons";
-
 import { FONT } from "../../../constants/fonts";
 import { darkTheme, lightTheme } from "../../../constants/theme";
 import Recommended from "./Recommended";
@@ -28,10 +27,10 @@ const home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const stories = useStoriesStore((state) => state.stories);
   // Filter out read stories
-  const unreadStories = stories.filter((story) => !story.read);
+  const unreadStories = (stories || []).filter((story) => !story.read);
 
   // Initialize data
-  // useDictionary();
+
   const { fetchStories } = useStories();
   const { fetchDictionary } = useDictionary();
 

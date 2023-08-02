@@ -1,7 +1,7 @@
 import { Dimensions, Platform, StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import { FONT } from "../../constants/fonts";
+import { FONT, SIZES } from "../../constants";
 
 export default () => {
   return (
@@ -11,7 +11,7 @@ export default () => {
         tabBarStyle: styles.container,
         tabBarActiveTintColor: "#e6e6e6",
         tabBarInactiveTintColor: "#ccc",
-        tabBarLabelStyle: { fontSize: 12, fontFamily: FONT.regular },
+        tabBarLabelStyle: { fontSize: SIZES.small, fontFamily: FONT.regular },
       }}
     >
       <Tabs.Screen

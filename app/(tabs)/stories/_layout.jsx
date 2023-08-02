@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { FONT } from "../../../constants/fonts";
+import { FONT, SIZES } from "../../../constants";
 import useSettingsStore from "../../../state/store";
 import { darkTheme, lightTheme } from "../../../constants/theme";
 
@@ -15,7 +15,7 @@ const StackLayout = () => {
           headerTitle: "All Stories",
           headerTintColor: theme.text,
           headerTitleStyle: {
-            fontSize: 20,
+            fontSize: SIZES.large,
             fontFamily: FONT.regular,
           },
           headerStyle: {

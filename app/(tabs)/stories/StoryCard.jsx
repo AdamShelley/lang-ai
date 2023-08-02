@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import { FONT } from "../../../constants/fonts";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
@@ -16,7 +23,12 @@ const Card = ({ story, width }) => {
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const handlePress = () => {
-    haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (Platform.OS === "ios") {
+      haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    } else {
+      haptics &&
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }
     router.push(`/story/${story.gptId}`);
   };
 
@@ -94,8 +106,6 @@ const styles = StyleSheet.create({
     height: "50%",
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
-    // borderBottomLeftRadius: 10,
-    // borderBottomRightRadius: 10,
     overflow: "hidden",
     position: "relative",
     backgroundColor: "transparent",
@@ -104,10 +114,6 @@ const styles = StyleSheet.create({
   image: () => ({
     height: "100%",
     width: "100%",
-    // borderTopRightRadius: 20,
-    // borderTopLeftRadius: 20,
-    // borderBottomLeftRadius: 20,
-    // borderBottomRightRadius: 20,
     resizeMode: "cover",
   }),
   overlay: {
@@ -125,7 +131,7 @@ const styles = StyleSheet.create({
   }),
   text: (theme) => ({
     color: theme.text,
-    fontSize: 15,
+    fontSize: 16,
     lineHeight: 20,
     fontWeight: 400,
     fontFamily: FONT.bold,

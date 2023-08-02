@@ -9,7 +9,7 @@ import Animated, {
   Easing,
   withDelay,
 } from "react-native-reanimated";
-import { FONT } from "../../constants/fonts";
+import { FONT, SIZES } from "../../constants";
 
 export const Option = ({
   option,
@@ -50,7 +50,7 @@ export const Option = ({
   const textAnimation = useAnimatedStyle(() => {
     return {
       color: selectedOption === index || submitted ? "#e6e6e6" : "#323232",
-      fontSize: 25,
+      fontSize: SIZES.xLarge,
       alignContent: "center",
       justifyContent: "center",
       margin: 0,
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   optionText: (theme) => ({
     color: theme.text,
     textAlign: "left",
-    fontSize: 16,
+    fontSize: SIZES.medium,
     fontFamily: FONT.medium,
     marginLeft: 20,
     flexShrink: 1,

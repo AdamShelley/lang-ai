@@ -1,7 +1,7 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Card from "./Card";
 
-import { FONT } from "../../../constants/fonts";
+import { FONT, SIZES } from "../../../constants";
 import { ActivityIndicator } from "react-native";
 import useStoriesStore from "../../../state/storiesStore";
 import useSettingsStore from "../../../state/store";
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   text: (theme) => ({
     color: theme.text,
-    fontSize: 20,
+    fontSize: SIZES.large,
     fontFamily: FONT.regular,
     paddingHorizontal: 20,
   }),

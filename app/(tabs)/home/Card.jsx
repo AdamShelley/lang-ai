@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { FONT } from "../../../constants/fonts";
+import { FONT, SIZES } from "../../../constants";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import useSettingsStore from "../../../state/store";
@@ -15,7 +15,12 @@ const Card = ({ story, width, wide = false }) => {
   const [imageUrl, setImageUrl] = useState(story?.imageUrl);
 
   const handlePress = (id) => {
-    haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (Platform.OS === "ios") {
+      haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    } else {
+      haptics &&
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }
 
     router.push(`/story/${id}`);
   };
@@ -57,7 +62,7 @@ const Card = ({ story, width, wide = false }) => {
               style={[
                 styles.levelText(theme),
                 {
-                  fontSize: 12,
+                  fontSize: SIZES.small,
                 },
               ]}
             >
@@ -155,7 +160,7 @@ const styles = StyleSheet.create({
   },
   levelText: (theme) => ({
     color: theme.text,
-    fontSize: 14,
+    fontSize: SIZES.regular,
     fontWeight: 400,
     fontFamily: FONT.medium,
     textAlign: "center",
@@ -164,7 +169,7 @@ const styles = StyleSheet.create({
   }),
   text: (wide, theme) => ({
     color: theme.text,
-    fontSize: 14,
+    fontSize: SIZES.regular,
     fontFamily: FONT.bold,
     flexWrap: "wrap",
     flexShrink: wide ? null : 1,
@@ -190,7 +195,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   }),
   smallText: (theme) => ({
-    fontSize: 12,
+    fontSize: SIZES.small,
     color: theme.text,
     marginTop: 8,
     marginRight: 5,

@@ -1,4 +1,4 @@
-export const darkTheme = {
+const darkTheme = {
   background: "#212121",
   cardColor: "#313131",
   info: "#eee",
@@ -7,7 +7,7 @@ export const darkTheme = {
   settingRow: "#313131",
 };
 
-export const lightTheme = {
+const lightTheme = {
   background: "#ffffff",
   cardColor: "#fff",
   info: "#212121",
@@ -15,3 +15,5 @@ export const lightTheme = {
   headerBackground: "#eee",
   settingRow: "#fff",
 };
+
+export { darkTheme, lightTheme };

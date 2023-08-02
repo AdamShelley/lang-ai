@@ -7,8 +7,9 @@ import {
   Platform,
 } from "react-native";
 import React from "react";
-import { FONT } from "../../constants/fonts";
+import { FONT, SIZES } from "../../constants";
 import { Stack } from "expo-router";
+import { version } from "../../package.json";
 
 const user = () => {
   return (
@@ -21,7 +22,7 @@ const user = () => {
           },
           headerTintColor: "#eee",
           headerTitleStyle: {
-            fontSize: 20,
+            fontSize: SIZES.large,
             fontFamily: FONT.medium,
             color: "#eee",
           },
@@ -36,7 +37,7 @@ const user = () => {
         </View>
         <View style={styles.row}>
           <Text style={styles.text}>App Version:</Text>
-          <Text style={styles.text}>0.1</Text>
+          <Text style={styles.text}>{version}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.text}>Email:</Text>
@@ -65,11 +66,12 @@ const styles = StyleSheet.create({
   text: {
     color: "#fff",
     fontFamily: FONT.medium,
+    letterSpacing: 1,
   },
   smallHeading: {
     color: "#fff",
     fontFamily: FONT.bold,
-    fontSize: 12,
+    fontSize: SIZES.small,
     marginTop: 20,
     marginBottom: 10,
   },

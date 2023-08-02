@@ -7,6 +7,7 @@ import { useState } from "react";
 import Filter from "../../../components/Filter";
 import useSettingsStore from "../../../state/store";
 import { useRouter } from "expo-router";
+import { SIZES } from "../../../constants";
 
 const AllStories = ({ ListHeaderComponent, stories, refreshControl }) => {
   const [storiesToShow, setStoriesToShow] = useState(stories);
@@ -41,12 +42,6 @@ const AllStories = ({ ListHeaderComponent, stories, refreshControl }) => {
               }}
             >
               <Text style={styles.text(theme)}>Last week</Text>
-              <Filter
-                text={"Show All"}
-                size="100%"
-                color="#fff"
-                onPress={() => router.push(`/stories`)}
-              />
             </View>
           </>
         )}
@@ -63,7 +58,7 @@ const styles = StyleSheet.create({
   },
   text: (theme) => ({
     color: theme.text,
-    fontSize: 20,
+    fontSize: SIZES.large,
     marginTop: 50,
     fontFamily: FONT.regular,
     paddingHorizontal: 20,

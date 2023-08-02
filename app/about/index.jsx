@@ -8,9 +8,9 @@ import {
   TextInput,
 } from "react-native";
 import { useState } from "react";
-import { FONT } from "../../constants/fonts";
 import { Stack } from "expo-router";
 import useDictionaryStore from "../../state/dictionaryStore";
+import { FONT, SIZES } from "../../constants";
 
 const About = () => {
   const dictionary = useDictionaryStore((state) => state.words);
@@ -33,7 +33,7 @@ const About = () => {
           },
           headerTintColor: "#eee",
           headerTitleStyle: {
-            fontSize: 20,
+            fontSize: SIZES.large,
             fontFamily: FONT.medium,
             color: "#eee",
           },
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   smallHeading: {
     color: "#fff",
     fontFamily: FONT.bold,
-    fontSize: 12,
+    fontSize: SIZES.small,
     marginTop: 20,
     marginBottom: 10,
   },
