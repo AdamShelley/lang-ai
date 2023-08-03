@@ -4,7 +4,7 @@ import { FONT, SIZES } from "../constants";
 const GenreButton = ({ text, size, color, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container(size, color)}>
-      <Text style={styles.text(color)}>{text}</Text>
+      <Text style={styles.text}>{text}</Text>
     </TouchableOpacity>
   );
 };
@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     backgroundColor: color,
   }),
-  text: (color) => ({
+  text: {
     color: "#fff",
     fontSize: SIZES.small,
     fontFamily: FONT.bold,
     textAlign: "center",
-  }),
+  },
 });

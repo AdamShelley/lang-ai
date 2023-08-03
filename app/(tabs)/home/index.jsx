@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   RefreshControl,
-  ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -24,8 +23,9 @@ const home = () => {
   const router = useRouter();
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
-  const [refreshing, setRefreshing] = useState(false);
   const stories = useStoriesStore((state) => state.stories);
+  const [refreshing, setRefreshing] = useState(false);
+  const isLoaded = useStoriesStore((state) => state.isLoaded);
   // Filter out read stories
   const unreadStories = (stories || []).filter((story) => !story.read);
 
@@ -48,42 +48,39 @@ const home = () => {
   return (
     <SafeAreaView style={styles.container(theme)}>
       <StatusBar style={isDarkMode ? "light" : "dark"} />
-
-      {stories && (
-        <AllStories
-          stories={unreadStories}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={theme.text}
-              title={"Pull to refresh"}
-              titleColor={theme.text}
-            />
-          }
-          ListHeaderComponent={
-            <>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: 10,
-                }}
-              >
-                <Text style={styles.title(theme)}>Home</Text>
-                <TouchableOpacity style={styles.circle} onPress={goToUser}>
-                  <Feather name="user" size={24} color="#fff" />
-                </TouchableOpacity>
-              </View>
-              <View style={{ flex: 11 }}>
-                <Recommended stories={unreadStories.slice(0, 5)} />
-              </View>
-            </>
-          }
-        />
-      )}
+      <AllStories
+        stories={unreadStories}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={theme.text}
+            title={"Pull to refresh"}
+            titleColor={theme.text}
+          />
+        }
+        ListHeaderComponent={
+          <>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: 10,
+              }}
+            >
+              <Text style={styles.title(theme)}>Home</Text>
+              <TouchableOpacity style={styles.circle} onPress={goToUser}>
+                <Feather name="user" size={24} color="#fff" />
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex: 11 }}>
+              <Recommended stories={unreadStories.slice(0, 5)} />
+            </View>
+          </>
+        }
+      />
     </SafeAreaView>
   );
 };

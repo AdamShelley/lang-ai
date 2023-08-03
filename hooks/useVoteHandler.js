@@ -11,6 +11,7 @@ export const useVoteHandler = (id, story, setStory) => {
   const haptics = useSettingsStore((state) => state.haptics);
   const { selectOption, submit } = useVoteOptionsStore();
   const [selectedOption, setSelectedOption] = useState(-1);
+  const [timeLeft, setTimeLeft] = useState();
   const [submitted, setSubmitted] = useState(false);
   const [voteId, setVoteId] = useState(null);
   const [error, setError] = useState(null);
@@ -90,6 +91,23 @@ export const useVoteHandler = (id, story, setStory) => {
       const response = await fetch(`${LIVE_URL}/voting/getPoll/${id}`);
       const data = await response.json();
       setVoteId(data.id);
+
+      // Check if vote is completed:
+      if (data.completed) {
+        setSubmitted(true);
+        return;
+      }
+
+      // Check for time left
+      const endDate = new Date(data.end_date);
+      const timeLeftMs = endDate - Date.now();
+
+      const hoursLeft = Math.floor(timeLeftMs / (1000 * 60 * 60));
+      const minutesLeft = Math.floor(
+        (timeLeftMs % (1000 * 60 * 60)) / (1000 * 60)
+      );
+
+      setTimeLeft(`${hoursLeft} hours ${minutesLeft} minutes`);
     } catch (error) {
       console.log(error);
     }
@@ -112,6 +130,7 @@ export const useVoteHandler = (id, story, setStory) => {
     voteId,
     setVoteId,
     error,
+    timeLeft,
     handleOptionChoice,
     handleVoteSubmission,
     checkForVote,

@@ -1,14 +1,14 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Card from "./Card";
-
 import { FONT, SIZES } from "../../../constants";
 import { ActivityIndicator } from "react-native";
 import useStoriesStore from "../../../state/storiesStore";
 import useSettingsStore from "../../../state/store";
 import { darkTheme, lightTheme } from "../../../constants/theme";
+import SkeletonLoader from "./SkeletonLoader";
 
 const Recommended = ({ stories }) => {
-  const isLoading = useStoriesStore((state) => state.isLoading);
+  const isLoaded = useStoriesStore((state) => state.isLoaded);
 
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
@@ -17,7 +17,7 @@ const Recommended = ({ stories }) => {
     <View style={styles.container}>
       <Text style={styles.text(theme)}>Latest Stories</Text>
 
-      {!isLoading ? (
+      {isLoaded ? (
         <FlatList
           showsHorizontalScrollIndicator={false}
           data={stories}
@@ -32,7 +32,19 @@ const Recommended = ({ stories }) => {
           horizontal
         />
       ) : (
-        <ActivityIndicator size="large" color="#fff" />
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          data={[1, 2, 3]}
+          renderItem={({ item }) => (
+            <SkeletonLoader wide={false} theme={theme} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+            columnGap: 15,
+          }}
+          horizontal
+        />
       )}
     </View>
   );

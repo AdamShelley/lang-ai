@@ -1,17 +1,6 @@
-import {
-  Image,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Platform,
-} from "react-native";
-import { Stack, useSearchParams } from "expo-router";
-import { View, Text } from "react-native";
-import { FONT } from "../../constants/fonts";
 import { useEffect, useState } from "react";
-import Filter from "../../components/Filter";
+import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
+import { useSearchParams } from "expo-router";
 import useSettingsStore from "../../state/store";
 import useStoriesStore from "../../state/storiesStore";
 import { darkTheme, lightTheme } from "../../constants/theme";
@@ -21,6 +10,8 @@ import TranslationBox from "./TranslationBox";
 import WordDisplay from "./WordDisplay";
 import FullTranslationBox from "./FullTranslationBox";
 import TapButtons from "./TapButtons";
+import Header from "../../components/Header";
+import { SIZES } from "../../constants";
 
 const Story = () => {
   const { id } = useSearchParams();
@@ -30,7 +21,7 @@ const Story = () => {
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
 
-  // LOGIC
+  // HOOK
   const {
     story,
     setStory,
@@ -61,29 +52,12 @@ const Story = () => {
       <StatusBar style="dark" />
       {story && (
         <>
-          <Image
-            source={{
-              uri: story?.imageUrl
-                ? story.imageUrl
-                : "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
-            }}
-            style={styles.image}
-            alt="story-image"
-          />
-          <Stack.Screen
-            options={{
-              headerTitle: `${story.title} ${story.part}`,
-
-              headerStyle: {
-                backgroundColor: theme.headerBackground,
-              },
-              headerTintColor: theme.text,
-              headerTitleStyle: {
-                fontSize: 16,
-                fontFamily: FONT.medium,
-                color: theme.text,
-              },
-            }}
+          <Header
+            imageURL={story.imageUrl}
+            headerTitle={`${story.title} ${story.part}`}
+            backgroundColor={theme.headerBackground}
+            tintColor={theme.text}
+            fontSize={SIZES.medium}
           />
 
           <View style={styles.wrapper}>
@@ -145,12 +119,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "100%",
   }),
-  titleContainer: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 5,
-  },
+
   image: {
     height: "100%",
     width: "100%",
@@ -162,20 +131,4 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  title: {
-    marginTop: 10,
-    color: "#fff",
-    fontSize: 25,
-    borderBottomWidth: 1,
-    borderBottomColor: "#fff",
-    paddingBottom: 50,
-    fontFamily: FONT.medium,
-  },
-
-  fullTranslation: (theme) => ({
-    width: "100%",
-    paddingTop: 20,
-    paddingHorizontal: "10%",
-    backgroundColor: theme.headerBackground,
-  }),
 });

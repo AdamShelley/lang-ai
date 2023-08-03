@@ -97,11 +97,7 @@ const settings = () => {
             </Pressable>
           </View>
         </View>
-        <View style={styles.row(theme)}>
-          <Pressable onPress={() => fetchDictionary(true)}>
-            <Text style={styles.text(theme)}>Update Dictionary</Text>
-          </Pressable>
-        </View>
+
         <View style={styles.row(theme)}>
           <Pressable onPress={() => router.push("/about")}>
             <Text style={styles.text(theme)}>About</Text>

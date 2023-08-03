@@ -1,5 +1,4 @@
 import {
-  Image,
   View,
   Text,
   SafeAreaView,
@@ -8,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import SubmitButton from "./SubmitButton";
-import { Stack, useSearchParams } from "expo-router";
+import { useSearchParams } from "expo-router";
 import { FONT, SIZES } from "../../constants";
 import { useEffect, useState } from "react";
 import useStoriesStore from "../../state/storiesStore";
@@ -17,15 +16,15 @@ import { darkTheme, lightTheme } from "../../constants/theme";
 import useSettingsStore from "../../state/store";
 import { useVoteHandler } from "../../hooks/useVoteHandler";
 import LevelCards from "./LevelCards";
-
-const DEFAULT_IMAGE_URI =
-  "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80";
+import Header from "../../components/Header";
 
 const Vote = () => {
   const { id } = useSearchParams();
   const stories = useStoriesStore((state) => state.stories);
   const [story, setStory] = useState();
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+
+  // HOOK
   const {
     selectedOption,
     submitted,
@@ -34,6 +33,7 @@ const Vote = () => {
     handleVoteSubmission,
     checkForVote,
     fetchSpecificStory,
+    timeLeft,
   } = useVoteHandler(id, story, setStory);
 
   const theme = isDarkMode ? darkTheme : lightTheme;
@@ -54,26 +54,12 @@ const Vote = () => {
       <StatusBar style="light" />
       {story && (
         <>
-          <Image
-            source={{
-              uri: story?.imageUrl ? story.imageUrl : DEFAULT_IMAGE_URI,
-            }}
-            style={styles.image}
-            alt="story-image"
-          />
-          <Stack.Screen
-            options={{
-              headerTitle: `Vote on the next part!`,
-              headerStyle: {
-                backgroundColor: "#212124",
-              },
-              headerTintColor: "#eee",
-              headerTitleStyle: {
-                fontSize: SIZES.medium,
-                fontFamily: FONT.medium,
-                color: "#eee",
-              },
-            }}
+          <Header
+            imageURL={story.imageUrl}
+            headerTitle="Vote on the next part!"
+            backgroundColor="#212124"
+            tintColor="#eee"
+            fontSize={SIZES.medium}
           />
 
           <View style={styles.wrapper}>
@@ -89,6 +75,10 @@ const Vote = () => {
               <View style={{ flex: 1 }}>
                 <Text style={styles.text(theme)}>
                   Vote on how you want the story to progress.
+                </Text>
+
+                <Text style={styles.text(theme)}>
+                  Time left to submit your vote: {timeLeft}
                 </Text>
 
                 <View style={styles.optionsContainer(theme)}>
@@ -151,13 +141,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     zIndex: 5,
-  },
-  image: {
-    height: "100%",
-    width: "100%",
-    objectFit: "cover",
-    position: "absolute",
-    opacity: 0.1,
   },
   synopsis: (theme) => ({
     color: theme.text,
