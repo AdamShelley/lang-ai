@@ -1,6 +1,5 @@
 import { ScrollView, Text, View, Pressable, StyleSheet } from "react-native";
 import { FONT } from "../../constants/fonts";
-import { darkTheme } from "../../constants/theme";
 
 const WordDisplay = ({
   story,
@@ -36,7 +35,7 @@ const WordDisplay = ({
               style={
                 /^[\p{Punctuation}]+$/u.test(word.chineseWord)
                   ? styles.punctuation(showPinyin)
-                  : styles.text(fontSize, theme, shownWord === word)
+                  : styles.text(fontSize, theme)
               }
             >
               {word.chineseWord}
@@ -100,12 +99,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingVertical: 0,
   }),
-  text: (fontSize, theme, shownWord) => ({
-    color: shownWord
-      ? theme === darkTheme
-        ? theme.text
-        : theme.background
-      : theme.text,
+  text: (fontSize, theme) => ({
+    color: theme.text,
     paddingVertical: 5,
     paddingHorizontal: 2,
     marginHorizontal: 2,
@@ -121,9 +116,8 @@ const styles = StyleSheet.create({
   }),
   voteButton: (theme) => ({
     width: "100%",
-    height: 80,
-    backgroundColor:
-      theme === darkTheme ? theme.background : theme.headerBackground,
+    height: 60,
+    backgroundColor: theme.headerBackground,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 100,

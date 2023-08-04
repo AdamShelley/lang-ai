@@ -18,11 +18,7 @@ const StackLayout = () => {
             fontSize: SIZES.large,
             fontFamily: FONT.regular,
           },
-          headerStyle: {
-            backgroundColor: theme.headerBackground,
-            shadowOpacity: 0,
-            elevation: 0,
-          },
+          headerTransparent: true,
         }}
       />
     </Stack>

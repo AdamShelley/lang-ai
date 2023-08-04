@@ -10,12 +10,25 @@ import {
 } from "react-native";
 import { FONT } from "../../../constants/fonts";
 import useSettingsStore from "../../../state/store";
-import useDictionary from "../../../hooks/useDictionary";
 import { darkTheme, lightTheme } from "../../../constants/theme";
 import { useRouter } from "expo-router";
 
 // Dev
 import { clearAll } from "../../../utils/devFunctions";
+
+const SettingsRow = ({ label, value, onValueChange, theme }) => (
+  <View style={styles.row(theme)}>
+    <Text style={styles.text(theme)}>{label}</Text>
+    <Switch
+      style={styles.switch}
+      trackColor={{ false: "#767577", true: "#81b0ff" }}
+      thumbColor={"#f4f3f4"}
+      ios_backgroundColor="#3e3e3e"
+      onValueChange={onValueChange}
+      value={value}
+    />
+  </View>
+);
 
 const settings = () => {
   const haptics = useSettingsStore((state) => state.haptics);
@@ -29,72 +42,46 @@ const settings = () => {
   const router = useRouter();
   const theme = isDarkMode ? darkTheme : lightTheme;
 
-  const { fetchDictionary } = useDictionary();
+  const renderTextSizeButton = (size) => (
+    <Pressable
+      style={styles.pressable(textSize === size, theme)}
+      onPress={() => setTextSize(size)}
+    >
+      <Text style={styles.buttonText(textSize === size, theme)}>
+        {size.toUpperCase().charAt(0)}
+      </Text>
+    </Pressable>
+  );
 
   return (
     <SafeAreaView style={styles.container(theme)}>
       <StatusBar style={isDarkMode ? "dark" : "light"} />
       <View style={styles.wrapper}>
-        <View style={styles.row(theme)}>
-          <Text style={styles.text(theme)}>Haptics</Text>
-          <Switch
-            style={styles.switch}
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={"#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={setHaptics}
-            value={haptics}
-          />
-        </View>
-        <View style={styles.row(theme)}>
-          <Text style={styles.text(theme)}>Show Pinyin</Text>
-          <Switch
-            style={styles.switch}
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={"#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={setPinyin}
-            value={pinyin}
-          />
-        </View>
-        <View style={styles.row(theme)}>
-          <Text style={styles.text(theme)}>Dark Mode</Text>
-          <Switch
-            style={styles.switch}
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={"#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleTheme}
-            value={isDarkMode}
-          />
-        </View>
+        <SettingsRow
+          label="Haptics"
+          value={haptics}
+          onValueChange={setHaptics}
+          theme={theme}
+        />
+        <SettingsRow
+          label="Show Pinyin"
+          value={pinyin}
+          onValueChange={setPinyin}
+          theme={theme}
+        />
+        <SettingsRow
+          label="Dark Mode"
+          value={isDarkMode}
+          onValueChange={toggleTheme}
+          theme={theme}
+        />
+
         <View style={styles.row(theme)}>
           <Text style={styles.text(theme)}>Text Size</Text>
           <View style={styles.pressableOptions}>
-            <Pressable
-              style={styles.pressable(textSize === "small", theme)}
-              onPress={() => setTextSize("small")}
-            >
-              <Text style={styles.buttonText(textSize === "small", theme)}>
-                S
-              </Text>
-            </Pressable>
-            <Pressable
-              style={styles.pressable(textSize === "medium", theme)}
-              onPress={() => setTextSize("medium")}
-            >
-              <Text style={styles.buttonText(textSize === "medium", theme)}>
-                M
-              </Text>
-            </Pressable>
-            <Pressable
-              style={styles.pressable(textSize === "large", theme)}
-              onPress={() => setTextSize("large")}
-            >
-              <Text style={styles.buttonText(textSize === "large", theme)}>
-                L
-              </Text>
-            </Pressable>
+            {renderTextSizeButton("small")}
+            {renderTextSizeButton("medium")}
+            {renderTextSizeButton("large")}
           </View>
         </View>
 
@@ -150,10 +137,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   }),
 
-  switch: {},
   pressableOptions: {
     flexDirection: "row",
-    // marginHorizontal: 20,
   },
   pressable: (textSize, theme) => ({
     width: 30,

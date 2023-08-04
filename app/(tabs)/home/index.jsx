@@ -25,25 +25,23 @@ const home = () => {
   const theme = isDarkMode ? darkTheme : lightTheme;
   const stories = useStoriesStore((state) => state.stories);
   const [refreshing, setRefreshing] = useState(false);
-  const isLoaded = useStoriesStore((state) => state.isLoaded);
   // Filter out read stories
   const unreadStories = (stories || []).filter((story) => !story.read);
 
   // Initialize data
-
   const { fetchStories } = useStories();
   const { fetchDictionary } = useDictionary();
 
-  const onRefresh = useCallback(() => {
+  // If Refresh pulldown is triggered
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    // Fetch new data
-    fetchDictionary(true);
-    fetchStories(true).then(() => setRefreshing(false));
+    await Promise.all([fetchDictionary(true), fetchStories(true)]);
+    setRefreshing(false);
   }, []);
 
-  const goToUser = () => {
+  const goToUser = useCallback(() => {
     router.push("/user");
-  };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container(theme)}>

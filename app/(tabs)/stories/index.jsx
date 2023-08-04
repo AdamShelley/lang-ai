@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from "react";
-
 import {
   View,
   StyleSheet,
@@ -8,15 +7,12 @@ import {
   StatusBar,
   Text,
 } from "react-native";
-
 import {
   RecyclerListView,
   LayoutProvider,
   DataProvider,
 } from "recyclerlistview";
-
 import StoryCard from "./StoryCard";
-
 import useStoriesStore from "../../../state/storiesStore";
 import FilterSection from "./FilterSection";
 import useSettingsStore from "../../../state/store";
@@ -28,7 +24,7 @@ const stories = () => {
   const [selectedLevel, setSelectedLevel] = useState("All");
   // Screen Width
   const screenWidth = Dimensions.get("window").width;
-  // Card width (40%)
+  // Card width (45%)
   const cardWidth = screenWidth * 0.45;
   const allStories = useStoriesStore((state) => state.stories);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
@@ -64,7 +60,7 @@ const stories = () => {
   const numOfColumns = 2;
   const layoutProvider = new LayoutProvider(
     () => {
-      return 0; // Assuming single view type
+      return 0;
     },
     (type, dim, index) => {
       if (filteredStories && filteredStories.length > 0) {
@@ -130,11 +126,4 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   }),
-
-  filterSection: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-  },
 });

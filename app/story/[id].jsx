@@ -65,7 +65,6 @@ const Story = () => {
               topic={story.topic}
               level={story.level}
               vote={story.options}
-              theme={theme}
             />
 
             <TranslationBox

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import { FONT } from "../../../constants/fonts";
+import { FONT, DEFAULT_IMAGE } from "../../../constants";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import useSettingsStore from "../../../state/store";
@@ -17,12 +17,11 @@ import { darkTheme, lightTheme } from "../../../constants/theme";
 const Card = ({ story, width }) => {
   const router = useRouter();
   const haptics = useSettingsStore((state) => state.haptics);
-  const [imageUrl, setImageUrl] = useState(story?.imageUrl);
+  const [imageUrl, setImageUrl] = useState(story?.imageUrl || DEFAULT_IMAGE);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
-
   const theme = isDarkMode ? darkTheme : lightTheme;
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     if (Platform.OS === "ios") {
       haptics && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     } else {
@@ -30,7 +29,11 @@ const Card = ({ story, width }) => {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }
     router.push(`/story/${story.gptId}`);
-  };
+  }, [router, haptics]);
+
+  const handleImageError = useCallback(() => {
+    setImageUrl(DEFAULT_IMAGE);
+  }, []);
 
   return (
     <TouchableOpacity
@@ -43,11 +46,7 @@ const Card = ({ story, width }) => {
             source={{
               uri: imageUrl,
             }}
-            onError={() => {
-              setImageUrl(
-                "https://plus.unsplash.com/premium_photo-1674713054504-4a6e71d26d29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-              );
-            }}
+            onError={handleImageError}
             key={story.imageUrl}
             style={styles.image()}
             alt="story-image"

@@ -4,10 +4,17 @@ const TranslationBox = ({ theme, shownWord, wordDef }) => {
   return (
     <View style={styles.translationContainer}>
       <View style={{ padding: 5 }}>
-        <Text style={{ color: "#eee", fontSize: 16 }}>
+        <Text style={{ fontWeight: 600, color: theme.text, fontSize: 16 }}>
           {shownWord && `Chinese:   ${shownWord.chineseWord}`}
         </Text>
-        <Text style={{ color: theme.text, fontSize: 20, marginTop: 5 }}>
+        <Text
+          style={{
+            fontWeight: 600,
+            color: theme.text,
+            fontSize: 20,
+            marginTop: 10,
+          }}
+        >
           {shownWord && `English:   ${wordDef?.englishWord || ""}`}
         </Text>
       </View>

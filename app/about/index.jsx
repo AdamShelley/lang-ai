@@ -48,13 +48,7 @@ const About = () => {
           onChangeText={setSearch}
           placeholder={"Search..."}
         />
-        <ScrollView>
-          {/* {keys.map((key) => (
-            <Text style={styles.text} key={key}>
-              {`${key} - ${dictionary[key].englishWord} - ${dictionary[key].definition}`}
-            </Text>
-          ))} */}
-        </ScrollView>
+        <ScrollView></ScrollView>
       </View>
     </SafeAreaView>
   );

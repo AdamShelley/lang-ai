@@ -1,17 +1,17 @@
 import { View, Text, StyleSheet } from "react-native";
 import { FONT } from "../../constants/fonts";
 
-const LevelCard = ({ topic, level, vote, theme }) => (
+const LevelCard = ({ topic, level, vote }) => (
   <>
-    <View style={styles.levelCard(theme, 100, 20)}>
-      <Text style={styles.level(theme)}>{topic}</Text>
+    <View style={styles.levelCard(100, 20)}>
+      <Text style={styles.level}>{topic}</Text>
     </View>
-    <View style={styles.levelCard(theme, 50, 130)}>
-      <Text style={styles.level(theme)}>{level}</Text>
+    <View style={styles.levelCard(50, 130)}>
+      <Text style={styles.level}>{level}</Text>
     </View>
     {vote && (
-      <View style={styles.levelCard(theme, 50, 190)}>
-        <Text style={styles.level(theme)}>Vote</Text>
+      <View style={styles.levelCard(50, 190)}>
+        <Text style={styles.level}>Vote</Text>
       </View>
     )}
   </>
@@ -20,7 +20,7 @@ const LevelCard = ({ topic, level, vote, theme }) => (
 export default LevelCard;
 
 const styles = StyleSheet.create({
-  levelCard: (theme, width, left) => ({
+  levelCard: (width, left) => ({
     height: 40,
     width: width,
     borderRadius: 20,
@@ -32,11 +32,11 @@ const styles = StyleSheet.create({
     left: left,
     zIndex: 5,
   }),
-  level: (theme) => ({
+  level: {
     fontSize: 12,
     fontFamily: FONT.bold,
     color: "#212121",
     textTransform: "uppercase",
     letterSpacing: 0.2,
-  }),
+  },
 });

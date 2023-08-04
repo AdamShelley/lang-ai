@@ -1,7 +1,6 @@
-import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Animated, {
   Clock,
-  Easing,
   block,
   useCode,
   timing,
@@ -18,6 +17,7 @@ import { lightTheme } from "../../../constants/theme";
 import { FONT } from "../../../constants";
 
 const AnimatedLG = Animated.createAnimatedComponent(LinearGradient);
+
 const SkeletonLoader = ({ width = 200, wide = false, theme }) => {
   const animatedValue = new Animated.Value(0);
 
@@ -35,7 +35,7 @@ const SkeletonLoader = ({ width = 200, wide = false, theme }) => {
 
     const config = {
       toValue: new Value(1),
-      duration: 600,
+      duration: 1000,
       easing: EasingNode.inOut(EasingNode.ease),
     };
 
@@ -67,7 +67,6 @@ const SkeletonLoader = ({ width = 200, wide = false, theme }) => {
   return (
     <View style={styles.container(width, wide, theme)}>
       <View style={styles.imageContainer(wide)}>
-        {/* <Animated.View style={[styles.image(wide)]} > */}
         <AnimatedLG
           colors={["#f0f0f0", "#e0e0e0", "#e0e0e0", "#f0f0f0"]}
           start={{ x: 0, y: 0 }}

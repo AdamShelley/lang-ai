@@ -28,10 +28,21 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 - Some punctuation issues depending on AI model. Calibration needed.
 - Light mode needs testing.
 - Icons are WIP.
-- Haptics are not working for android.
+~~- Haptics are not working for android.~~
 
 ## Versions
-0.0.3 - Initial Public .apk release.
+
+**0.0.5** ( /08/2023)
+- Fixed heading border issue on stories page.
+- Non-styling improvements to all pages.
+
+**0.0.4** (03/08/2023)
+- Fixed haptics for android.
+- Added loading skeleton for the home page.
+- Internal code cleanup.
+
+**0.0.3** (26/07/2023)
+- Initial Public .apk release.
 
 
 
