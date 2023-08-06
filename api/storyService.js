@@ -12,14 +12,11 @@ export const fetchStoriesFromServer = async (forceFetch = false) => {
     // Check for stories in async storage
     const storiesFromStorage = await AsyncStorage.getItem("stories");
 
-    //  If no need to fetch new data, use local storage
+    // Check if update is required or if forceFetch is set to true
+    const updateRequired = shouldUpdate(shouldUpdateStories) || forceFetch;
 
-    console.log("UPDATE REQUIRED?:", shouldUpdate(shouldUpdateStories));
-    if (
-      storiesFromStorage?.length &&
-      !forceFetch &&
-      !shouldUpdate(shouldUpdateStories)
-    ) {
+    //  If no need to fetch new data, use local storage
+    if (storiesFromStorage?.length && !updateRequired) {
       console.log("Using local storage Stories");
 
       const parsedStories = JSON.parse(storiesFromStorage);

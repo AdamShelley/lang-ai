@@ -1,7 +1,6 @@
 // dictionaryService.js
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { URL_DEV, LIVE_URL } from "@env";
-import moment from "moment";
 
 // Check Time to UPDATE On Frontend
 const { getTimestamp, shouldUpdate } = require("../utils/shouldUpdate");
@@ -9,17 +8,17 @@ const { getTimestamp, shouldUpdate } = require("../utils/shouldUpdate");
 export const fetchDictionaryFromServer = async (forceFetch = false) => {
   try {
     const lastUpdate = await AsyncStorage.getItem("lastUpdateWords");
-    const shouldUpdateStories = lastUpdate ? parseInt(lastUpdate, 10) : null;
+    const shouldUpdateDictionary = lastUpdate ? parseInt(lastUpdate, 10) : null;
 
     // Check if a dictionary is already in the async storage
     const dictionaryFromStorage = await AsyncStorage.getItem("dictionary");
 
-    if (
-      dictionaryFromStorage?.length &&
-      !forceFetch &&
-      !shouldUpdate(shouldUpdateStories)
-    ) {
+    // Check if update is required or if forceFetch is set to true
+    const updateRequired = shouldUpdate(shouldUpdateDictionary) || forceFetch;
+
+    if (dictionaryFromStorage?.length && !updateRequired) {
       console.log("Using local storage Dictionary");
+      console.log(JSON.parse(dictionaryFromStorage.length));
       return JSON.parse(dictionaryFromStorage);
     } else {
       console.log("FETCHING DICTIONARY FROM SERVER");

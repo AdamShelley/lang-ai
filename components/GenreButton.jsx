@@ -5,8 +5,15 @@ import { Ionicons } from "@expo/vector-icons";
 const GenreButton = ({ text, size, color, onPress, deletion }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container(size, color)}>
-      {deletion && <Ionicons name="ios-close-circle" size={16} color="white" />}
       <Text style={styles.text}>{text}</Text>
+      {deletion && (
+        <Ionicons
+          name="ios-close-circle"
+          size={16}
+          color="white"
+          style={{ marginLeft: 10 }}
+        />
+      )}
     </TouchableOpacity>
   );
 };
@@ -33,6 +40,5 @@ const styles = StyleSheet.create({
     fontSize: SIZES.small,
     fontFamily: FONT.bold,
     textAlign: "center",
-    marginLeft: 5,
   },
 });

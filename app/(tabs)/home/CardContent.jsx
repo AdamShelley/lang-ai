@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
   }),
   nonWideLevel: (wide, theme) => ({
-    borderRadius: 10,
+    borderRadius: 20,
     borderWidth: theme === lightTheme ? 0 : 1,
     borderColor: wide ? "#313131" : "transparent",
     padding: 5,

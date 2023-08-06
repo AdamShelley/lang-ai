@@ -35,7 +35,7 @@ const SkeletonLoader = ({ width = 200, wide = false, theme }) => {
 
     const config = {
       toValue: new Value(1),
-      duration: 1000,
+      duration: 1500,
       easing: EasingNode.inOut(EasingNode.ease),
     };
 
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   smallText: {
     height: 40,
     width: "80%",
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#424242",
     marginVertical: 5,
   },
   bottomSection: (wide) => ({
