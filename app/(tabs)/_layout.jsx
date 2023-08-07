@@ -1,4 +1,4 @@
-import { Dimensions, Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { FONT, SIZES } from "../../constants";
@@ -9,9 +9,9 @@ export default () => {
       backBehavior="initialRoute"
       screenOptions={{
         tabBarStyle: styles.container,
-        tabBarActiveTintColor: "#e6e6e6",
-        tabBarInactiveTintColor: "#ccc",
-        tabBarLabelStyle: { fontSize: SIZES.small, fontFamily: FONT.regular },
+        tabBarActiveTintColor: "#FFA500",
+        tabBarInactiveTintColor: "#eee",
+        tabBarLabelStyle: { fontSize: SIZES.small, fontFamily: FONT.medium },
       }}
     >
       <Tabs.Screen
@@ -20,7 +20,7 @@ export default () => {
           headerShown: false,
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="home" size={20} color="#fff" />
+            <Ionicons name="home" size={20} color={color} />
           ),
         }}
       />
@@ -30,7 +30,7 @@ export default () => {
           headerShown: false,
           tabBarLabel: "Stories",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="library" size={20} color="#fff" />
+            <Ionicons name="library" size={20} color={color} />
           ),
         }}
       />
@@ -40,7 +40,7 @@ export default () => {
           headerShown: false,
           tabBarLabel: "Settings",
           tabBarIcon: ({ color }) => (
-            <FontAwesome5 name="cog" size={20} color="#fff" />
+            <FontAwesome5 name="cog" size={20} color={color} />
           ),
         }}
       />

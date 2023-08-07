@@ -1,48 +1,24 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { URL_DEV, LIVE_URL } from "@env";
-import moment from "moment";
-
-const { getTimestamp, shouldUpdate } = require("../utils/shouldUpdate");
+import { LIVE_URL } from "@env";
+import { fetchDataFromServer } from "./dataService";
 
 export const fetchStoriesFromServer = async (forceFetch = false) => {
+  const stories = await fetchDataFromServer("db", "stories", forceFetch);
+
   try {
-    const lastUpdate = await AsyncStorage.getItem("lastUpdateStories");
-    const shouldUpdateStories = lastUpdate ? parseInt(lastUpdate, 10) : null;
-
-    // Check for stories in async storage
-    const storiesFromStorage = await AsyncStorage.getItem("stories");
-
-    // Check if update is required or if forceFetch is set to true
-    const updateRequired = shouldUpdate(shouldUpdateStories) || forceFetch;
-
-    //  If no need to fetch new data, use local storage
-    if (storiesFromStorage?.length && !updateRequired) {
-      console.log("Using local storage Stories");
-
-      const parsedStories = JSON.parse(storiesFromStorage);
-      return parsedStories;
-    } else {
-      console.log("FETCHING STORIES FROM SERVER");
-      const response = await fetch(`${LIVE_URL}/db`);
-      const data = await response.json();
-
-      // Parse the word array in each story
-      const newData = data.map((story) => {
-        story.words = story?.words?.map((obj) => JSON.parse(obj));
+    if (stories) {
+      // Parse the word array in each story if its not parsed correctly
+      const newData = stories.map((story) => {
+        story.words = story?.words?.map((obj) =>
+          typeof obj === "string" ? JSON.parse(obj) : obj
+        );
         return { ...story };
       });
-
-      console.log(newData.length);
-
-      const timestamp = getTimestamp();
-      await AsyncStorage.setItem("lastUpdateStories", timestamp.toString());
 
       return newData;
     }
   } catch (error) {
-    console.log("----fetch stories from server");
-    console.error(error);
-    return error;
+    console.log(error);
   }
 };
 
@@ -89,27 +65,6 @@ export const fetchImagesFromServer = async (stories, batchSize = 5) => {
     console.log("----fetch images from server");
 
     return console.log(error);
-  }
-};
-
-export const getStoriesFromStorage = async () => {
-  const storiesFromStorage = await AsyncStorage.getItem("stories");
-  if (storiesFromStorage) {
-    return JSON.parse(storiesFromStorage);
-  }
-  return null;
-};
-
-export const saveStoriesToStorage = async (stories) => {
-  await AsyncStorage.setItem("stories", JSON.stringify(stories));
-};
-
-export const updateLocalStorage = async (newData) => {
-  try {
-    // Update local storage with new data
-    await AsyncStorage.setItem("stories", JSON.stringify(newData));
-  } catch (error) {
-    console.error("Error updating local storage:", error);
   }
 };
 

@@ -41,9 +41,9 @@ const styles = StyleSheet.create({
     width: wide ? "30%" : "100%", // Smaller container if wide card
     minWidth: 10,
     height: wide ? "100%" : "60%",
-    borderTopRightRadius: wide ? 0 : 10,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: wide ? 10 : 0,
+    borderTopRightRadius: wide ? 0 : 2,
+    borderTopLeftRadius: 2,
+    borderBottomLeftRadius: wide ? 2 : 0,
     borderBottomRightRadius: 0,
     overflow: "hidden",
     position: "relative",
@@ -52,9 +52,9 @@ const styles = StyleSheet.create({
 
   image: (wide) => ({
     height: "100%",
-    borderTopRightRadius: wide ? 0 : 10,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: wide ? 10 : 0,
+    borderTopRightRadius: wide ? 0 : 2,
+    borderTopLeftRadius: 2,
+    borderBottomLeftRadius: wide ? 2 : 0,
     resizeMode: "cover",
   }),
   overlay: {

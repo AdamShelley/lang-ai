@@ -17,16 +17,9 @@ const useDictionary = () => {
   };
 
   useEffect(() => {
-    // let isMounted = true;
-
     if (isLoaded) return;
 
-    const fetchDictionaryAndUpdate = async () => {
-      console.log("Fetching dictionary!");
-      fetchDictionary();
-    };
-
-    fetchDictionaryAndUpdate();
+    fetchDictionary();
   }, []);
 
   return { fetchDictionary };

@@ -18,7 +18,7 @@ const Recommended = ({ stories }) => {
 
       <FlatList
         showsHorizontalScrollIndicator={false}
-        data={isLoaded ? stories : [1, 2, 3]}
+        data={isLoaded ? stories : new Array(3).fill(null)}
         renderItem={({ item }) =>
           isLoaded ? (
             <Card story={item} wide={false} theme={theme} />

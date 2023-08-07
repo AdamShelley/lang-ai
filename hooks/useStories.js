@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import * as storyService from "../api/storyService";
 import { supabase } from "../utils/supabaseClient";
 import useStoriesStore from "../state/storiesStore";
+import { getDataFromStorage, updateLocalStorage } from "../api/dataService";
 
 const useStories = () => {
   const setStories = useStoriesStore((state) => state.setStories);
@@ -44,14 +45,14 @@ const useStories = () => {
       if (payload.eventType === "INSERT") {
         try {
           // Combine the new data with the existing data
-          const localStories = await storyService.getStoriesFromStorage();
+          const localStories = await getDataFromStorage("stories");
 
           // Parse the word array in each story
           const words = payload.new?.words?.map((obj) => JSON.parse(obj));
           const newStory = { ...payload.new, words };
 
           const newData = [newStory, ...localStories];
-          await storyService.updateLocalStorage(newData);
+          await updateLocalStorage("stories", newData);
           // Run the fetchStories function to update the state
           fetchStoriesAndUpdate();
         } catch (error) {

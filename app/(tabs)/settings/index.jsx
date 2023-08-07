@@ -91,12 +91,10 @@ const settings = () => {
           </Pressable>
         </View>
 
-        {/* DEV ONLY */}
-
-        <Text style={styles.smallHeading(theme)}>----Dev Only----</Text>
+        {/* <Text style={styles.smallHeading(theme)}>----Dev Only----</Text> */}
         <View style={styles.row(theme)}>
           <TouchableOpacity onPress={clearAll}>
-            <Text style={{ color: "red", padding: 5 }}>Clear Storage</Text>
+            <Text style={styles.text(theme)}>Clear Cache</Text>
           </TouchableOpacity>
         </View>
       </View>

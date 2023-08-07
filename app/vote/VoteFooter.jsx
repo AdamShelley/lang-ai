@@ -1,5 +1,6 @@
 import { Text, StyleSheet } from "react-native";
 import SubmitButton from "./SubmitButton";
+import { SIZES } from "../../constants";
 
 const VoteFooter = ({
   handleVoteSubmission,

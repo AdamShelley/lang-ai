@@ -8,7 +8,7 @@ const VoteOptions = ({
   handleOptionChoice,
   selectedOption,
 }) => (
-  <View style={styles.optionsContainer(theme)}>
+  <View style={styles.optionsContainer}>
     {!story.voted ? (
       story.options.map((option, index) => (
         <Option
@@ -39,7 +39,7 @@ const VoteOptions = ({
 export default VoteOptions;
 
 const styles = StyleSheet.create({
-  optionsContainer: (theme) => ({
+  optionsContainer: {
     flex: 1,
     marginTop: 20,
     flexDirection: "column",
@@ -47,5 +47,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     maxHeight: "50%",
-  }),
+  },
 });

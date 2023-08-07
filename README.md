@@ -35,6 +35,9 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 **0.0.5** ( /08/2023)
 - Fixed heading border issue on stories page.
 - Non-styling improvements to all pages.
+- Data fetching optimized / Cleaned up. 
+- On the backend - votes automatically calculated after duration has been reached. 
+
 
 **0.0.4** (03/08/2023)
 - Fixed haptics for android.
