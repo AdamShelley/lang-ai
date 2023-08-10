@@ -1,5 +1,7 @@
 import { ScrollView, Text, View, Pressable, StyleSheet } from "react-native";
 import { FONT } from "../../constants/fonts";
+import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import { SIZES } from "../../constants";
 
 const WordDisplay = ({
   story,
@@ -47,11 +49,37 @@ const WordDisplay = ({
 
     {story.options && !story.vote_finished && (
       <Pressable onPress={goToVotePage} style={styles.voteButton(theme)}>
-        <Text style={{ color: theme.text }}>
-          {story.voted
-            ? "You have voted already"
-            : "Vote on the next stage of the story!"}
-        </Text>
+        {story.voted ? (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <MaterialIcons name="done" size={SIZES.medium} color="black" />
+            <Text
+              style={{
+                marginLeft: 10,
+                color: theme.black,
+                fontFamily: FONT.medium,
+              }}
+            >
+              You have voted already
+            </Text>
+          </View>
+        ) : (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <FontAwesome5
+              name="vote-yea"
+              size={SIZES.medium}
+              color={theme.background}
+            />
+            <Text
+              style={{
+                marginLeft: 10,
+                color: theme.black,
+                fontFamily: FONT.medium,
+              }}
+            >
+              Vote on the next stage of the story
+            </Text>
+          </View>
+        )}
       </Pressable>
     )}
   </ScrollView>
@@ -117,7 +145,7 @@ const styles = StyleSheet.create({
   voteButton: (theme) => ({
     width: "100%",
     height: 60,
-    backgroundColor: theme.headerBackground,
+    backgroundColor: "#FFA500",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 100,
@@ -128,5 +156,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    borderColor: "rgba(0, 0, 0, 0.1)",
+    borderWidth: 1,
   }),
 });

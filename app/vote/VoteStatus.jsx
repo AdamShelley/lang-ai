@@ -1,16 +1,25 @@
 import { Text, StyleSheet } from "react-native";
 import { SIZES } from "../../constants";
 
-const VoteStatus = ({ theme, timeLeft }) => {
+const VoteStatus = ({ theme, timeLeft, voted }) => {
   return (
     <>
-      <Text style={styles.text(theme)}>
-        Vote on how you want the story to progress.
-      </Text>
+      {voted ? (
+        <>
+          <Text style={styles.text(theme)}>Time left until vote closes: </Text>
+          <Text style={styles.text(theme)}>{timeLeft}</Text>
+        </>
+      ) : (
+        <>
+          <Text style={styles.text(theme)}>
+            Vote on how you want the story to progress.
+          </Text>
 
-      <Text style={styles.text(theme)}>
-        Time left to submit your vote: {timeLeft}
-      </Text>
+          <Text style={styles.text(theme)}>
+            Time left to submit your vote: {timeLeft}
+          </Text>
+        </>
+      )}
     </>
   );
 };

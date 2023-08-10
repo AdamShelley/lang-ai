@@ -76,7 +76,11 @@ const Vote = () => {
 
               <View style={{ flex: 1 }}>
                 {/* If voting is still open */}
-                <VoteStatus theme={theme} timeLeft={timeLeft} />
+                <VoteStatus
+                  theme={theme}
+                  timeLeft={timeLeft}
+                  voted={story?.voted}
+                />
 
                 {/* Show 3 options if not submitted/Or the option the user picked */}
                 <VoteOptions

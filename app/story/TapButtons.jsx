@@ -34,5 +34,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     backgroundColor: theme.headerBackground,
     paddingBottom: Platform.OS !== "ios" ? 20 : 0,
+    paddingHorizontal: 10,
   }),
 });

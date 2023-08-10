@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: width ? width : 200,
     height: wide ? 100 : 250,
-    borderRadius: 10,
+    borderRadius: 25,
     marginTop: 15,
     overflow: "hidden",
   }),

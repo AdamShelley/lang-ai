@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   wideLevel: {
     padding: 5,
-    backgroundColor: "#212121",
+    backgroundColor: "#eee",
     borderRadius: 50,
     borderWidth: 0,
     borderColor: "#313131",
@@ -79,10 +79,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   levelText: (theme) => ({
-    color: theme.text,
-    fontSize: SIZES.regular,
-    fontWeight: 400,
-    fontFamily: FONT.medium,
+    color: theme.black,
+    fontSize: SIZES.small,
+    fontFamily: FONT.bold,
     textAlign: "center",
     alignSelf: "center",
     textTransform: "uppercase",

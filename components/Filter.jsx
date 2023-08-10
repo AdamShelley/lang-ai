@@ -22,15 +22,17 @@ export default Filter;
 
 const styles = StyleSheet.create({
   container: (size, theme) => ({
-    padding: 5,
+    padding: 10,
     width: size,
     alignItems: "center",
-    backgroundColor: theme.headerBackground,
+    backgroundColor: "theme.headerBackground",
     paddingTop: 10,
-    paddingBottom: 0,
+    paddingBottom: 5,
+    borderRadius: 15,
   }),
   text: (theme) => ({
     color: theme.text,
     fontFamily: FONT.bold,
+    fontSize: 16,
   }),
 });

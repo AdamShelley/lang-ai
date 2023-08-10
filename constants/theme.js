@@ -5,6 +5,7 @@ const darkTheme = {
   text: "#eee",
   headerBackground: "#212124",
   settingRow: "#313131",
+  black: "#1a1a1a",
 };
 
 const lightTheme = {
@@ -14,6 +15,7 @@ const lightTheme = {
   text: "#333333",
   headerBackground: "#eee",
   settingRow: "#fff",
+  black: "#1a1a1a",
 };
 
 export { darkTheme, lightTheme };

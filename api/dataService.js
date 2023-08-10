@@ -1,3 +1,4 @@
+import NetInfo from "@react-native-community/netinfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LIVE_URL } from "@env";
 import {
@@ -12,6 +13,25 @@ export const fetchDataFromServer = async (
   storageKey,
   forceFetch = false
 ) => {
+  // Check NETWORK status
+  const networkStatus = await NetInfo.fetch();
+
+  // For testing purposes
+  // let networkStatus = {
+  //   isConnected: false,
+  // };
+
+  if (!networkStatus.isConnected) {
+    console.log("No network connection");
+    const dataFromStorage = await getDataFromStorage(storageKey);
+    if (dataFromStorage && Object.keys(dataFromStorage).length > 0) {
+      console.log(`Using local storage ${storageKey}`);
+      return dataFromStorage;
+    }
+    console.error("No network and no data in local storage");
+    return getDefaultDataForStorageKey(storageKey);
+  }
+
   // Create a key for the last time we updated this data from the server
   // Check if we should update the data from the server or force fetch = true
   const lastUpdateKey = getLastUpdateKey(storageKey);
@@ -22,6 +42,7 @@ export const fetchDataFromServer = async (
 
   // If we have valid data in local storage and we don't need to update it, use it
   // Otherwise, fetch the data from the server and update local storage
+
   if (
     isValidDataForStorageKey(storageKey, dataFromStorage) &&
     !updateRequired

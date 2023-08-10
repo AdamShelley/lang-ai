@@ -26,7 +26,7 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 - It is not optimized, especially for android
 - Styling issues on very small/very large phones
 - Some punctuation issues depending on AI model. Calibration needed.
-- Light mode needs testing.
+- Light mode needs testing. 
 - Icons are WIP.
 ~~- Haptics are not working for android.~~
 
@@ -35,6 +35,7 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 **0.0.5** ( /08/2023)
 - Fixed heading border issue on stories page.
 - Non-styling improvements to all pages.
+- When the device is offline, the stories should now load correctly from cache.
 - Data fetching optimized / Cleaned up. 
 - On the backend - votes automatically calculated after duration has been reached. 
 

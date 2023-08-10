@@ -30,8 +30,8 @@ const Recommended = ({ stories }) => {
           isLoaded ? item.gptId : index.toString()
         }
         contentContainerStyle={{
-          paddingHorizontal: 20,
-          columnGap: 15,
+          paddingHorizontal: 40,
+          columnGap: 20,
         }}
         horizontal
       />

@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignSelf: "center",
     height: wide ? 100 : 250,
-    borderRadius: 10,
+    borderRadius: 20,
     marginTop: 15,
     overflow: "hidden",
     shadowColor: "#000",
