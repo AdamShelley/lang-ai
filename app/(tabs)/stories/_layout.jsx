@@ -15,8 +15,8 @@ const StackLayout = () => {
           headerTitle: "All Stories",
           headerTintColor: theme.text,
           headerTitleStyle: {
-            fontSize: SIZES.large,
-            fontFamily: FONT.regular,
+            fontSize: SIZES.medium,
+            fontFamily: FONT.medium,
           },
           headerTransparent: true,
         }}

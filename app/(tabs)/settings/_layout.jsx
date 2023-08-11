@@ -16,8 +16,8 @@ const StackLayout = () => {
           headerTitle: "Settings",
           headerTintColor: theme.text,
           headerTitleStyle: {
-            fontSize: SIZES.large,
-            fontFamily: FONT.regular,
+            fontSize: SIZES.medium,
+            fontFamily: FONT.medium,
           },
           headerTransparent: true,
         }}

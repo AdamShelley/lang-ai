@@ -4,8 +4,15 @@ const TranslationBox = ({ theme, shownWord, wordDef }) => {
   return (
     <View style={styles.translationContainer}>
       <View style={{ padding: 5 }}>
-        <Text style={{ fontWeight: 600, color: theme.text, fontSize: 16 }}>
-          {shownWord && `Chinese:   ${shownWord.chineseWord}`}
+        <Text
+          style={{
+            fontWeight: 600,
+            color: theme.text,
+            fontSize: 16,
+            textAlign: "center",
+          }}
+        >
+          {shownWord && `${shownWord.chineseWord}`}
         </Text>
         <Text
           style={{
@@ -13,9 +20,10 @@ const TranslationBox = ({ theme, shownWord, wordDef }) => {
             color: theme.text,
             fontSize: 20,
             marginTop: 10,
+            textAlign: "center",
           }}
         >
-          {shownWord && `English:   ${wordDef?.englishWord || ""}`}
+          {shownWord && `${wordDef?.englishWord || ""}`}
         </Text>
       </View>
     </View>

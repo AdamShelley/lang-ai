@@ -22,27 +22,23 @@ const user = () => {
           },
           headerTintColor: "#eee",
           headerTitleStyle: {
-            fontSize: SIZES.large,
+            fontSize: SIZES.medium,
             fontFamily: FONT.medium,
             color: "#eee",
           },
         }}
       />
       <StatusBar style="light" />
-      <View style={styles.wrapper}>
-        <Text style={styles.smallHeading}>Account</Text>
-        <View style={styles.row}>
-          <Text style={styles.text}>OS:</Text>
-          <Text style={styles.text}>{Platform.OS}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.text}>App Version:</Text>
-          <Text style={styles.text}>{version}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.text}>Email:</Text>
-          <Text style={styles.text}>test@test.com</Text>
-        </View>
+
+      <View style={styles.content}>
+        <Text style={styles.label}>OS:</Text>
+        <Text style={styles.value}>{Platform.OS}</Text>
+
+        <Text style={styles.label}>App Version:</Text>
+        <Text style={styles.value}>{version}</Text>
+
+        <Text style={styles.label}>Email:</Text>
+        <Text style={styles.value}>test@test.com</Text>
       </View>
     </SafeAreaView>
   );
@@ -54,40 +50,25 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#212121",
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
-  },
-  wrapper: {
-    flex: 1,
-    marginTop: 100,
-    width: "80%",
-  },
-  text: {
-    color: "#fff",
-    fontFamily: FONT.medium,
-    letterSpacing: 1,
-  },
-  smallHeading: {
-    color: "#fff",
-    fontFamily: FONT.bold,
-    fontSize: SIZES.small,
-    marginTop: 20,
-    marginBottom: 10,
+    paddingHorzontal: 20,
   },
 
-  switch: {},
-  row: {
-    height: 50,
-    maxHeight: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    alignSelf: "stretch",
-    padding: 10,
+  content: {
+    flex: 1,
+    marginTop: 20,
     paddingHorizontal: 20,
-    backgroundColor: "#424242",
-    width: "100%",
-    marginTop: 10,
+  },
+
+  label: {
+    color: "#aaa",
+    fontFamily: FONT.medium,
+    fontSize: SIZES.medium,
+    marginVertical: 10,
+  },
+  value: {
+    color: "#fff",
+    fontFamily: FONT.regular,
+    fontSize: SIZES.medium,
+    marginBottom: 20,
   },
 });

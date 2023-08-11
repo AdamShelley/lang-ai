@@ -30,6 +30,10 @@ const SettingsRow = ({ label, value, onValueChange, theme }) => (
   </View>
 );
 
+const SettingsHeader = ({ title }) => (
+  <Text style={styles.headerText}>{title}</Text>
+);
+
 const settings = () => {
   const haptics = useSettingsStore((state) => state.haptics);
   const setHaptics = useSettingsStore((state) => state.setHaptics);
@@ -56,7 +60,10 @@ const settings = () => {
   return (
     <SafeAreaView style={styles.container(theme)}>
       <StatusBar style={isDarkMode ? "dark" : "light"} />
+
       <View style={styles.wrapper}>
+        <SettingsHeader title="Preferences" />
+
         <SettingsRow
           label="Haptics"
           value={haptics}
@@ -76,6 +83,7 @@ const settings = () => {
           theme={theme}
         />
 
+        <SettingsHeader title="Display" />
         <View style={styles.row(theme)}>
           <Text style={styles.text(theme)}>Text Size</Text>
           <View style={styles.pressableOptions}>
@@ -85,13 +93,13 @@ const settings = () => {
           </View>
         </View>
 
+        <SettingsHeader title="About & Dev" />
         <View style={styles.row(theme)}>
           <Pressable onPress={() => router.push("/about")}>
             <Text style={styles.text(theme)}>About</Text>
           </Pressable>
         </View>
 
-        {/* <Text style={styles.smallHeading(theme)}>----Dev Only----</Text> */}
         <View style={styles.row(theme)}>
           <TouchableOpacity onPress={clearAll}>
             <Text style={styles.text(theme)}>Clear Cache</Text>
@@ -114,12 +122,19 @@ const styles = StyleSheet.create({
   }),
   wrapper: {
     flex: 1,
-    marginTop: 100,
+    marginTop: 50,
     width: "80%",
+  },
+  headerText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#aaa",
+    marginBottom: 10,
+    marginTop: 20,
   },
   text: (theme) => ({
     color: theme.text,
-    fontFamily: FONT.medium,
+    fontFamily: FONT.bold,
     textAlign: "center",
   }),
   buttonText: (textSize, theme) => ({

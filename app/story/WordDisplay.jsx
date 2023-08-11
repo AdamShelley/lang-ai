@@ -110,10 +110,8 @@ const styles = StyleSheet.create({
     lineHeight: 25,
   }),
   textWrapper: (shownWord, showPinyin, theme) => ({
-    borderWidth: 1,
     borderRadius: 10,
     marginTop: showPinyin ? 0 : 17,
-    borderColor: shownWord ? theme.cardColor : "transparent",
     backgroundColor: shownWord ? theme.background : "transparent",
   }),
   punctuation: (showPinyin) => ({

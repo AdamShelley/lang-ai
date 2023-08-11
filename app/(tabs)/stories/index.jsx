@@ -25,7 +25,7 @@ const stories = () => {
   // Screen Width
   const screenWidth = Dimensions.get("window").width;
   // Card width (45%)
-  const cardWidth = screenWidth * 0.45;
+  const cardWidth = screenWidth * 0.46;
   const allStories = useStoriesStore((state) => state.stories);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
@@ -58,6 +58,7 @@ const stories = () => {
 
   // LayoutProvider for RecyclerListView
   const numOfColumns = 2;
+
   const layoutProvider = new LayoutProvider(
     () => {
       return 0;
@@ -66,8 +67,7 @@ const stories = () => {
       if (filteredStories && filteredStories.length > 0) {
         const isEvenIndex = index % 2 === 0;
         dim.width = screenWidth / numOfColumns;
-        dim.height = cardWidth * 2 - 30;
-
+        dim.height = cardWidth * 2 - 40;
         dim.x = isEvenIndex ? 0 : dim.width;
       } else {
         dim.width = 0;

@@ -23,12 +23,11 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 - DALL-E
 
 ## Known Issues
-- It is not optimized, especially for android
 - Styling issues on very small/very large phones
 - Some punctuation issues depending on AI model. Calibration needed.
+- Some words are not showing their translations.
 - Light mode needs testing. 
 - Icons are WIP.
-~~- Haptics are not working for android.~~
 
 ## Versions
 
@@ -38,6 +37,7 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 - When the device is offline, the stories should now load correctly from cache.
 - Data fetching optimized / Cleaned up. 
 - On the backend - votes automatically calculated after duration has been reached. 
+- Punctuation improvements on the backend. 
 
 
 **0.0.4** (03/08/2023)

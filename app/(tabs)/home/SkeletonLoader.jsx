@@ -13,7 +13,6 @@ import Animated, {
   EasingNode,
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
-import { lightTheme } from "../../../constants/theme";
 import { FONT } from "../../../constants";
 
 const AnimatedLG = Animated.createAnimatedComponent(LinearGradient);
@@ -79,7 +78,8 @@ const SkeletonLoader = ({ width = 200, wide = false, theme }) => {
       </View>
       <View style={styles.bottomSection(wide)}>
         {!wide && <View style={styles.nonWideLevel(wide, theme)} />}
-        {wide && <Animated.View style={[styles.smallText]} />}
+        {wide && <Animated.View style={[styles.title]} />}
+        <Animated.View style={[styles.smallText]} />
       </View>
     </View>
   );
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: wide ? "flex-start" : "center",
     justifyContent: wide ? "flex-start" : "flex-start",
     alignSelf: "center",
-    width: width ? width : 200,
+    width: width,
     height: wide ? 100 : 250,
     borderRadius: 25,
     marginTop: 15,
@@ -105,82 +105,44 @@ const styles = StyleSheet.create({
     height: wide ? "100%" : "60%",
     borderTopRightRadius: wide ? 0 : 10,
     borderTopLeftRadius: 10,
-    borderBottomLeftRadius: wide ? 10 : 0,
-    borderBottomRightRadius: 0,
     overflow: "hidden",
-    position: "relative",
-    tintColor: wide ? "rgba(255, 255, 255, 0.6)" : "none",
   }),
-  image: (wide) => ({
-    height: "100%",
-    borderTopRightRadius: wide ? 0 : 10,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: wide ? 10 : 0,
-    backgroundColor: "#e0e0e0",
-    alignContent: "center",
-    justifyContent: "center",
-  }),
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.2)",
-  },
 
-  text: (wide) => ({
-    height: 20,
-    width: wide ? "50%" : "80%",
-    backgroundColor: "#e0e0e0",
-    marginVertical: 5,
-  }),
-  smallText: {
-    height: 40,
-    width: "80%",
-    backgroundColor: "#424242",
-    marginVertical: 5,
-  },
   bottomSection: (wide) => ({
     height: wide ? "100%" : "30%",
     padding: 10,
     flexDirection: "column",
-    alignItems: wide ? "flex-start" : "flex-start",
-    justifyContent: "flex-start",
+    alignItems: "flex-start",
     alignSelf: "stretch",
-    overflow: "hidden",
     marginLeft: wide ? 10 : null,
     width: wide ? "65%" : null,
-    flex: 1,
   }),
   nonWideLevel: (wide, theme) => ({
     borderRadius: 10,
-    borderWidth: theme === lightTheme ? 0 : 1,
     borderColor: wide ? "#313131" : "transparent",
     padding: 5,
     paddingHorizontal: 10,
-    backgroundColor: theme.background,
+    backgroundColor: "#fff",
     color: theme.text,
     alignSelf: wide ? "auto" : "center",
     position: wide ? "absolute" : "relative",
-    left: wide ? 10 : null,
-    right: wide ? 10 : null,
     bottom: wide ? 1 : null,
     textAlign: "center",
     fontFamily: FONT.medium,
     textTransform: "uppercase",
   }),
-  wideLevel: {
-    padding: 5,
-    backgroundColor: "#212121",
-    borderRadius: 10,
-    borderWidth: 0,
-    borderColor: "#313131",
-    position: "absolute",
-    bottom: 2,
-    left: "10%",
-    right: "10%",
-    textAlign: "center",
+
+  title: {
+    height: 20,
+    width: "80%",
+    backgroundColor: "#424242",
     alignSelf: "center",
-    shadowColor: "rgba(0,0,0,0.9)",
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 5,
+  },
+  smallText: {
+    height: 40,
+    width: "80%",
+    backgroundColor: "#424242",
+    marginVertical: 5,
+    alignSelf: "center",
   },
 });
