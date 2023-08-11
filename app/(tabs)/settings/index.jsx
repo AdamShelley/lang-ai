@@ -7,6 +7,7 @@ import {
   Switch,
   TouchableOpacity,
   Pressable,
+  Platform,
 } from "react-native";
 import { FONT } from "../../../constants/fonts";
 import useSettingsStore from "../../../state/store";
@@ -15,6 +16,8 @@ import { useRouter } from "expo-router";
 
 // Dev
 import { clearAll } from "../../../utils/devFunctions";
+
+const HEADER_HEIGHT = Platform.OS === "android" ? 56 : 44;
 
 const SettingsRow = ({ label, value, onValueChange, theme }) => (
   <View style={styles.row(theme)}>
@@ -119,6 +122,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
+    paddingTop: Platform.OS === "android" ? HEADER_HEIGHT : 0,
   }),
   wrapper: {
     flex: 1,

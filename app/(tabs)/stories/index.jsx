@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   StatusBar,
   Text,
+  Platform,
 } from "react-native";
 import {
   RecyclerListView,
@@ -17,6 +18,8 @@ import useStoriesStore from "../../../state/storiesStore";
 import FilterSection from "./FilterSection";
 import useSettingsStore from "../../../state/store";
 import { darkTheme, lightTheme } from "../../../constants/theme";
+
+const HEADER_HEIGHT = Platform.OS === "android" ? 56 : 44;
 
 const stories = () => {
   // State
@@ -125,5 +128,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.headerBackground,
     flex: 1,
     width: "100%",
+    paddingTop: Platform.OS === "android" ? HEADER_HEIGHT : 0,
   }),
 });
