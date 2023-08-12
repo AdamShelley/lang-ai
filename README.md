@@ -31,6 +31,9 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 
 ## Versions
 
+**0.0.6** ( /08/2023)
+
+
 **0.0.5** ( /08/2023)
 - Fixed heading border issue on stories page.
 - Non-styling improvements to all pages.

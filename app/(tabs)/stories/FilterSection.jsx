@@ -108,34 +108,38 @@ const FilterSection = ({
       </View>
       {showGenres && (
         <View style={style.buttonContainer}>
-          {Array.from(availableGenres).map((genre) => (
-            <GenreButton
-              key={genre}
-              text={genre}
-              color="#333"
-              size="25%"
-              onPress={() => {
-                setSelectedGenre(genre);
-                setShowGenre(false);
-              }}
-            />
-          ))}
+          {Array.from(availableGenres)
+            .sort()
+            .map((genre) => (
+              <GenreButton
+                key={genre}
+                text={genre}
+                color="#333"
+                size="25%"
+                onPress={() => {
+                  setSelectedGenre(genre);
+                  setShowGenre(false);
+                }}
+              />
+            ))}
         </View>
       )}
       {showLevels && (
         <View style={style.buttonContainer}>
-          {Array.from(availableLevels).map((level) => (
-            <GenreButton
-              key={level}
-              text={level}
-              color="#333"
-              size="30%"
-              onPress={() => {
-                setSelectedLevel(level);
-                setShowLevels(false);
-              }}
-            />
-          ))}
+          {Array.from(availableLevels)
+            .sort()
+            .map((level) => (
+              <GenreButton
+                key={level}
+                text={level}
+                color="#333"
+                size="30%"
+                onPress={() => {
+                  setSelectedLevel(level);
+                  setShowLevels(false);
+                }}
+              />
+            ))}
         </View>
       )}
     </View>
