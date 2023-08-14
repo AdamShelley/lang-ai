@@ -32,6 +32,7 @@ const Recommended = ({ stories }) => {
         contentContainerStyle={{
           paddingHorizontal: 40,
           columnGap: 20,
+          paddingTop: 20,
         }}
         horizontal
       />

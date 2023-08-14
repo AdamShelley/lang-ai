@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Text,
   View,
@@ -18,6 +18,8 @@ import useStories from "../../../hooks/useStories";
 import useDictionary from "../../../hooks/useDictionary";
 import useStoriesStore from "../../../state/storiesStore";
 import useSettingsStore from "../../../state/store";
+
+const HEADER_HEIGHT = Platform.OS === "android" ? 56 : 44;
 
 const home = () => {
   const router = useRouter();
@@ -91,6 +93,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.headerBackground,
     alignItems: "flex-start",
     justifyContent: "center",
+    paddingTop: Platform.OS === "android" ? HEADER_HEIGHT : 0,
   }),
   title: (theme) => ({
     paddingTop: 40,

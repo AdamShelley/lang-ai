@@ -2,6 +2,7 @@ import { ScrollView, Text, View, Pressable, StyleSheet } from "react-native";
 import { FONT } from "../../constants/fonts";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { SIZES } from "../../constants";
+import useSettingsStore from "../../state/store";
 
 const WordDisplay = ({
   story,
@@ -14,76 +15,94 @@ const WordDisplay = ({
   setShownWord,
   setWordDef,
   goToVotePage,
-}) => (
-  <ScrollView horizontal={false} contentContainerStyle={styles.wordWrapper}>
-    <Text style={styles.synopsis(theme)}>{story.synopsis}</Text>
-    {modifiedWords.map((word, index) => (
-      <Pressable
-        onPressIn={(e) => showWord(e, word)}
-        onPressOut={() => {
-          setShownWord("");
-          setWordDef("");
-        }}
-        key={`${word}-${index}`}
-      >
-        <View style={{ textAlign: "center" }}>
-          {showPinyin && (
-            <Text style={styles.pinyinText(theme)}>{word.pinyin}</Text>
-          )}
-          <View
-            style={styles.textWrapper(shownWord === word, showPinyin, theme)}
-          >
-            <Text
-              style={
-                /^[\p{Punctuation}]+$/u.test(word.chineseWord)
-                  ? styles.punctuation(showPinyin)
-                  : styles.text(fontSize, theme)
-              }
-            >
-              {word.chineseWord}
-            </Text>
-          </View>
-        </View>
-      </Pressable>
-    ))}
+}) => {
+  const textSize = useSettingsStore((state) => state.textSize);
 
-    {story.options && !story.vote_finished && (
-      <Pressable onPress={goToVotePage} style={styles.voteButton(theme)}>
-        {story.voted ? (
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <MaterialIcons name="done" size={SIZES.medium} color="black" />
-            <Text
-              style={{
-                marginLeft: 10,
-                color: theme.black,
-                fontFamily: FONT.medium,
-              }}
+  // Choose padding required for text size
+  const paddingMapping = {
+    small: 16,
+    medium: 17,
+    large: 18,
+  };
+
+  const paddingSize = paddingMapping[textSize] || 17;
+
+  return (
+    <ScrollView horizontal={false} contentContainerStyle={styles.wordWrapper}>
+      <Text style={styles.synopsis(theme)}>{story.synopsis}</Text>
+      {modifiedWords.map((word, index) => (
+        <Pressable
+          onPressIn={(e) => showWord(e, word)}
+          onPressOut={() => {
+            setShownWord("");
+            setWordDef("");
+          }}
+          key={`${word}-${index}`}
+        >
+          <View style={{ textAlign: "center" }}>
+            {showPinyin && (
+              <Text style={styles.pinyinText(theme)}>{word.pinyin}</Text>
+            )}
+            <View
+              style={styles.textWrapper(
+                shownWord === word,
+                showPinyin,
+                theme,
+                paddingSize
+              )}
             >
-              You have voted already
-            </Text>
+              <Text
+                style={
+                  /^[\p{Punctuation}]+$/u.test(word.chineseWord)
+                    ? styles.punctuation(showPinyin)
+                    : styles.text(fontSize, theme)
+                }
+              >
+                {word.chineseWord}
+              </Text>
+            </View>
           </View>
-        ) : (
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <FontAwesome5
-              name="vote-yea"
-              size={SIZES.medium}
-              color={theme.background}
-            />
-            <Text
-              style={{
-                marginLeft: 10,
-                color: theme.black,
-                fontFamily: FONT.medium,
-              }}
-            >
-              Vote on the next stage of the story
-            </Text>
-          </View>
-        )}
-      </Pressable>
-    )}
-  </ScrollView>
-);
+        </Pressable>
+      ))}
+
+      {story.options && !story.vote_finished && (
+        <Pressable onPress={goToVotePage} style={styles.voteButton(theme)}>
+          {story.voted ? (
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <MaterialIcons name="done" size={SIZES.medium} color="black" />
+              <Text
+                style={{
+                  marginLeft: 10,
+                  color: theme.black,
+                  fontFamily: FONT.medium,
+                }}
+              >
+                You have voted already
+              </Text>
+            </View>
+          ) : (
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <FontAwesome5
+                name="vote-yea"
+                size={SIZES.medium}
+                color={theme.background}
+              />
+              <Text
+                style={{
+                  marginLeft: 10,
+                  color: theme.black,
+                  fontFamily: FONT.medium,
+                }}
+              >
+                Vote on the next stage of the story
+              </Text>
+            </View>
+          )}
+        </Pressable>
+      )}
+    </ScrollView>
+  );
+};
 
 export default WordDisplay;
 
@@ -109,9 +128,10 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     lineHeight: 25,
   }),
-  textWrapper: (shownWord, showPinyin, theme) => ({
+  textWrapper: (shownWord, showPinyin, theme, padding) => ({
     borderRadius: 10,
-    marginTop: showPinyin ? 0 : 17,
+
+    marginTop: showPinyin ? 0 : padding,
     backgroundColor: shownWord ? theme.background : "transparent",
   }),
   punctuation: (showPinyin) => ({

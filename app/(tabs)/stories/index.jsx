@@ -19,7 +19,8 @@ import FilterSection from "./FilterSection";
 import useSettingsStore from "../../../state/store";
 import { darkTheme, lightTheme } from "../../../constants/theme";
 
-const HEADER_HEIGHT = Platform.OS === "android" ? 56 : 44;
+const HEADER_HEIGHT = Platform.OS === "android" ? 80 : 44;
+const RENDER_OFFSET = Platform.OS === "android" ? 600 : 500;
 
 const stories = () => {
   // State
@@ -28,7 +29,7 @@ const stories = () => {
   // Screen Width
   const screenWidth = Dimensions.get("window").width;
   // Card width (45%)
-  const cardWidth = screenWidth * 0.46;
+  const cardWidth = screenWidth * 0.45;
   const allStories = useStoriesStore((state) => state.stories);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
@@ -70,7 +71,7 @@ const stories = () => {
       if (filteredStories && filteredStories.length > 0) {
         const isEvenIndex = index % 2 === 0;
         dim.width = screenWidth / numOfColumns;
-        dim.height = cardWidth * 2 - 40;
+        dim.height = cardWidth * 1.9;
         dim.x = isEvenIndex ? 0 : dim.width;
       } else {
         dim.width = 0;
@@ -110,7 +111,7 @@ const stories = () => {
               marginTop: 5,
               paddingBottom: 100,
             }}
-            renderAheadOffset={500}
+            renderAheadOffset={RENDER_OFFSET}
             renderFooter={() => <View style={{ paddingVertical: 0 }} />}
           />
         ) : (

@@ -4,7 +4,7 @@
     "web": {
       "bundler": "metro"
     },
-    "name": "language_native",
+    "name": "lang-ai",
     "slug": "lang-ai",
     "splash": {
       "image": "./assets/splash/splash.png",
