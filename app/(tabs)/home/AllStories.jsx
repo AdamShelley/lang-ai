@@ -13,6 +13,15 @@ const AllStories = ({ ListHeaderComponent, stories, refreshControl }) => {
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
 
+  // Check for stories to show that are within the last week
+  const lastWeeksStories = storiesToShow.filter((story) => {
+    const storyDate = new Date(story.created);
+    const today = new Date();
+    const lastWeek = new Date(today.setDate(today.getDate() - 7));
+
+    return storyDate > lastWeek;
+  });
+
   useEffect(() => {
     setStoriesToShow(stories);
   }, [stories]);
@@ -37,7 +46,7 @@ const AllStories = ({ ListHeaderComponent, stories, refreshControl }) => {
       <FlatList
         refreshControl={refreshControl}
         showsVerticalScrollIndicator={false}
-        data={isLoaded ? storiesToShow.slice(5, 12) : new Array(3).fill(null)} // Only show 7 stories on home page.
+        data={isLoaded ? lastWeeksStories.slice(5) : new Array(3).fill(null)} // Only show 7 stories on home page.
         renderItem={({ item }) =>
           isLoaded ? (
             <Card width={"90%"} wide={true} story={item} />

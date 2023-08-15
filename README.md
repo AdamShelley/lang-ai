@@ -31,13 +31,18 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 
 ## Versions
 
-**0.0.6** ( /08/2023)
+
+**0.0.6** (15/08/2023)
+- Fixed a problem with dictionary not loading all words (WIP)
 - Added more padding on android devices.
 - Translation is now more readable.
 - New icon
 - When showing pinyin at different font sizes, it should jump less.
+- Last week stories now show up on the home page (properly filtered).
+- Story page styling improvements.
 
-**0.0.5** ( /08/2023)
+
+**0.0.5** (11/08/2023)
 - Fixed heading border issue on stories page.
 - Non-styling improvements to all pages.
 - When the device is offline, the stories should now load correctly from cache.

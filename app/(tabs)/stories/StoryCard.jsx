@@ -55,7 +55,9 @@ const Card = ({ story, width }) => {
 
           {story.read && (
             <View style={styles.read}>
-              <Text style={styles.levelText(theme)}>Read</Text>
+              <Text style={[styles.levelText(theme), { color: "#eee" }]}>
+                Read
+              </Text>
             </View>
           )}
           <View style={styles.level}>
@@ -88,9 +90,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignSelf: "center",
     width: width ? width : 200,
+    // width: "100%",
     height: 300,
     minHeight: 300,
-    borderRadius: 10,
+    borderRadius: 5,
     marginTop: 15,
     shadowColor: "#1a1a1a",
     shadowOffset: { width: 0, height: 2 },
@@ -103,8 +106,8 @@ const styles = StyleSheet.create({
     width: "100%",
     minWidth: 10,
     height: "50%",
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
     overflow: "hidden",
     position: "relative",
     backgroundColor: "#000",
@@ -152,19 +155,17 @@ const styles = StyleSheet.create({
   }),
   level: {
     padding: 10,
-    backgroundColor: "#212121",
-    borderRadius: 10,
+    backgroundColor: "#eee",
+    borderRadius: 50,
     borderWidth: 0,
-    // borderColor: "#414141",
+    borderColor: "#313131",
     position: "absolute",
-    bottom: 5,
-    left: "25%",
-    right: "25%",
+    top: 5,
+    left: "5%",
+    right: "60%",
     textAlign: "center",
     alignSelf: "center",
-    width: "50%",
     shadowColor: "rgba(0,0,0,0.9)",
-    // shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 1,
     elevation: 5,
@@ -172,27 +173,24 @@ const styles = StyleSheet.create({
   read: {
     padding: 10,
     backgroundColor: "#344332",
-    borderRadius: 10,
+    borderRadius: 50,
     borderWidth: 0,
-    // borderColor: "#414141",
     position: "absolute",
     top: 5,
-    left: "25%",
-    right: "25%",
+    left: "60%",
+    right: "5%",
     textAlign: "center",
     alignSelf: "center",
-    width: "50%",
     shadowColor: "rgba(0,0,0,0.9)",
-    // shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 1,
     elevation: 5,
   },
   levelText: (theme) => ({
-    color: "#eee",
+    color: theme.black,
     fontSize: 12,
     fontWeight: 400,
-    fontFamily: FONT.medium,
+    fontFamily: FONT.bold,
     textAlign: "center",
     alignSelf: "center",
     textTransform: "uppercase",

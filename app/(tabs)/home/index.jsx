@@ -19,7 +19,7 @@ import useDictionary from "../../../hooks/useDictionary";
 import useStoriesStore from "../../../state/storiesStore";
 import useSettingsStore from "../../../state/store";
 
-const HEADER_HEIGHT = Platform.OS === "android" ? 56 : 44;
+const HEADER_HEIGHT = Platform.OS === "android" ? 50 : 44;
 
 const home = () => {
   const router = useRouter();

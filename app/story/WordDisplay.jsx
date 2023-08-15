@@ -3,6 +3,7 @@ import { FONT } from "../../constants/fonts";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { SIZES } from "../../constants";
 import useSettingsStore from "../../state/store";
+import useDictionaryStore from "../../state/dictionaryStore";
 
 const WordDisplay = ({
   story,
@@ -17,7 +18,7 @@ const WordDisplay = ({
   goToVotePage,
 }) => {
   const textSize = useSettingsStore((state) => state.textSize);
-
+  const dictionary = useDictionaryStore((state) => state.words);
   // Choose padding required for text size
   const paddingMapping = {
     small: 16,
@@ -41,7 +42,9 @@ const WordDisplay = ({
         >
           <View style={{ textAlign: "center" }}>
             {showPinyin && (
-              <Text style={styles.pinyinText(theme)}>{word.pinyin}</Text>
+              <Text style={styles.pinyinText(theme)}>
+                {word?.pinyin || dictionary[word.chineseWord]?.pinyin}
+              </Text>
             )}
             <View
               style={styles.textWrapper(

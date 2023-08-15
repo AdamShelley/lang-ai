@@ -23,7 +23,7 @@ const TranslationBox = ({ theme, shownWord, wordDef }) => {
             textAlign: "center",
           }}
         >
-          {shownWord && `${wordDef?.englishWord || ""}`}
+          {shownWord && `${wordDef?.englishWord || wordDef?.definition || ""}`}
         </Text>
       </View>
     </View>

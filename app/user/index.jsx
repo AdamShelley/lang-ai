@@ -10,8 +10,12 @@ import React from "react";
 import { FONT, SIZES } from "../../constants";
 import { Stack } from "expo-router";
 import { version } from "../../package.json";
+import useStoriesStore from "../../state/storiesStore";
+import useDictionaryStore from "../../state/dictionaryStore";
 
 const user = () => {
+  const stories = useStoriesStore((state) => state.stories);
+
   return (
     <SafeAreaView style={styles.container}>
       <Stack.Screen
@@ -37,8 +41,8 @@ const user = () => {
         <Text style={styles.label}>App Version:</Text>
         <Text style={styles.value}>{version}</Text>
 
-        <Text style={styles.label}>Email:</Text>
-        <Text style={styles.value}>test@test.com</Text>
+        <Text style={styles.label}>No. of Stories</Text>
+        <Text style={styles.value}>{stories.length}</Text>
       </View>
     </SafeAreaView>
   );

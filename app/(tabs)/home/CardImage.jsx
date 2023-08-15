@@ -45,9 +45,9 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 2,
     borderBottomLeftRadius: wide ? 2 : 0,
     borderBottomRightRadius: 0,
-    overflow: "hidden",
     position: "relative",
     tintColor: wide ? "rgba(255, 255, 255, 0.6)" : "none",
+    overflow: "hidden",
   }),
 
   image: (wide) => ({
