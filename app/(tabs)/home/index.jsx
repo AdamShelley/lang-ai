@@ -18,17 +18,23 @@ import useStories from "../../../hooks/useStories";
 import useDictionary from "../../../hooks/useDictionary";
 import useStoriesStore from "../../../state/storiesStore";
 import useSettingsStore from "../../../state/store";
+import OnboardingOverlay from "./OnboardingOverlay";
 
 const HEADER_HEIGHT = Platform.OS === "android" ? 50 : 44;
 
 const home = () => {
   const router = useRouter();
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
+  const hasSeenOverlay = useSettingsStore((state) => state.hasSeenOverlay);
+  const setHasSeenOverlay = useSettingsStore(
+    (state) => state.setHasSeenOverlay
+  );
   const theme = isDarkMode ? darkTheme : lightTheme;
   const stories = useStoriesStore((state) => state.stories);
   const [refreshing, setRefreshing] = useState(false);
   // Filter out read stories
   const unreadStories = (stories || []).filter((story) => !story.read);
+  const [showOverlay, setShowOverlay] = useState(!hasSeenOverlay); // CHANGE TO GLOBAL LATER
 
   // Initialize data
   const { fetchStories } = useStories();
@@ -45,9 +51,15 @@ const home = () => {
     router.push("/user");
   }, []);
 
+  const handleOverlay = () => {
+    setShowOverlay(false);
+    setHasSeenOverlay(true);
+  };
+
   return (
     <SafeAreaView style={styles.container(theme)}>
       <StatusBar style={isDarkMode ? "light" : "dark"} />
+
       <AllStories
         stories={unreadStories}
         refreshControl={
@@ -81,6 +93,8 @@ const home = () => {
           </>
         }
       />
+
+      {showOverlay && <OnboardingOverlay onClose={handleOverlay} />}
     </SafeAreaView>
   );
 };

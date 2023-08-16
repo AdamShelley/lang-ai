@@ -5,6 +5,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const useSettingsStore = create(
   persist(
     (set, get) => ({
+      hasSeenOverlay: false,
+      setHasSeenOverlay: () => set({ hasSeenOverlay: true }),
       haptics: true,
       setHaptics: () => set({ haptics: !get().haptics }),
       pinyin: false,

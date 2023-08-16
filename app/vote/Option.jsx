@@ -1,13 +1,13 @@
 import { useEffect } from "react";
-import { Pressable, View, Text, StyleSheet } from "react-native";
+import { Pressable, Text, StyleSheet } from "react-native";
 import Animated, {
   Layout,
-  SlideInDown,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
   Easing,
   withDelay,
+  BounceInDown,
 } from "react-native-reanimated";
 import { FONT, SIZES } from "../../constants";
 
@@ -95,7 +95,7 @@ export const Option = ({
 
   return (
     <Animated.View
-      entering={!submitted && SlideInDown.delay(200 * index).duration(700)}
+      entering={BounceInDown.delay(300 * index).duration(800)}
       layout={Layout.springify()}
       style={[opacityStyles, translateStyle, styles.option(theme)]}
       key={index}

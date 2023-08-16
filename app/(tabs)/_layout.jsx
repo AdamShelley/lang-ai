@@ -2,13 +2,24 @@ import { Platform, StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { FONT, SIZES } from "../../constants";
+import useSettingsStore from "../../state/store";
 
 export default () => {
+  const hasSeenOverlay = useSettingsStore((state) => state.hasSeenOverlay);
+
+  const preventTabPress = {
+    tabPress: (e) => {
+      if (!hasSeenOverlay) {
+        e.preventDefault();
+      }
+    },
+  };
+
   return (
     <Tabs
       backBehavior="initialRoute"
       screenOptions={{
-        tabBarStyle: styles.container,
+        tabBarStyle: styles.container(hasSeenOverlay),
         tabBarActiveTintColor: "#FFA500",
         tabBarInactiveTintColor: "#eee",
         tabBarLabelStyle: { fontSize: SIZES.small, fontFamily: FONT.medium },
@@ -16,6 +27,7 @@ export default () => {
     >
       <Tabs.Screen
         name="home"
+        listeners={preventTabPress}
         options={{
           headerShown: false,
           tabBarLabel: "Home",
@@ -26,6 +38,7 @@ export default () => {
       />
       <Tabs.Screen
         name="stories"
+        listeners={preventTabPress}
         options={{
           headerShown: false,
           tabBarLabel: "Stories",
@@ -36,6 +49,7 @@ export default () => {
       />
       <Tabs.Screen
         name="settings"
+        listeners={preventTabPress}
         options={{
           headerShown: false,
           tabBarLabel: "Settings",
@@ -49,13 +63,14 @@ export default () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#464646",
+  container: (overlay) => ({
+    height: Platform.OS === "ios" ? 70 : 60,
+    backgroundColor: overlay ? "#464646" : "#212121",
     alignItems: "center",
     justifyContent: "center",
     borderTopWidth: 0,
     alignSelf: "center",
-    paddingTop: 10,
+    paddingTop: Platform.OS === "ios" ? 5 : 5,
     paddingBottom: Platform.OS === "ios" ? 20 : 5,
-  },
+  }),
 });

@@ -64,10 +64,6 @@ const stories = () => {
 
   // LayoutProvider for RecyclerListView
   const numOfColumns = 2;
-  // const twoCards = cardPercentage * 2;
-  // const marginPercent = Math.abs((1 - twoCards) / 3);
-
-  // const margin = screenWidth * marginPercent;
 
   const layoutProvider = new LayoutProvider(
     () => {
@@ -75,10 +71,11 @@ const stories = () => {
     },
     (type, dim, index) => {
       if (filteredStories && filteredStories.length > 0) {
-        const isEvenIndex = index % 2 === 0;
+        // const isEvenIndex = index % 2 === 0;
 
         dim.width = screenWidth / numOfColumns;
-        dim.height = cardWidth * 1.6;
+        dim.height =
+          Platform.OS === "ios" ? cardWidth * 1.58 : cardWidth * 1.51;
       } else {
         dim.width = 0;
         dim.height = 0;

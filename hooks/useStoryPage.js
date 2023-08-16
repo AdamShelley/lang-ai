@@ -74,12 +74,10 @@ export const useStoryPage = (id) => {
 
     // Dictionary length
 
-    console.log(dictionary[word.chineseWord], word);
+    // console.log(dictionary[word.chineseWord], word);
     if (word.chineseWord in dictionary) {
-      console.log("Using dictionary");
       setWordDef(dictionary[word.chineseWord]);
     } else {
-      console.log("Using word");
       setWordDef(word);
     }
   };
