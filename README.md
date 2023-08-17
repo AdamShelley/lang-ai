@@ -25,12 +25,18 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 ## Known Issues
 - Styling issues on very small/very large phones
 - Some punctuation issues depending on AI model. Calibration needed.
-- Some words are not showing their translations.
 - Light mode needs testing. 
 - Icons are WIP.
 
 ## Versions
 
+
+**0.1.0** (17/08/2023)
+- Added Onboarding for the story page.
+
+**0.0.7** (16/08/2023)
+- Added intro overlay.
+- Fixed some android styling/animation issues.
 
 **0.0.6** (15/08/2023)
 - Fixed a problem with dictionary not loading all words (WIP)

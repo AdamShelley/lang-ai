@@ -12,6 +12,7 @@ import FullTranslationBox from "./FullTranslationBox";
 import TapButtons from "./TapButtons";
 import Header from "../../components/Header";
 import { SIZES } from "../../constants";
+import OnboardingOverlay from "./OnboardingOverlay";
 
 const Story = () => {
   const { id } = useSearchParams();
@@ -20,6 +21,20 @@ const Story = () => {
   const stories = useStoriesStore((state) => state.stories);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
+
+  const showStoryOnboarding = useSettingsStore(
+    (state) => state.showStoryOnboarding
+  );
+  const setShowStoryOnboarding = useSettingsStore(
+    (state) => state.setShowStoryOnboarding
+  );
+
+  const [firstTimeReading, setFirstTimeReading] = useState(showStoryOnboarding);
+
+  const closeOnboarding = () => {
+    setFirstTimeReading(false);
+    setShowStoryOnboarding();
+  };
 
   // HOOK
   const {
@@ -102,6 +117,7 @@ const Story = () => {
               setShowTranslation={setShowTranslation}
             />
           </View>
+          {firstTimeReading && <OnboardingOverlay onClose={closeOnboarding} />}
         </>
       )}
     </SafeAreaView>

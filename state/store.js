@@ -7,6 +7,8 @@ const useSettingsStore = create(
     (set, get) => ({
       hasSeenOverlay: false,
       setHasSeenOverlay: () => set({ hasSeenOverlay: true }),
+      showStoryOnboarding: true,
+      setShowStoryOnboarding: () => set({ showStoryOnboarding: false }),
       haptics: true,
       setHaptics: () => set({ haptics: !get().haptics }),
       pinyin: false,

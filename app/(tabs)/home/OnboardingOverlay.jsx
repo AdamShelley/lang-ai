@@ -13,9 +13,8 @@ const OnboardingOverlay = ({ onClose }) => {
             fontSize: SIZES.xLarge,
           }}
         >
-          {" "}
-          LangAI{" "}
-        </Text>{" "}
+          LangAI
+        </Text>
       </Text>
       <Text style={styles.normalText}>
         Thank you for testing my WIP app. I hope you find it useful.
@@ -38,7 +37,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.8)", // semi-transparent
+    backgroundColor: "rgba(0, 0, 0, 0.85)",
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
@@ -54,14 +53,17 @@ const styles = StyleSheet.create({
     fontSize: SIZES.medium,
     fontFamily: FONT.regular,
     padding: 20,
+    marginHorizontal: 20,
   },
   closeButton: {
     marginTop: 20,
     padding: 20,
-    backgroundColor: "#212121",
+    backgroundColor: "darkgreen",
     borderRadius: 5,
+    width: "50%",
   },
   closeButtonText: {
     color: "#fff",
+    textAlign: "center",
   },
 });
