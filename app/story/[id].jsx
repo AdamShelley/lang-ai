@@ -77,9 +77,11 @@ const Story = () => {
 
           <View style={styles.wrapper}>
             <LevelCard
+              title={story.title}
               topic={story.topic}
               level={story.level}
               vote={story.options}
+              part={story.part}
             />
 
             <TranslationBox

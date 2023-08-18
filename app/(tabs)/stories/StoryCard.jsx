@@ -69,7 +69,7 @@ const Card = ({ story, width }) => {
       </View>
       <View style={styles.bottomSection()}>
         <Text style={styles.text(theme)} numberOfLines={3} ellipsizeMode="tail">
-          {story.title}
+          {story.title} {story.part > 1 ? `Part ${story.part}` : ""}
         </Text>
 
         <Text style={styles.smallText(theme)} numberOfLines={3}>

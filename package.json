@@ -45,6 +45,6 @@
     "metro-resolver": "^0.73.7"
   },
   "name": "lang-ai",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true
 }

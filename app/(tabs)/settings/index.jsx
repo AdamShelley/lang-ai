@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
   buttonText: (textSize, theme) => ({
     color: textSize ? theme.background : theme.text,
     fontFamily: FONT.medium,
+    fontSize: textSize === "small" ? 10 : 12,
     textAlign: "center",
   }),
   smallHeading: (theme) => ({
