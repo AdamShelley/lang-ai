@@ -149,6 +149,8 @@ const FilterSection = ({
 const style = StyleSheet.create({
   wrapper: {
     alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
   },
   filteredButtons: {
     alignSelf: "stretch",

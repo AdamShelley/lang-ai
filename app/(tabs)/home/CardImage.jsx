@@ -22,13 +22,13 @@ const CardImage = ({ wide, theme, story }) => {
           alt="story-image"
         />
         <View style={styles.overlay} />
-        {wide && (
+        {/* {wide && (
           <View style={styles.wideLevel}>
             <Text style={styles.levelText(theme)}>
               {story.level || "Unknown"}
             </Text>
           </View>
-        )}
+        )} */}
       </View>
     </View>
   );
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     height: wide ? "100%" : "60%",
     borderTopRightRadius: wide ? 0 : 2,
     borderTopLeftRadius: 2,
-    borderBottomLeftRadius: wide ? 2 : 0,
+    borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     position: "relative",
     tintColor: wide ? "rgba(255, 255, 255, 0.6)" : "none",
@@ -52,9 +52,7 @@ const styles = StyleSheet.create({
 
   image: (wide) => ({
     height: "100%",
-    borderTopRightRadius: wide ? 0 : 2,
-    borderTopLeftRadius: 2,
-    borderBottomLeftRadius: wide ? 2 : 0,
+    borderRadius: wide ? 10 : 0,
     resizeMode: "cover",
   }),
   overlay: {

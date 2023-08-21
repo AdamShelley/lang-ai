@@ -1,5 +1,5 @@
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { FONT } from "../constants/fonts";
+import { Pressable, Text, StyleSheet } from "react-native";
+import { FONT, SIZES } from "../constants";
 import { darkTheme, lightTheme } from "../constants/theme";
 import useSettingsStore from "../state/store";
 
@@ -8,13 +8,15 @@ const Filter = ({ text, size, onPress, disabled }) => {
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   return (
-    <TouchableOpacity
+    <Pressable
       disabled={disabled}
       onPress={onPress}
       style={styles.container(size, theme)}
+      pressRetentionOffset={100}
+      hitSlop={20}
     >
       <Text style={styles.text(theme)}>{text}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -22,17 +24,18 @@ export default Filter;
 
 const styles = StyleSheet.create({
   container: (size, theme) => ({
-    padding: 10,
+    // padding: 10,
     width: size,
     alignItems: "center",
-    backgroundColor: "theme.headerBackground",
+    backgroundColor: theme.headerBackground,
     paddingTop: 10,
-    paddingBottom: 5,
+    paddingBottom: 0,
     borderRadius: 15,
+    marginHorizontal: 30,
   }),
   text: (theme) => ({
     color: theme.text,
-    fontFamily: FONT.bold,
-    fontSize: 16,
+    fontFamily: FONT.medium,
+    fontSize: SIZES.regular,
   }),
 });

@@ -12,7 +12,7 @@ const TranslationBox = ({ theme, shownWord, wordDef }) => {
             textAlign: "center",
           }}
         >
-          {shownWord && `${shownWord.chineseWord}`}
+          {shownWord && `${shownWord.pinyin}   ${shownWord.chineseWord}`}
         </Text>
         <Text
           style={{

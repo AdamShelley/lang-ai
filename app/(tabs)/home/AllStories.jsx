@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
   text: (theme) => ({
     color: theme.text,
-    fontSize: SIZES.large,
+    fontSize: SIZES.medium,
     marginTop: 50,
     fontFamily: FONT.regular,
     paddingHorizontal: 20,

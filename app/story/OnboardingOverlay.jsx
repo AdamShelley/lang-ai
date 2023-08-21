@@ -219,8 +219,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: "center",
     backgroundColor: "linear-gradient(to bottom, #212121, #313131)",
-    borderWidth: 1,
-    borderColor: "#424242",
+    // borderWidth: 1,
+    // borderColor: "#424242",
     justifyContent: align ? align : "center",
   }),
 
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   }),
   guideText: {
     color: "#FFF",
-    fontSize: SIZES.xLarge,
+    fontSize: SIZES.large,
     marginBottom: 20,
     fontFamily: FONT.bold,
     textAlign: "center",
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   normalText: {
     marginTop: 10,
     color: "#FFF",
-    fontSize: SIZES.medium,
+    fontSize: SIZES.regular,
     fontFamily: FONT.medium,
     lineHeight: 25,
     marginBottom: 40,

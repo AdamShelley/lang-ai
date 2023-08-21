@@ -30,8 +30,8 @@ const Recommended = ({ stories }) => {
           isLoaded ? item.gptId : index.toString()
         }
         contentContainerStyle={{
-          paddingHorizontal: 40,
-          columnGap: 20,
+          paddingHorizontal: 20,
+          columnGap: 10,
           paddingTop: 20,
         }}
         horizontal
@@ -44,11 +44,11 @@ export default Recommended;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
+    marginTop: 30,
   },
   text: (theme) => ({
     color: theme.text,
-    fontSize: SIZES.large,
+    fontSize: SIZES.medium,
     fontFamily: FONT.regular,
     paddingHorizontal: 20,
   }),

@@ -9,7 +9,7 @@ import {
   Pressable,
   Platform,
 } from "react-native";
-import { FONT } from "../../../constants/fonts";
+import { FONT, SIZES } from "../../../constants";
 import useSettingsStore from "../../../state/store";
 import { darkTheme, lightTheme } from "../../../constants/theme";
 import { useRouter } from "expo-router";
@@ -21,7 +21,7 @@ const HEADER_HEIGHT = Platform.OS === "android" ? 56 : 44;
 
 const SettingsRow = ({ label, value, onValueChange, theme }) => (
   <View style={styles.row(theme)}>
-    <Text style={styles.text(theme)}>{label}</Text>
+    <Text style={[styles.text(theme)]}>{label}</Text>
     <Switch
       style={styles.switch}
       trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -51,10 +51,16 @@ const settings = () => {
 
   const renderTextSizeButton = (size) => (
     <Pressable
-      style={styles.pressable(textSize === size, theme)}
+      style={[
+        styles.pressable(textSize === size, theme),
+        textSize === size ? styles.highlighted : {},
+        {
+          color: textSize === size && theme.text,
+        },
+      ]}
       onPress={() => setTextSize(size)}
     >
-      <Text style={styles.buttonText(textSize === size, theme)}>
+      <Text style={styles.buttonText(textSize === size, theme, size)}>
         {size.toUpperCase().charAt(0)}
       </Text>
     </Pressable>
@@ -141,10 +147,10 @@ const styles = StyleSheet.create({
     fontFamily: FONT.bold,
     textAlign: "center",
   }),
-  buttonText: (textSize, theme) => ({
+  buttonText: (textSize, theme, size) => ({
     color: textSize ? theme.background : theme.text,
     fontFamily: FONT.medium,
-    fontSize: textSize === "small" ? 10 : 12,
+    fontSize: SIZES[size],
     textAlign: "center",
   }),
   smallHeading: (theme) => ({
@@ -157,13 +163,18 @@ const styles = StyleSheet.create({
 
   pressableOptions: {
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   pressable: (textSize, theme) => ({
-    width: 30,
+    width: 50,
+    height: 50,
+    justifyContent: "center",
     textAlign: "center",
-    marginHorizontal: 10,
+    alignItems: "center",
+    // marginHorizontal: 10,
     borderRadius: 10,
-    padding: 5,
+    padding: 2,
     backgroundColor: textSize ? theme.text : "transparent",
   }),
   row: (theme) => ({
@@ -182,4 +193,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 10,
   }),
+  highlighted: {
+    padding: 5,
+  },
 });

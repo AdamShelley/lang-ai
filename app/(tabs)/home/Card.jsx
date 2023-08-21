@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import useSettingsStore from "../../../state/store";
@@ -27,17 +27,23 @@ const Card = ({ story, width, wide = false }) => {
     [haptics, router]
   );
 
+  const handleLongPress = useCallback(() => {}, []);
+
   return (
-    <TouchableOpacity
+    <Pressable
       style={[
         styles.container(wide),
-        { width: width || 200, backgroundColor: theme.cardColor },
+        {
+          width: width || 200,
+          backgroundColor: wide ? "transparent" : theme.cardColor,
+        },
       ]}
       onPress={() => handlePress(story.gptId)}
+      onLongPress={handleLongPress}
     >
       <CardImage wide={wide} theme={theme} story={story} />
       <CardContent wide={wide} story={story} />
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -50,8 +56,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignSelf: "center",
     height: wide ? 100 : 250,
-    borderRadius: 15,
-    marginTop: 15,
+    borderRadius: wide ? 0 : 10,
+    marginTop: 20,
     overflow: "hidden",
   }),
 });

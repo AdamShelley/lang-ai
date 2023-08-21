@@ -7,11 +7,10 @@ import {
   Platform,
 } from "react-native";
 import React from "react";
-import { FONT, SIZES } from "../../constants";
+import { FONT, SIZES } from "../../constants/";
 import { Stack } from "expo-router";
 import { version } from "../../package.json";
 import useStoriesStore from "../../state/storiesStore";
-import useDictionaryStore from "../../state/dictionaryStore";
 
 const user = () => {
   const stories = useStoriesStore((state) => state.stories);
@@ -40,6 +39,9 @@ const user = () => {
 
         <Text style={styles.label}>App Version:</Text>
         <Text style={styles.value}>{version}</Text>
+
+        <Text style={styles.label}>Language:</Text>
+        <Text style={styles.value}>Simplified Chinese 中文 </Text>
 
         <Text style={styles.label}>No. of Stories</Text>
         <Text style={styles.value}>{stories.length}</Text>
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
   },
   value: {
     color: "#fff",
-    fontFamily: FONT.regular,
+    fontFamily: FONT.medium,
     fontSize: SIZES.medium,
     marginBottom: 20,
   },

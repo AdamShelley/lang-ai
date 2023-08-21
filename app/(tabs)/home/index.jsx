@@ -10,7 +10,7 @@ import {
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Feather } from "@expo/vector-icons";
-import { FONT } from "../../../constants/fonts";
+import { FONT, SIZES } from "../../../constants";
 import { darkTheme, lightTheme } from "../../../constants/theme";
 import Recommended from "./Recommended";
 import AllStories from "./AllStories";
@@ -20,7 +20,7 @@ import useStoriesStore from "../../../state/storiesStore";
 import useSettingsStore from "../../../state/store";
 import OnboardingOverlay from "./OnboardingOverlay";
 
-const HEADER_HEIGHT = Platform.OS === "android" ? 50 : 44;
+const HEADER_HEIGHT = Platform.OS === "android" ? 20 : 44;
 
 const home = () => {
   const router = useRouter();
@@ -112,21 +112,22 @@ const styles = StyleSheet.create({
   title: (theme) => ({
     paddingTop: 40,
     fontFamily: FONT.medium,
-    fontSize: 30,
+    fontSize: SIZES.xLarge,
     fontWeight: 100,
     fontWeight: "medium",
     color: theme.text,
     paddingHorizontal: 20,
   }),
   circle: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 30,
     backgroundColor: "#474750",
     alignItems: "center",
     justifyContent: "center",
+    alignSelf: "center",
     marginRight: 20,
-    marginTop: 30,
+    marginTop: 40,
   },
   text: (theme) => ({
     color: theme.text,

@@ -1,4 +1,5 @@
 const SIZES = {
+  xSmall: 10,
   small: 12,
   regular: 14,
   medium: 16,

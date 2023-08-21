@@ -65,11 +65,12 @@ export default () => {
 const styles = StyleSheet.create({
   container: (overlay) => ({
     height: Platform.OS === "ios" ? 70 : 60,
-    backgroundColor: overlay ? "#464646" : "#212121",
+    backgroundColor: overlay ? "#212124" : "#212121",
     alignItems: "center",
     justifyContent: "center",
     borderTopWidth: 0,
     alignSelf: "center",
+
     paddingTop: Platform.OS === "ios" ? 5 : 5,
     paddingBottom: Platform.OS === "ios" ? 20 : 5,
   }),

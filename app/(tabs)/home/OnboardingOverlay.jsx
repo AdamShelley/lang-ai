@@ -17,7 +17,7 @@ const OnboardingOverlay = ({ onClose }) => {
         Welcome to <Text style={styles.langAIText}>LangAI</Text>
       </Text>
 
-      <Text style={styles.normalText}>
+      <Text style={styles.feedbackText}>
         Explore AI-generated stories tailored for different proficiency levels.
       </Text>
 
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.large,
     fontFamily: FONT.bold,
     marginHorizontal: 20,
-    marginTop: 10,
+    marginTop: 20,
     marginBottom: 10,
     textAlign: "center",
   },
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.medium,
     fontFamily: FONT.regular,
     marginHorizontal: 20,
-    marginBottom: 10,
+    margin: 10,
     textAlign: "center",
   },
 
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.medium,
     fontFamily: FONT.regular,
     marginHorizontal: 20,
-    marginTop: 10,
+    marginTop: 20,
     fontStyle: "italic",
   },
 

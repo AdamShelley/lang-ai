@@ -31,10 +31,15 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 ## Versions
 
 
-**0.1.1** (xx/08/2023)
+**0.1.2** (21/08/2023)
+- Making the app look even more beautiful: Revamped the look of the cards.
+- Buttons have more hitSlop/Retention offset to make it easier to press.
+- We think you're gonna love it.
+
+**0.1.1** (18/08/2023)
 - Added a page to see all parts of the series, just click the 'All parts' button at the top.
 - Improved the onboarding experience on the story page. 
-
+ 
 **0.1.0** (17/08/2023)
 - Added Onboarding for the story page.
 
