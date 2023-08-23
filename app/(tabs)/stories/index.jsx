@@ -18,6 +18,7 @@ import useStoriesStore from "../../../state/storiesStore";
 import FilterSection from "./FilterSection";
 import useSettingsStore from "../../../state/store";
 import { darkTheme, lightTheme } from "../../../constants/theme";
+import SkeletonLoader from "./SkeletonLoader";
 
 const HEADER_HEIGHT = Platform.OS === "android" ? 80 : 44;
 const RENDER_OFFSET = Platform.OS === "android" ? 600 : 500;
@@ -31,7 +32,7 @@ const stories = () => {
   // Card width (45%)
   const cardPercentage = 0.49;
   const cardWidth = screenWidth * cardPercentage;
-
+  const isLoaded = useStoriesStore((state) => state.isLoaded);
   const allStories = useStoriesStore((state) => state.stories);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
@@ -74,8 +75,7 @@ const stories = () => {
         // const isEvenIndex = index % 2 === 0;
 
         dim.width = screenWidth / numOfColumns;
-        dim.height =
-          Platform.OS === "ios" ? cardWidth * 1.58 : cardWidth * 1.51;
+        dim.height = Platform.OS === "ios" ? cardWidth * 1.6 : cardWidth * 1.6;
       } else {
         dim.width = 0;
         dim.height = 0;
@@ -90,6 +90,21 @@ const stories = () => {
     );
   }, [filteredStories]);
 
+  // Skeleton for background loading
+  const skeletonDataProvider = new DataProvider(
+    (r1, r2) => r1 !== r2
+  ).cloneWithRows(new Array(6).fill(null));
+
+  const skeletonLayoutProvider = new LayoutProvider(
+    () => {
+      return 0;
+    },
+    (type, dim, index) => {
+      dim.width = screenWidth / numOfColumns;
+      dim.height = Platform.OS === "ios" ? cardWidth * 1.2 : cardWidth * 1.2;
+    }
+  );
+
   return (
     <SafeAreaView style={styles.container(theme)}>
       <StatusBar style={isDarkMode ? "light" : "dark"} />
@@ -103,23 +118,23 @@ const stories = () => {
       />
 
       <View>
-        {filteredStories && filteredStories.length > 0 ? (
-          <RecyclerListView
-            layoutProvider={layoutProvider}
-            dataProvider={dataProvider}
-            rowRenderer={(type, data) => (
+        <RecyclerListView
+          layoutProvider={isLoaded ? layoutProvider : skeletonLayoutProvider}
+          dataProvider={isLoaded ? dataProvider : skeletonDataProvider}
+          rowRenderer={(type, data) =>
+            isLoaded ? (
               <StoryCard story={data} width={cardWidth} key={data.gptId} />
-            )}
-            contentContainerStyle={{
-              marginTop: 5,
-              paddingBottom: 100,
-            }}
-            renderAheadOffset={RENDER_OFFSET}
-            renderFooter={() => <View style={{ paddingVertical: 0 }} />}
-          />
-        ) : (
-          <Text style={{ color: "white" }}>No items to display</Text>
-        )}
+            ) : (
+              <SkeletonLoader width={cardWidth} />
+            )
+          }
+          contentContainerStyle={{
+            marginTop: 5,
+            paddingBottom: 100,
+          }}
+          renderAheadOffset={RENDER_OFFSET}
+          renderFooter={() => <View style={{ paddingVertical: 0 }} />}
+        />
       </View>
     </SafeAreaView>
   );

@@ -83,13 +83,15 @@ const Vote = () => {
                 />
 
                 {/* Show 3 options if not submitted/Or the option the user picked */}
-                <VoteOptions
-                  theme={theme}
-                  story={story}
-                  handleOptionChoice={handleOptionChoice}
-                  submitted={submitted}
-                  selectedOption={selectedOption}
-                />
+                {timeLeft && (
+                  <VoteOptions
+                    theme={theme}
+                    story={story}
+                    handleOptionChoice={handleOptionChoice}
+                    submitted={submitted}
+                    selectedOption={selectedOption}
+                  />
+                )}
               </View>
 
               <VoteFooter

@@ -3,15 +3,10 @@ import { FONT } from "../../constants/fonts";
 import { SIZES } from "../../constants";
 
 const FullTranslationBox = ({ theme, translation }) => (
-  <View
-    style={{
-      height: "30%",
-      paddingHorizontal: 2,
-    }}
-  >
+  <View style={styles.container}>
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.translationText(theme, false)}
+      contentContainerStyle={styles.translationText(theme)}
     >
       <Text style={styles.translation(theme)}>{translation}</Text>
     </ScrollView>
@@ -21,33 +16,36 @@ const FullTranslationBox = ({ theme, translation }) => (
 export default FullTranslationBox;
 
 const styles = StyleSheet.create({
-  translationText: (theme, hidden) => ({
+  container: {
+    // flex: 1,
+    padidngHorizontal: 20,
+    paddingBottom: 10,
+    justifyContent: "flex-end",
+    height: "30%",
+    width: "90%",
+    alignSelf: "center",
+  },
+  translationText: (theme) => ({
     padding: 20,
-    color: "black",
-    fontFamily: FONT.medium,
-    marginBottom: 20,
-    textAlign: hidden ? "center" : "justify",
     backgroundColor: theme.headerBackground,
-    borderRadius: 10,
+    borderRadius: 15,
     borderWidth: 1,
-    borderColor: theme.text,
-
-    // Shadow
+    borderColor: "#343434",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 3,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    elevation: 6,
   }),
 
   translation: (theme) => ({
     fontSize: SIZES.medium,
     color: theme.text,
     textAlign: "justify",
-    lineHeight: 30,
+    lineHeight: 28,
+    fontFamily: FONT.regular,
   }),
 });

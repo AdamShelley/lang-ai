@@ -55,9 +55,10 @@ const Series = () => {
             {series &&
               series.map((story) => (
                 <StoryCard
+                  series
                   key={story.gptId}
                   story={story}
-                  width={"95%"}
+                  width={"80%"}
                   onPress={() =>
                     navigation.navigate("Story", { id: story.gptId })
                   }

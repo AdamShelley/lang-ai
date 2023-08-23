@@ -31,6 +31,11 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 ## Versions
 
 
+**0.1.3** (**/08/2023)
+- Improved the visuals of the Stories tab, to align with the styles on the home page.
+- Updated visuals for the Genre/Level filters and the Story Full Translation box.
+- It's our best app yet.
+
 **0.1.2** (21/08/2023)
 - Making the app look even more beautiful: Revamped the look of the cards.
 - Buttons have more hitSlop/Retention offset to make it easier to press.

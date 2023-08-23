@@ -4,22 +4,26 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
   Platform,
+  Pressable,
 } from "react-native";
-import { FONT, DEFAULT_IMAGE } from "../../../constants";
+import { FONT, DEFAULT_IMAGE, SIZES } from "../../../constants";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import useSettingsStore from "../../../state/store";
-
+import { AntDesign } from "@expo/vector-icons";
 import { darkTheme, lightTheme } from "../../../constants/theme";
+import ContextMenu from "../../../components/ContextMenu";
 
-const Card = ({ story, width }) => {
+const Card = ({ story, width, series }) => {
   const router = useRouter();
   const haptics = useSettingsStore((state) => state.haptics);
   const [imageUrl, setImageUrl] = useState(story?.imageUrl || DEFAULT_IMAGE);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
+
+  const [contextMenu, setContextMenu] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const handlePress = useCallback(() => {
     if (Platform.OS === "ios") {
@@ -35,12 +39,34 @@ const Card = ({ story, width }) => {
     setImageUrl(DEFAULT_IMAGE);
   }, []);
 
+  const handleLongPress = (event) => {
+    const touchableX = event.nativeEvent.locationX;
+    const touchableY = event.nativeEvent.locationY;
+
+    setPosition({ x: touchableX, y: touchableY });
+    setContextMenu(true);
+  };
+
   return (
-    <TouchableOpacity
-      style={styles.container(width, theme)}
+    <Pressable
+      style={[
+        styles.container(width, theme),
+        {
+          height: series ? 250 : 300,
+        },
+      ]}
       onPress={handlePress}
+      onLongPress={handleLongPress}
+      onPressOut={() => setContextMenu(false)}
     >
-      <View style={styles.imageContainer()}>
+      <View
+        style={[
+          styles.imageContainer,
+          {
+            width: series ? "100%" : "90%",
+          },
+        ]}
+      >
         <View style={{ alignSelf: "stretch" }}>
           <Image
             source={{
@@ -48,26 +74,12 @@ const Card = ({ story, width }) => {
             }}
             onError={handleImageError}
             key={story.imageUrl}
-            style={styles.image()}
+            style={styles.image}
             alt="story-image"
           />
-          <View style={styles.overlay} />
-
-          {story.read && (
-            <View style={styles.read}>
-              <Text style={[styles.levelText(theme), { color: "#eee" }]}>
-                Read
-              </Text>
-            </View>
-          )}
-          <View style={styles.level}>
-            <Text style={styles.levelText(theme)}>
-              {story.level || "Unknown"}
-            </Text>
-          </View>
         </View>
       </View>
-      <View style={styles.bottomSection()}>
+      <View style={styles.bottomSection}>
         <Text style={styles.text(theme)} numberOfLines={3} ellipsizeMode="tail">
           {story.title} {story.part > 1 ? `Part ${story.part}` : ""}
         </Text>
@@ -75,8 +87,31 @@ const Card = ({ story, width }) => {
         <Text style={styles.smallText(theme)} numberOfLines={3}>
           {story.synopsis}
         </Text>
+
+        <View style={styles.infoText}>
+          <Text style={styles.levelText(theme)}>
+            {story.level || "Unknown"}
+          </Text>
+          <Text style={styles.levelText(theme)}>
+            {story.topic || "Unknown"}
+          </Text>
+          {story.read && (
+            <View style={styles.read}>
+              <AntDesign
+                name="checkcircle"
+                size={12}
+                color="#eee"
+                style={{ marginRight: 1, padding: 2 }}
+              />
+              <Text style={[styles.levelText(theme), { color: "#eee" }]}>
+                Read
+              </Text>
+            </View>
+          )}
+        </View>
       </View>
-    </TouchableOpacity>
+      {/* {contextMenu && <ContextMenu position={position} />} */}
+    </Pressable>
   );
 };
 
@@ -84,128 +119,107 @@ export default Card;
 
 const styles = StyleSheet.create({
   container: (width, theme) => ({
-    backgroundColor: theme.cardColor,
+    backgroundColor: "transparent",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignSelf: "center",
     width: width ? width : 200,
-    // width: "100%",
     height: 300,
-    minHeight: 300,
-    borderRadius: 2,
-    marginTop: 15,
-    shadowColor: "#1a1a1a",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 20,
-    elevation: 5,
+    minHeight: 200,
+    marginTop: 20,
+    paddingHorizontal: 5,
   }),
-  imageContainer: () => ({
-    // marginTop: 5,
-    width: "100%",
-    minWidth: 10,
+  imageContainer: {
+    width: "90%",
     height: "50%",
+    minWidth: 10,
     borderTopRightRadius: 2,
     borderTopLeftRadius: 2,
-    overflow: "hidden",
     position: "relative",
-    backgroundColor: "#000",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.75,
-    shadowRadius: 50,
-    elevation: 5,
-  }),
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 10,
+    shadowRadius: 5,
+    elevation: 10,
+  },
 
-  image: () => ({
+  image: {
     height: "100%",
     width: "100%",
     resizeMode: "cover",
     alignSelf: "center",
-  }),
-  overlay: {
-    position: "absolute",
-    backgroundColor: "transparent",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 10,
-    elevation: 10,
+    borderRadius: 5,
   },
-  bottomSection: () => ({
+
+  bottomSection: {
+    width: "90%",
     height: "50%",
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "flex-start",
     alignSelf: "stretch",
     overflow: "hidden",
-    padding: 10,
-  }),
+    // padding: 10,
+    margin: 10,
+  },
   text: (theme) => ({
     color: theme.text,
-    fontSize: 16,
+    fontSize: SIZES.regular,
     lineHeight: 20,
     fontWeight: 400,
     fontFamily: FONT.bold,
-    marginTop: 10,
+    // marginTop: 0,
     alignSelf: "flex-start",
     flexWrap: "wrap",
-    paddingHorizontal: 10,
-  }),
-  level: {
-    padding: 10,
-    backgroundColor: "#eee",
-    borderRadius: 50,
-    borderWidth: 0,
-    borderColor: "#313131",
-    position: "absolute",
-    top: 5,
-    left: "5%",
-    right: "60%",
-    textAlign: "center",
-    alignSelf: "center",
-    shadowColor: "rgba(0,0,0,0.9)",
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 5,
-  },
-  read: {
-    padding: 10,
-    backgroundColor: "#344332",
-    borderRadius: 50,
-    borderWidth: 0,
-    position: "absolute",
-    top: 5,
-    left: "60%",
-    right: "5%",
-    textAlign: "center",
-    alignSelf: "center",
-    shadowColor: "rgba(0,0,0,0.9)",
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 5,
-  },
-  levelText: (theme) => ({
-    color: theme.black,
-    fontSize: 12,
-    fontWeight: 400,
-    fontFamily: FONT.bold,
-    textAlign: "center",
-    alignSelf: "center",
-    textTransform: "uppercase",
-    letterSpacing: 1.5,
+    // paddingHorizontal: 10,
   }),
 
   smallText: (theme) => ({
-    fontSize: 12,
+    fontSize: SIZES.small,
     color: theme.text,
-    marginTop: 10,
+    marginTop: 5,
     fontFamily: FONT.regular,
     fontWeight: 100,
     flexWrap: "wrap",
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     paddingBottom: 10,
     lineHeight: 20,
   }),
+
+  infoText: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  levelText: (theme) => ({
+    color: theme.lighterText,
+    fontSize: SIZES.xSmall,
+    fontFamily: FONT.regular,
+    textAlign: "left",
+    alignSelf: "flex-start",
+    textTransform: "uppercase",
+    marginRight: 5,
+    padding: 3,
+  }),
+
+  read: {
+    padding: 0,
+    backgroundColor: "#344332",
+    borderRadius: 10,
+    borderWidth: 0,
+    textAlign: "center",
+    alignSelf: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    // Box Shadow
+    shadowColor: "rgba(0,0,0,0.9)",
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 5,
+  },
 });

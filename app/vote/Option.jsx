@@ -95,7 +95,7 @@ export const Option = ({
 
   return (
     <Animated.View
-      entering={BounceInDown.delay(300 * index).duration(800)}
+      entering={BounceInDown.delay(500 * index).duration(1000)}
       layout={Layout.springify()}
       style={[opacityStyles, translateStyle, styles.option(theme)]}
       key={index}

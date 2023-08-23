@@ -1,10 +1,10 @@
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { Pressable, Text, StyleSheet } from "react-native";
 import { FONT, SIZES } from "../constants";
 import { Ionicons } from "@expo/vector-icons";
 
 const GenreButton = ({ text, size, color, onPress, deletion }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container(size, color)}>
+    <Pressable onPress={onPress} style={styles.container(size, color)}>
       <Text style={styles.text}>{text}</Text>
       {deletion && (
         <Ionicons
@@ -14,7 +14,7 @@ const GenreButton = ({ text, size, color, onPress, deletion }) => {
           style={{ marginLeft: 10 }}
         />
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -34,6 +34,16 @@ const styles = StyleSheet.create({
     backgroundColor: color,
     borderWidth: 1,
     borderColor: "#ffffff15",
+
+    // Box Shadow
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 6,
   }),
   text: {
     color: "#fff",
