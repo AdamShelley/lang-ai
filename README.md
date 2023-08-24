@@ -31,7 +31,8 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 ## Versions
 
 
-**0.1.3** (**/08/2023)
+**0.1.3** (**Update**/08/2023)
+- Added a Report Issue page for users to report issues with stories.
 - Improved the visuals of the Stories tab, to align with the styles on the home page.
 - Updated visuals for the Genre/Level filters and the Story Full Translation box.
 - It's our best app yet.

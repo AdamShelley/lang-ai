@@ -119,6 +119,7 @@ const Story = () => {
               setShowTranslation={setShowTranslation}
             />
           </View>
+
           {firstTimeReading && <OnboardingOverlay onClose={closeOnboarding} />}
         </>
       )}

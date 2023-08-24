@@ -4,6 +4,7 @@ import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { SIZES } from "../../constants";
 import useSettingsStore from "../../state/store";
 import useDictionaryStore from "../../state/dictionaryStore";
+import { useRouter } from "expo-router";
 
 const WordDisplay = ({
   story,
@@ -17,6 +18,7 @@ const WordDisplay = ({
   setWordDef,
   goToVotePage,
 }) => {
+  const router = useRouter();
   const textSize = useSettingsStore((state) => state.textSize);
   const dictionary = useDictionaryStore((state) => state.words);
   // Choose padding required for text size
@@ -27,6 +29,11 @@ const WordDisplay = ({
   };
 
   const paddingSize = paddingMapping[textSize] || 17;
+
+  // Route to report page
+  const handleReportPress = () => {
+    router.push(`/report/${story.gptId}`);
+  };
 
   return (
     <ScrollView horizontal={false} contentContainerStyle={styles.wordWrapper}>
@@ -103,6 +110,21 @@ const WordDisplay = ({
           )}
         </Pressable>
       )}
+
+      {/* Button to go to report problem page */}
+      <Pressable onPress={handleReportPress}>
+        <Text
+          style={{
+            color: theme.text,
+            fontFamily: FONT.medium,
+            fontSize: 16,
+            textAlign: "center",
+            marginTop: 20,
+          }}
+        >
+          Report a problem
+        </Text>
+      </Pressable>
     </ScrollView>
   );
 };

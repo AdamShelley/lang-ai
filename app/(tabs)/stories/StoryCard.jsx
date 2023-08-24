@@ -13,7 +13,6 @@ import * as Haptics from "expo-haptics";
 import useSettingsStore from "../../../state/store";
 import { AntDesign } from "@expo/vector-icons";
 import { darkTheme, lightTheme } from "../../../constants/theme";
-import ContextMenu from "../../../components/ContextMenu";
 
 const Card = ({ story, width, series }) => {
   const router = useRouter();
@@ -21,9 +20,6 @@ const Card = ({ story, width, series }) => {
   const [imageUrl, setImageUrl] = useState(story?.imageUrl || DEFAULT_IMAGE);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const theme = isDarkMode ? darkTheme : lightTheme;
-
-  const [contextMenu, setContextMenu] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const handlePress = useCallback(() => {
     if (Platform.OS === "ios") {
@@ -39,14 +35,6 @@ const Card = ({ story, width, series }) => {
     setImageUrl(DEFAULT_IMAGE);
   }, []);
 
-  const handleLongPress = (event) => {
-    const touchableX = event.nativeEvent.locationX;
-    const touchableY = event.nativeEvent.locationY;
-
-    setPosition({ x: touchableX, y: touchableY });
-    setContextMenu(true);
-  };
-
   return (
     <Pressable
       style={[
@@ -56,8 +44,6 @@ const Card = ({ story, width, series }) => {
         },
       ]}
       onPress={handlePress}
-      onLongPress={handleLongPress}
-      onPressOut={() => setContextMenu(false)}
     >
       <View
         style={[
@@ -110,7 +96,6 @@ const Card = ({ story, width, series }) => {
           )}
         </View>
       </View>
-      {/* {contextMenu && <ContextMenu position={position} />} */}
     </Pressable>
   );
 };
