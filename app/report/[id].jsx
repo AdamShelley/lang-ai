@@ -1,3 +1,4 @@
+import { LIVE_URL } from "@env";
 import {
   SafeAreaView,
   ScrollView,
@@ -12,7 +13,6 @@ import {
 import { useState } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import useSettingsStore from "../../state/store";
-import useStoriesStore from "../../state/storiesStore";
 import { darkTheme, lightTheme } from "../../constants/theme";
 import { SIZES, FONT } from "../../constants";
 import Checkbox from "expo-checkbox";
@@ -44,9 +44,23 @@ const Report = () => {
     };
 
     // Submit to API
-    console.log(issue);
+    sendIssueToDB(issue);
 
     setReportSubmitted(true);
+  };
+
+  const sendIssueToDB = async (issue) => {
+    try {
+      await fetch(`${LIVE_URL}/issues`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(issue),
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const goHomeButton = () => {
