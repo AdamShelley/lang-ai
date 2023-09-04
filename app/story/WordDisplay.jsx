@@ -112,14 +112,15 @@ const WordDisplay = ({
       )}
 
       {/* Button to go to report problem page */}
-      <Pressable onPress={handleReportPress}>
+      <Pressable onPress={handleReportPress} style={{ width: "100%" }}>
         <Text
           style={{
             color: theme.text,
             fontFamily: FONT.medium,
             fontSize: 16,
-            textAlign: "center",
-            marginTop: 20,
+            textAlign: "left",
+            marginTop: 10,
+            color: "#FFA500",
           }}
         >
           Report a problem
@@ -133,7 +134,7 @@ export default WordDisplay;
 
 const styles = StyleSheet.create({
   wordWrapper: {
-    width: "95%",
+    width: "100%",
     marginTop: 10,
     paddingBottom: 100,
     flexDirection: "row",
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 100,
-    marginBottom: 20,
+    // marginBottom: 20,
     borderRadius: 5,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },

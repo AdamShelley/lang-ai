@@ -38,6 +38,11 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 ## Versions
 
 
+
+**0.1.4** (xx/08/2023)
+- Improved the way the backend fetches data, fetching should now only get the stories missing on your device.
+
+
 **0.1.3** (24/08/2023)
 - Added a Report Issue page for users to report issues with stories.
 - Improved the visuals of the Stories tab, to align with the styles on the home page.

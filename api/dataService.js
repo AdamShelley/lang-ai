@@ -52,17 +52,37 @@ export const fetchDataFromServer = async (
   }
 
   console.log(`FETCHING ${storageKey} FROM SERVER`);
-  return await fetchAndUpdateData(endpoint, storageKey, lastUpdateKey);
+  return await fetchAndUpdateData(
+    endpoint,
+    storageKey,
+    lastUpdateKey,
+    lastUpdate
+  );
 };
 
 // Fetch Data from Server
-const fetchAndUpdateData = async (endpoint, storageKey, lastUpdateKey) => {
+const fetchAndUpdateData = async (
+  endpoint,
+  storageKey,
+  lastUpdateKey,
+  lastUpdate
+) => {
   try {
-    const response = await fetch(`${LIVE_URL}/${endpoint}`);
+    const url =
+      endpoint === "stories"
+        ? `${LIVE_URL}/${endpoint}?lastUpdate=${lastUpdate}`
+        : `${LIVE_URL}/${endpoint}`;
+
+    const response = await fetch(url);
+
     const data = await response.json();
 
+    // Merge data from server with existing data
+    const existingData = await getDataFromStorage(storageKey);
+    const mergedData = { ...existingData, ...data };
+
     // Save to Async Storage
-    await updateLocalStorage(storageKey, data);
+    await updateLocalStorage(storageKey, mergedData);
     await updateLocalStorage(lastUpdateKey, getTimestamp().toString());
     return data;
   } catch (error) {

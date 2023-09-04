@@ -1,4 +1,4 @@
-import { LIVE_URL } from "@env";
+import { LIVE_URL, URL_DEV } from "@env";
 import {
   SafeAreaView,
   ScrollView,
@@ -51,7 +51,7 @@ const Report = () => {
 
   const sendIssueToDB = async (issue) => {
     try {
-      await fetch(`${LIVE_URL}/issues`, {
+      await fetch(`${LIVE_URL}/issue`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
