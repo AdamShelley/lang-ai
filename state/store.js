@@ -17,6 +17,9 @@ const useSettingsStore = create(
       setTextSize: (textSize) => set({ textSize: textSize }),
       isDarkMode: true,
       toggleTheme: () => set({ isDarkMode: !get().isDarkMode }),
+      hideReadStories: false,
+      setHideReadStories: () =>
+        set({ hideReadStories: !get().hideReadStories }),
     }),
     {
       name: "settings-storage",

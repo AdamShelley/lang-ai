@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import Filter from "../../../components/Filter";
 import GenreButton from "../../../components/GenreButton";
+import { Pressable } from "react-native";
 
 const ALL = "All";
 const UNKNOWN = "Unknown";
@@ -38,12 +39,15 @@ const filterAndMapValues = (allStories, selectedGenre, selectedLevel, type) => {
     )
   );
 };
+
 const FilterSection = ({
   selectedGenre,
   selectedLevel,
   setSelectedGenre,
   setSelectedLevel,
   allStories,
+  hideRead,
+  setHideRead,
 }) => {
   const [showGenres, setShowGenre] = useState(false);
   const [showLevels, setShowLevels] = useState(false);
@@ -73,6 +77,7 @@ const FilterSection = ({
             }}
           />
         )}
+
         {selectedLevel && selectedLevel !== "All" && (
           <GenreButton
             text={`${selectedLevel}`}
@@ -96,6 +101,7 @@ const FilterSection = ({
             setShowLevels(false);
           }}
         />
+
         <Filter
           text={"Select Level"}
           color="#fff"

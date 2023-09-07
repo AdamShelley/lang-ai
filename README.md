@@ -41,6 +41,7 @@ Download the WIP .apk from my website [adamshelley.com/projects/wip/Langai](http
 
 **0.1.4** (xx/08/2023)
 - Improved the way the backend fetches data, fetching should now only get the stories missing on your device.
+- Added a new filter button to hide/show read stories
 
 
 **0.1.3** (24/08/2023)

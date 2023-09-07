@@ -5,7 +5,6 @@ import {
   Dimensions,
   SafeAreaView,
   StatusBar,
-  Text,
   Platform,
 } from "react-native";
 import {
@@ -27,6 +26,9 @@ const stories = () => {
   // State
   const [selectedGenre, setSelectedGenre] = useState("All");
   const [selectedLevel, setSelectedLevel] = useState("All");
+
+  const hideReadStories = useSettingsStore((state) => state.hideReadStories);
+
   // Screen Width
   const screenWidth = Dimensions.get("window").width;
   // Card width (45%)
@@ -60,8 +62,12 @@ const stories = () => {
       );
     }
 
+    if (hideReadStories) {
+      result = result.filter((story) => !story.read);
+    }
+
     return result;
-  }, [selectedGenre, selectedLevel, allStories]);
+  }, [selectedGenre, selectedLevel, allStories, hideReadStories]);
 
   // LayoutProvider for RecyclerListView
   const numOfColumns = 2;
