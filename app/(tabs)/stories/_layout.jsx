@@ -7,6 +7,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 const StackLayout = () => {
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
 
+  const hideReadStories = useSettingsStore((state) => state.hideReadStories);
   const setHideReadStories = useSettingsStore(
     (state) => state.setHideReadStories
   );
@@ -45,7 +46,7 @@ const StackLayout = () => {
             >
               <TouchableOpacity onPress={setHideReadStories}>
                 <Text style={{ fontSize: SIZES.small, color: "#fff" }}>
-                  Hide Read
+                  {hideReadStories ? "Show" : "Hide"} Read
                 </Text>
               </TouchableOpacity>
             </View>

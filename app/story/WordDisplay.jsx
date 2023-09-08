@@ -112,7 +112,10 @@ const WordDisplay = ({
       )}
 
       {/* Button to go to report problem page */}
-      <Pressable onPress={handleReportPress} style={{ width: "100%" }}>
+      <Pressable
+        onPress={handleReportPress}
+        style={{ width: "100%", marginTop: 100 }}
+      >
         <Text
           style={{
             color: theme.text,
