@@ -112,23 +112,23 @@ const WordDisplay = ({
       )}
 
       {/* Button to go to report problem page */}
-      <Pressable
-        onPress={handleReportPress}
-        style={{ width: "100%", marginTop: 100 }}
-      >
-        <Text
-          style={{
-            color: theme.text,
-            fontFamily: FONT.medium,
-            fontSize: 16,
-            textAlign: "left",
-            marginTop: 10,
-            color: "#FFA500",
-          }}
-        >
-          Report a problem
-        </Text>
-      </Pressable>
+
+      <View style={{ width: "100%", marginTop: 50 }}>
+        <Pressable onPress={handleReportPress} style={{ width: "100%" }}>
+          <Text
+            style={{
+              color: theme.text,
+              fontFamily: FONT.medium,
+              fontSize: 16,
+              textAlign: "left",
+              marginTop: 10,
+              color: "#FFA500",
+            }}
+          >
+            Report a problem
+          </Text>
+        </Pressable>
+      </View>
     </ScrollView>
   );
 };

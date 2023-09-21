@@ -10,12 +10,13 @@ import {
   TextInput,
   Pressable,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import useSettingsStore from "../../state/store";
 import { darkTheme, lightTheme } from "../../constants/theme";
 import { SIZES, FONT } from "../../constants";
 import Checkbox from "expo-checkbox";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Report = () => {
   const { id } = useLocalSearchParams();
@@ -32,21 +33,49 @@ const Report = () => {
   const [other, setOther] = useState(false);
   const [comments, setComments] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Issue Object
-    const issue = {
-      spelling,
-      translation,
-      inappropriateContent,
-      other,
-      comments,
-      id,
-    };
 
-    // Submit to API
-    sendIssueToDB(issue);
+    if (!reportSubmitted) {
+      console.log("submitting new report");
 
-    setReportSubmitted(true);
+      const issue = {
+        spelling,
+        translation,
+        inappropriateContent,
+        other,
+        comments,
+        id,
+      };
+
+      // Submit to API
+      sendIssueToDB(issue);
+
+      setReportSubmitted(true);
+    } else {
+      console.log("Report already submitted");
+      setReportSubmitted(true);
+    }
+  };
+
+  const updateReportedStoriesInAsyncStorage = async (storyId) => {
+    try {
+      const reportedStories = await AsyncStorage.getItem("reportedStories");
+      let stories = reportedStories ? JSON.parse(reportedStories) : [];
+
+      // Check if the story has already been reported
+      if (stories.includes(storyId)) {
+        // Story already reported, do not proceed
+        return false;
+      }
+
+      stories.push(storyId);
+
+      await AsyncStorage.setItem("reportedStories", JSON.stringify(stories));
+      return true;
+    } catch (error) {
+      console.log("Failed to updated reported stories", error);
+    }
   };
 
   const sendIssueToDB = async (issue) => {
@@ -66,6 +95,19 @@ const Report = () => {
   const goHomeButton = () => {
     router.push("/");
   };
+
+  useEffect(() => {
+    const checkReported = async () => {
+      const canReport = await updateReportedStoriesInAsyncStorage(id);
+      if (!canReport) {
+        setReportSubmitted(true);
+      } else {
+        setReportSubmitted(false);
+      }
+    };
+
+    checkReported();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container(theme)}>
