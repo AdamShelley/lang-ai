@@ -74,6 +74,11 @@ const WordDisplay = ({
           </View>
         </Pressable>
       ))}
+      {story.options && !story.vote_finished && story.part < 10 && (
+        <View style={styles.textWrapper(showPinyin, theme, paddingSize)}>
+          <Text style={styles.text(fontSize, theme)}>To be continued.</Text>
+        </View>
+      )}
 
       {story.options && !story.vote_finished && (
         <Pressable onPress={goToVotePage} style={styles.voteButton(theme)}>
@@ -110,9 +115,7 @@ const WordDisplay = ({
           )}
         </Pressable>
       )}
-
       {/* Button to go to report problem page */}
-
       <View style={{ width: "100%", marginTop: 50 }}>
         <Pressable onPress={handleReportPress} style={{ width: "100%" }}>
           <Text
