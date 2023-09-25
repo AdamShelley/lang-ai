@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: "flex-start",
-    marginTop: 80,
-    paddingHorizontal: 50,
+    marginTop: Platform.OS === "ios" ? 40 : 80,
+    paddingHorizontal: 30,
   },
 
   label: {

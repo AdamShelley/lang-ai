@@ -5,7 +5,6 @@ import {
   StatusBar,
   Text,
   Switch,
-  TouchableOpacity,
   Pressable,
   Platform,
 } from "react-native";
@@ -37,6 +36,24 @@ const SettingsHeader = ({ title }) => (
   <Text style={styles.headerText}>{title}</Text>
 );
 
+const LanguageButton = ({
+  langCode,
+  displayName,
+  isSelected,
+  onSelect,
+  theme,
+}) => (
+  <Pressable
+    style={[
+      styles.languageButtonContainer(isSelected, theme),
+      isSelected ? styles.highlighted(theme) : {},
+    ]}
+    onPress={() => onSelect(langCode)}
+  >
+    <Text style={styles.languageButton(isSelected, theme)}>{displayName}</Text>
+  </Pressable>
+);
+
 const settings = () => {
   const haptics = useSettingsStore((state) => state.haptics);
   const setHaptics = useSettingsStore((state) => state.setHaptics);
@@ -46,6 +63,9 @@ const settings = () => {
   const setTextSize = useSettingsStore((state) => state.setTextSize);
   const isDarkMode = useSettingsStore((state) => state.isDarkMode);
   const toggleTheme = useSettingsStore((state) => state.toggleTheme);
+  const language = useSettingsStore((state) => state.language);
+  const setLanguage = useSettingsStore((state) => state.setLanguage);
+
   const router = useRouter();
   const theme = isDarkMode ? darkTheme : lightTheme;
 
@@ -102,6 +122,33 @@ const settings = () => {
           </View>
         </View>
 
+        <SettingsHeader title="Languages" />
+
+        <View style={styles.languageContainer}>
+          <LanguageButton
+            langCode="zh"
+            displayName="Chinese (Simplified)"
+            isSelected={language === "zh"}
+            onSelect={setLanguage}
+            theme={theme}
+          />
+          <LanguageButton
+            langCode="de"
+            displayName="German"
+            isSelected={language === "de"}
+            onSelect={setLanguage}
+            theme={theme}
+          />
+          <LanguageButton
+            langCode="la"
+            displayName="Latin"
+            isSelected={language === "la"}
+            onSelect={setLanguage}
+            theme={theme}
+          />
+          {/* Add more LanguageButton components as needed */}
+        </View>
+
         <SettingsHeader title="About & Dev" />
         <View style={styles.row(theme)}>
           <Pressable onPress={() => router.push("/about")}>
@@ -110,9 +157,9 @@ const settings = () => {
         </View>
 
         <View style={styles.row(theme)}>
-          <TouchableOpacity onPress={clearAll}>
+          <Pressable onPress={clearAll}>
             <Text style={styles.text(theme)}>Clear Cache</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </SafeAreaView>
@@ -193,7 +240,25 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 10,
   }),
-  highlighted: {
-    padding: 5,
-  },
+  languageButtonContainer: (isSelected, theme) => ({
+    backgroundColor: isSelected ? "#D1E8E2" : "#F4F4F4",
+    borderRadius: 10,
+    padding: 10,
+    margin: 5,
+  }),
+  highlighted: (theme) => ({
+    borderWidth: 2,
+    borderColor: theme.text,
+    padding: 8,
+  }),
+  languageButtonContainer: (isSelected, theme) => ({
+    backgroundColor: isSelected ? theme.text : theme.settingRow,
+    borderRadius: 10,
+    padding: 10,
+    margin: 5,
+  }),
+  languageButton: (isSelected, theme) => ({
+    color: isSelected ? theme.background : theme.text,
+    fontFamily: FONT.bold,
+  }),
 });

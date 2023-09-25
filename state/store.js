@@ -5,6 +5,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const useSettingsStore = create(
   persist(
     (set, get) => ({
+      language: "zh",
+      setLanguage: (language) => set({ language: language }),
       hasSeenOverlay: false,
       setHasSeenOverlay: () => set({ hasSeenOverlay: true }),
       showStoryOnboarding: true,
