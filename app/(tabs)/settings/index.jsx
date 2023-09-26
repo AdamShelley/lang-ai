@@ -7,15 +7,16 @@ import {
   Switch,
   Pressable,
   Platform,
+  ScrollView,
 } from "react-native";
 import { FONT, SIZES } from "../../../constants";
 import useSettingsStore from "../../../state/store";
 import { darkTheme, lightTheme } from "../../../constants/theme";
 import { useRouter } from "expo-router";
+import { languages } from "../../../constants/languages";
 
 // Dev
 import { clearAll } from "../../../utils/devFunctions";
-
 const HEADER_HEIGHT = Platform.OS === "android" ? 56 : 44;
 
 const SettingsRow = ({ label, value, onValueChange, theme }) => (
@@ -55,16 +56,29 @@ const LanguageButton = ({
 );
 
 const settings = () => {
-  const haptics = useSettingsStore((state) => state.haptics);
-  const setHaptics = useSettingsStore((state) => state.setHaptics);
-  const pinyin = useSettingsStore((state) => state.pinyin);
-  const setPinyin = useSettingsStore((state) => state.setPinyin);
-  const textSize = useSettingsStore((state) => state.textSize);
-  const setTextSize = useSettingsStore((state) => state.setTextSize);
-  const isDarkMode = useSettingsStore((state) => state.isDarkMode);
-  const toggleTheme = useSettingsStore((state) => state.toggleTheme);
-  const language = useSettingsStore((state) => state.language);
-  const setLanguage = useSettingsStore((state) => state.setLanguage);
+  const {
+    haptics,
+    setHaptics,
+    pinyin,
+    setPinyin,
+    textSize,
+    setTextSize,
+    isDarkMode,
+    toggleTheme,
+    language,
+    setLanguage,
+  } = useSettingsStore((state) => ({
+    haptics: state.haptics,
+    setHaptics: state.setHaptics,
+    pinyin: state.pinyin,
+    setPinyin: state.setPinyin,
+    textSize: state.textSize,
+    setTextSize: state.setTextSize,
+    isDarkMode: state.isDarkMode,
+    toggleTheme: state.toggleTheme,
+    language: state.language,
+    setLanguage: state.setLanguage,
+  }));
 
   const router = useRouter();
   const theme = isDarkMode ? darkTheme : lightTheme;
@@ -90,7 +104,11 @@ const settings = () => {
     <SafeAreaView style={styles.container(theme)}>
       <StatusBar style={isDarkMode ? "dark" : "light"} />
 
-      <View style={styles.wrapper}>
+      <ScrollView
+        style={styles.wrapper}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
         <SettingsHeader title="Preferences" />
 
         <SettingsRow
@@ -125,28 +143,16 @@ const settings = () => {
         <SettingsHeader title="Languages" />
 
         <View style={styles.languageContainer}>
-          <LanguageButton
-            langCode="zh"
-            displayName="Chinese (Simplified)"
-            isSelected={language === "zh"}
-            onSelect={setLanguage}
-            theme={theme}
-          />
-          <LanguageButton
-            langCode="de"
-            displayName="German"
-            isSelected={language === "de"}
-            onSelect={setLanguage}
-            theme={theme}
-          />
-          <LanguageButton
-            langCode="la"
-            displayName="Latin"
-            isSelected={language === "la"}
-            onSelect={setLanguage}
-            theme={theme}
-          />
-          {/* Add more LanguageButton components as needed */}
+          {languages.map((lang) => (
+            <LanguageButton
+              key={lang.langCode}
+              langCode={lang.langCode}
+              displayName={lang.displayName}
+              isSelected={language === lang.langCode}
+              onSelect={setLanguage}
+              theme={theme}
+            />
+          ))}
         </View>
 
         <SettingsHeader title="About & Dev" />
@@ -161,7 +167,7 @@ const settings = () => {
             <Text style={styles.text(theme)}>Clear Cache</Text>
           </Pressable>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -179,8 +185,9 @@ const styles = StyleSheet.create({
   }),
   wrapper: {
     flex: 1,
-    marginTop: 50,
-    width: "80%",
+    // marginTop: 50,
+    width: "100%",
+    paddingHorizontal: 40,
   },
   headerText: {
     fontSize: 16,
@@ -256,6 +263,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     margin: 5,
+    height: 50,
+    maxHeight: 50,
+    justifyContent: "center",
+    paddingHorizontal: 20,
   }),
   languageButton: (isSelected, theme) => ({
     color: isSelected ? theme.background : theme.text,

@@ -62,6 +62,8 @@ const Story = () => {
     }
   }, [id, stories]);
 
+  console.log(story);
+
   return (
     <SafeAreaView style={styles.container(theme)}>
       <StatusBar style="dark" />
