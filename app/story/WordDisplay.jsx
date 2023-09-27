@@ -76,7 +76,18 @@ const WordDisplay = ({
       ))}
       {story.options && !story.vote_finished && story.part < 10 && (
         <View style={styles.textWrapper(showPinyin, theme, paddingSize)}>
-          <Text style={styles.text(fontSize, theme)}>To be continued.</Text>
+          <Text
+            style={[
+              styles.text(fontSize, theme),
+              {
+                fontStyle: "italic",
+                fontSize: 14,
+                marginTop: 10,
+              },
+            ]}
+          >
+            To be continued...
+          </Text>
         </View>
       )}
 

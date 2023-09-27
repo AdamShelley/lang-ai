@@ -62,7 +62,7 @@ const Story = () => {
     }
   }, [id, stories]);
 
-  console.log(story);
+  if (story?.language) console.log(story.language);
 
   return (
     <SafeAreaView style={styles.container(theme)}>
