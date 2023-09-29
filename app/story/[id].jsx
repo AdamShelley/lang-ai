@@ -62,8 +62,6 @@ const Story = () => {
     }
   }, [id, stories]);
 
-  if (story?.language) console.log(story.language);
-
   return (
     <SafeAreaView style={styles.container(theme)}>
       <StatusBar style="dark" />

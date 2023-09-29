@@ -5,8 +5,10 @@ import {
   isValidStoriesData,
   isValidDictionaryData,
 } from "../utils/checkValidArrayOrObject";
+import useSettingsStore from "../state/store";
 
 const { getTimestamp, shouldUpdate } = require("../utils/shouldUpdate");
+const settingsStore = useSettingsStore.getState();
 
 export const fetchDataFromServer = async (
   endpoint,
@@ -20,6 +22,9 @@ export const fetchDataFromServer = async (
   // let networkStatus = {
   //   isConnected: false,
   // };
+
+  // Get language from zustand
+  const language = settingsStore.language;
 
   if (!networkStatus.isConnected) {
     console.log("No network connection");
@@ -56,7 +61,8 @@ export const fetchDataFromServer = async (
     endpoint,
     storageKey,
     lastUpdateKey,
-    lastUpdate
+    lastUpdate,
+    language
   );
 };
 
@@ -65,13 +71,14 @@ const fetchAndUpdateData = async (
   endpoint,
   storageKey,
   lastUpdateKey,
-  lastUpdate
+  lastUpdate,
+  language = "zh"
 ) => {
   try {
     const url =
       endpoint === "stories"
-        ? `${LIVE_URL}/${endpoint}?lastUpdate=${lastUpdate}`
-        : `${LIVE_URL}/${endpoint}`;
+        ? `${LIVE_URL}/${endpoint}?lastUpdate=${lastUpdate}?language=${language}`
+        : `${LIVE_URL}/${endpoint}?language=${language}`;
 
     const response = await fetch(url);
 
