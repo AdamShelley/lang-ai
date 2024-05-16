@@ -1,5 +1,6 @@
 {
   "expo": {
+    "platforms": ["ios", "android"],
     "scheme": "acme",
     "web": {
       "bundler": "metro"
